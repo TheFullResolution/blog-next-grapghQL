@@ -1,0 +1,49 @@
+{
+  "name": "personal-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next ./frontend",
+    "build": "next build ./frontend",
+    "start": "next start ./frontend",
+    "deploy": "cd backend && prisma deploy --env-file variables.env"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheFullResolution/personal-website.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TheFullResolution/personal-website/issues"
+  },
+  "homepage": "https://github.com/TheFullResolution/personal-website#readme",
+  "dependencies": {
+    "@zeit/next-sass": "1.0.1",
+    "@zeit/next-typescript": "1.1.1",
+    "dotenv": "7.0.0",
+    "graphql-cli": "3.0.11",
+    "graphql-yoga": "1.17.4",
+    "next": "8.0.3",
+    "next-with-apollo": "3.4.0",
+    "node-sass": "4.11.0",
+    "nodemon": "1.18.10",
+    "prisma": "1.28.5",
+    "prisma-binding": "2.3.8",
+    "react": "16.8.4",
+    "react-dom": "16.8.4"
+  },
+  "devDependencies": {
+    "@types/node": "11.11.3",
+    "@types/react": "16.8.8",
+    "@types/react-dom": "16.8.2",
+    "apollo-boost": "0.3.1",
+    "apollo-client": "2.5.1",
+    "eslint": "5.15.2",
+    "fork-ts-checker-webpack-plugin": "1.0.0",
+    "graphql": "14.1.1",
+    "graphql-tag": "2.10.1",
+    "react-apollo": "2.5.2"
+  }
+}
