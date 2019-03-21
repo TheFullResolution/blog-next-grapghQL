@@ -1,9 +1,11 @@
-import App, { Container } from 'next/app';
-import { NextContext, NextComponentType } from 'next';
-import { ApolloProvider } from 'react-apollo';
-import withData from '../lib/withData';
+import './_app.scss';
 
-import './_global.scss'
+import { NextComponentType, NextContext } from 'next';
+import App, { Container } from 'next/app';
+import { ApolloProvider } from 'react-apollo';
+
+import { Page } from '../components/Page/Page';
+import withData from '../lib/withData';
 
 interface IProps {
   apollo: any;
@@ -31,7 +33,9 @@ class MyApp extends App<IProps> {
     return (
       <Container>
         <ApolloProvider client={apollo}>
-          <Component {...pageProps} />
+          <Page>
+            <Component {...pageProps} />
+          </Page>
         </ApolloProvider>
       </Container>
     );
