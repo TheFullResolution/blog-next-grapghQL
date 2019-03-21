@@ -3,6 +3,8 @@ import { NextContext, NextComponentType } from 'next';
 import { ApolloProvider } from 'react-apollo';
 import withData from '../lib/withData';
 
+import './_global.scss'
+
 interface IProps {
   apollo: any;
 }
