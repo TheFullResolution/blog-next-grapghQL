@@ -1,5 +1,5 @@
 // let's go!
-require('dotenv').config({ path: 'variables.env' });
+require('dotenv').config({ path: 'backend/variables.env' });
 const createServer = require('./createServer');
 const db = require('./db');
 

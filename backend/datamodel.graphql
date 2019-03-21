@@ -1,4 +1,5 @@
-type User {
+type BlogPost {
   id: ID! @unique
-  name: String!
+  title: String!
+  body: String!
 }

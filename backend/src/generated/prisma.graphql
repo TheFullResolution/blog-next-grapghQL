@@ -1,7 +1,7 @@
 # source: https://eu1.prisma.sh/jedrzej-lewandowski/personal-website/dev
-# timestamp: Sun Mar 17 2019 21:53:29 GMT+0100 (CET)
+# timestamp: Thu Mar 21 2019 13:46:10 GMT+0100 (CET)
 
-type AggregateUser {
+type AggregateBlogPost {
   count: Int!
 }
 
@@ -10,124 +10,72 @@ type BatchPayload {
   count: Long!
 }
 
-"""
-The `Long` scalar type represents non-fractional signed whole numeric values.
-Long can represent values between -(2^63) and 2^63 - 1.
-"""
-scalar Long
-
-type Mutation {
-  createUser(data: UserCreateInput!): User!
-  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
-  deleteUser(where: UserWhereUniqueInput!): User
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
-  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
-  deleteManyUsers(where: UserWhereInput): BatchPayload!
-}
-
-enum MutationType {
-  CREATED
-  UPDATED
-  DELETED
-}
-
-"""An object with an ID"""
-interface Node {
-  """The id of the object."""
+type BlogPost implements Node {
   id: ID!
-}
-
-"""Information about pagination in a connection."""
-type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
-}
-
-type Query {
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  user(where: UserWhereUniqueInput!): User
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
-
-  """Fetches an object given its ID"""
-  node(
-    """The ID of an object"""
-    id: ID!
-  ): Node
-}
-
-type Subscription {
-  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-}
-
-type User implements Node {
-  id: ID!
-  name: String!
+  title: String!
+  body: String!
 }
 
 """A connection to a list of items."""
-type UserConnection {
+type BlogPostConnection {
   """Information to aid in pagination."""
   pageInfo: PageInfo!
 
   """A list of edges."""
-  edges: [UserEdge]!
-  aggregate: AggregateUser!
+  edges: [BlogPostEdge]!
+  aggregate: AggregateBlogPost!
 }
 
-input UserCreateInput {
-  name: String!
+input BlogPostCreateInput {
+  id: ID
+  title: String!
+  body: String!
 }
 
 """An edge in a connection."""
-type UserEdge {
+type BlogPostEdge {
   """The item at the end of the edge."""
-  node: User!
+  node: BlogPost!
 
   """A cursor for use in pagination."""
   cursor: String!
 }
 
-enum UserOrderByInput {
+enum BlogPostOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  title_ASC
+  title_DESC
+  body_ASC
+  body_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
   createdAt_DESC
 }
 
-type UserPreviousValues {
+type BlogPostPreviousValues {
   id: ID!
-  name: String!
+  title: String!
+  body: String!
 }
 
-type UserSubscriptionPayload {
+type BlogPostSubscriptionPayload {
   mutation: MutationType!
-  node: User
+  node: BlogPost
   updatedFields: [String!]
-  previousValues: UserPreviousValues
+  previousValues: BlogPostPreviousValues
 }
 
-input UserSubscriptionWhereInput {
+input BlogPostSubscriptionWhereInput {
   """Logical AND on all given filters."""
-  AND: [UserSubscriptionWhereInput!]
+  AND: [BlogPostSubscriptionWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [UserSubscriptionWhereInput!]
+  OR: [BlogPostSubscriptionWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [UserSubscriptionWhereInput!]
+  NOT: [BlogPostSubscriptionWhereInput!]
 
   """
   The subscription event gets dispatched when it's listed in mutation_in
@@ -148,26 +96,28 @@ input UserSubscriptionWhereInput {
   The subscription event gets only dispatched when some of the field names included in this list have been updated
   """
   updatedFields_contains_some: [String!]
-  node: UserWhereInput
+  node: BlogPostWhereInput
 }
 
-input UserUpdateInput {
-  name: String
+input BlogPostUpdateInput {
+  title: String
+  body: String
 }
 
-input UserUpdateManyMutationInput {
-  name: String
+input BlogPostUpdateManyMutationInput {
+  title: String
+  body: String
 }
 
-input UserWhereInput {
+input BlogPostWhereInput {
   """Logical AND on all given filters."""
-  AND: [UserWhereInput!]
+  AND: [BlogPostWhereInput!]
 
   """Logical OR on all given filters."""
-  OR: [UserWhereInput!]
+  OR: [BlogPostWhereInput!]
 
   """Logical NOT on all given filters combined by AND."""
-  NOT: [UserWhereInput!]
+  NOT: [BlogPostWhereInput!]
   id: ID
 
   """All values that are not equal to given value."""
@@ -208,48 +158,146 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   id_not_ends_with: ID
-  name: String
+  title: String
 
   """All values that are not equal to given value."""
-  name_not: String
+  title_not: String
 
   """All values that are contained in given list."""
-  name_in: [String!]
+  title_in: [String!]
 
   """All values that are not contained in given list."""
-  name_not_in: [String!]
+  title_not_in: [String!]
 
   """All values less than the given value."""
-  name_lt: String
+  title_lt: String
 
   """All values less than or equal the given value."""
-  name_lte: String
+  title_lte: String
 
   """All values greater than the given value."""
-  name_gt: String
+  title_gt: String
 
   """All values greater than or equal the given value."""
-  name_gte: String
+  title_gte: String
 
   """All values containing the given string."""
-  name_contains: String
+  title_contains: String
 
   """All values not containing the given string."""
-  name_not_contains: String
+  title_not_contains: String
 
   """All values starting with the given string."""
-  name_starts_with: String
+  title_starts_with: String
 
   """All values not starting with the given string."""
-  name_not_starts_with: String
+  title_not_starts_with: String
 
   """All values ending with the given string."""
-  name_ends_with: String
+  title_ends_with: String
 
   """All values not ending with the given string."""
-  name_not_ends_with: String
+  title_not_ends_with: String
+  body: String
+
+  """All values that are not equal to given value."""
+  body_not: String
+
+  """All values that are contained in given list."""
+  body_in: [String!]
+
+  """All values that are not contained in given list."""
+  body_not_in: [String!]
+
+  """All values less than the given value."""
+  body_lt: String
+
+  """All values less than or equal the given value."""
+  body_lte: String
+
+  """All values greater than the given value."""
+  body_gt: String
+
+  """All values greater than or equal the given value."""
+  body_gte: String
+
+  """All values containing the given string."""
+  body_contains: String
+
+  """All values not containing the given string."""
+  body_not_contains: String
+
+  """All values starting with the given string."""
+  body_starts_with: String
+
+  """All values not starting with the given string."""
+  body_not_starts_with: String
+
+  """All values ending with the given string."""
+  body_ends_with: String
+
+  """All values not ending with the given string."""
+  body_not_ends_with: String
 }
 
-input UserWhereUniqueInput {
+input BlogPostWhereUniqueInput {
   id: ID
+}
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  createBlogPost(data: BlogPostCreateInput!): BlogPost!
+  updateBlogPost(data: BlogPostUpdateInput!, where: BlogPostWhereUniqueInput!): BlogPost
+  deleteBlogPost(where: BlogPostWhereUniqueInput!): BlogPost
+  upsertBlogPost(where: BlogPostWhereUniqueInput!, create: BlogPostCreateInput!, update: BlogPostUpdateInput!): BlogPost!
+  updateManyBlogPosts(data: BlogPostUpdateManyMutationInput!, where: BlogPostWhereInput): BatchPayload!
+  deleteManyBlogPosts(where: BlogPostWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+"""An object with an ID"""
+interface Node {
+  """The id of the object."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Query {
+  blogPosts(where: BlogPostWhereInput, orderBy: BlogPostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [BlogPost]!
+  blogPost(where: BlogPostWhereUniqueInput!): BlogPost
+  blogPostsConnection(where: BlogPostWhereInput, orderBy: BlogPostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): BlogPostConnection!
+
+  """Fetches an object given its ID"""
+  node(
+    """The ID of an object"""
+    id: ID!
+  ): Node
+}
+
+type Subscription {
+  blogPost(where: BlogPostSubscriptionWhereInput): BlogPostSubscriptionPayload
 }
