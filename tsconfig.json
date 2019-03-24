@@ -16,9 +16,14 @@
       "strict": true,
       "target": "esnext"
     },
+    "include": [
+      "@types/**/*.d.ts",
+      "frontend/**/*.d.ts",
+      "frontend/**/*.ts",
+      "frontend/**/*.tsx"
+    ],
     "typeRoots": [
-      "../@types",
-      "../node_modules/@types"
+      "@types",
+      "node_modules/@types"
     ]
-
   }

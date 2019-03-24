@@ -1,6 +1,8 @@
 import styles from './home.scss';
+
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+
 
 const ALL_ARTICLES_QUERY = gql`
   query ALL_ARTICLES_QUERY {

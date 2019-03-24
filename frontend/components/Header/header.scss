@@ -1,0 +1,15 @@
+.header {
+    h1 {
+        text-align: center;
+    }
+
+    nav {
+        display: flex;
+        list-style: none;
+        justify-content: center;
+        
+        li + li {
+            margin-left: 10px;
+        }
+    }
+}
