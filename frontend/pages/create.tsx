@@ -1,11 +1,3 @@
-import React from 'react'
+import { CreateBlogPost } from "../components/CreateBlogPost/CreateBlogPost";
 
-const Create = () => {
-  return (
-    <div>
-      Create
-    </div>
-  )
-}
-
-export default Create
+export default CreateBlogPost
