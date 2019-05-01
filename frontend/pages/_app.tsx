@@ -7,12 +7,12 @@ import { ApolloProvider } from 'react-apollo';
 import { Page } from '../components/Page/Page';
 import withData from '../lib/withData';
 
-interface IProps {
+interface Props {
   apollo: any;
 }
 
-class MyApp extends App<IProps> {
-  static async getInitialProps({
+class MyApp extends App<Props> {
+  public static async getInitialProps({
     Component,
     ctx
   }: {
@@ -27,7 +27,7 @@ class MyApp extends App<IProps> {
     return { pageProps: { ...pageProps, query: ctx.query } };
   }
 
-  render() {
+  public render() {
     const { Component, apollo, pageProps } = this.props;
 
     return (

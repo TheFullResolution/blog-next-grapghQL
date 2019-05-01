@@ -2,9 +2,6 @@ import ReactMde from 'react-mde'
 import Showdown from 'showdown'
 import { Component } from 'react'
 
-import "react-mde/lib/styles/css/react-mde-all.css";
-
-
 interface Props {
   handleChange: (value: any) => void
 }
@@ -15,9 +12,9 @@ export interface State {
 }
 
 export class Editor extends Component<Props, State> {
-  converter: Showdown.Converter
+  private converter: Showdown.Converter
 
-  constructor(props: Props) {
+  public constructor(props: Props) {
     super(props)
     this.state = {
       value: '**Hello world!!!**',
@@ -31,16 +28,16 @@ export class Editor extends Component<Props, State> {
     })
   }
 
-  handleValueChange = (value: string) => {
+  private handleValueChange = (value: string) => {
     this.setState({ value })
     this.props.handleChange(value)
   }
 
-  handleTabChange = (tab: 'write' | 'preview') => {
+  private handleTabChange = (tab: 'write' | 'preview') => {
     this.setState({ tab })
   }
 
-  render() {
+  public render() {
     return (
       <div className="container">
         <ReactMde
