@@ -1,4 +1,4 @@
-const Mutations = {
+const Mutation = {
     async createBlogPost(parent, args, ctx, info) {
         // TODO: Check if they are logged in
     
@@ -11,10 +11,8 @@ const Mutations = {
           info
         );
     
-        console.log(item);
-    
         return item;
       },
 };
 
-module.exports = Mutations;
+export { Mutation };

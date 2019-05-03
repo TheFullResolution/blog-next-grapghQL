@@ -1,0 +1,3 @@
+language: typescript
+schema: ./backend/src/schema.graphql
+output: ./backend/src/generated/graphqlgen.ts

@@ -1,5 +1,5 @@
 // This file connects to the remote prisma DB and gives us the ability to query it with JS
-const { Prisma } = require('prisma-binding')
+import { Prisma } from 'prisma-binding'
 
 const prisma = new Prisma({
   typeDefs: 'backend/src/generated/prisma.graphql',
@@ -8,4 +8,4 @@ const prisma = new Prisma({
   debug: false,
 })
 
-module.exports = prisma
+export { prisma }
