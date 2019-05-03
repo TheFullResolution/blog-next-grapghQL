@@ -1,8 +1,8 @@
 const { forwardTo } = require('prisma-binding');
 
 const Query = {
-  blogPost: forwardTo('db'),
-  blogPosts: forwardTo('db')
+  blogPost: forwardTo('prisma'),
+  blogPosts: forwardTo('prisma')
 };
 
 module.exports = Query;

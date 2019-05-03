@@ -1,19 +1,58 @@
 // let's go!
 require('dotenv').config({ path: 'backend/variables.env' })
 
-const createServer = require('./createServer')
-const db = require('./db')
+const express = require('express')
+const cors = require('cors')
+const helmet  = require('helmet');
+const cookieParser  = require('cookie-parser');
+const bodyParser  = require('body-parser');
+const Mutation = require('./resolvers/Mutation')
+const Query = require('./resolvers/Query')
+const prisma = require('./prisma')
+const { ApolloServer } = require('apollo-server-express')
 
-const server = createServer()
+const { importSchema } = require('graphql-import')
 
-server.start(
-  {
-    cors: {
-      credentials: true,
-      origin: process.env.FRONTEND_URL,
-    },
+const typeDefs = importSchema('./backend/src/schema.graphql')
+
+const DEV = process.env.NODE_ENV !== 'production';
+
+const corsOptions = {
+  credentials: true,
+  origin: process.env.FRONTEND_URL,
+} 
+
+
+const app = express()
+const server = new ApolloServer({
+  typeDefs,
+  resolvers: {
+    Mutation,
+    Query,
   },
-  deets => {
-    console.log(`Server is now running on port http://localhost:${deets.port}`)
-  },
-)
+  introspection: DEV,
+  debug: DEV,
+  playground: DEV,
+  context: ({ req }) => ({
+    ...req,
+    prisma,
+  })
+})
+
+app.use(cors(corsOptions));
+app.use(helmet());
+app.use(cookieParser());
+app.use(bodyParser.json());
+
+server.applyMiddleware({ app,   cors: corsOptions})
+
+app.listen({ port: process.env.PORT || 4000 }, err => {
+  console.log('\n'.repeat(10));
+
+  if (err) throw err;
+  console.log(
+    `Apollo Server ready at http://localhost:${process.env.PORT}${
+      server.graphqlPath
+    }`
+  );
+});
