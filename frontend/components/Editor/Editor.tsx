@@ -1,6 +1,7 @@
 import ReactMde from 'react-mde'
 import Showdown from 'showdown'
 import { Component } from 'react'
+import "react-mde/lib/styles/css/react-mde-all.css";
 
 interface Props {
   handleChange: (value: any) => void

@@ -24,7 +24,9 @@ module.exports = withPlugins([
   [
     withCSS,
     {
-      cssModules: false,
+      cssLoaderOptions: {
+        url: false
+      }
     },
   ],
   [
