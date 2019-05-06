@@ -1,3 +1,8 @@
 language: typescript
 schema: ./backend/src/schema.graphql
-output: ./backend/src/generated/graphqlgen.ts
+context: ./backend/src/models/context.ts:Context
+output: ./backend/src/generated/api.ts
+
+models:
+  files:
+    - ./backend/src/models/datamodel.ts

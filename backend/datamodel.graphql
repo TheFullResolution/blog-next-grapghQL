@@ -1,5 +1,0 @@
-type BlogPost {
-  id: ID! @unique
-  title: String!
-  body: String!
-}

@@ -8,9 +8,9 @@ import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import { Mutation } from './resolvers/Mutation'
 import { Query } from './resolvers/Query'
-import { prisma } from './prisma'
 import { ApolloServer } from 'apollo-server-express'
 import { importSchema } from 'graphql-import'
+import { prisma } from './generated';
 
 const typeDefs = importSchema('./backend/src/schema.graphql')
 
@@ -22,8 +22,11 @@ const corsOptions = {
 }
 
 const app = express()
+
 const server = new ApolloServer({
+  //@ts-ignore
   typeDefs,
+  //@ts-ignore
   resolvers: {
     Mutation,
     Query,
@@ -32,8 +35,8 @@ const server = new ApolloServer({
   debug: DEV,
   playground: DEV,
   context: ({ req }) => ({
-    ...req,
-    prisma,
+    req,
+    db: prisma,
   }),
 })
 
