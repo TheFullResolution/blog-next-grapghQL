@@ -17,13 +17,13 @@
       "target": "esnext"
     },
     "include": [
-      "@types/**/*.d.ts",
+      "_types/**/*.d.ts",
       "frontend/**/*.d.ts",
       "frontend/**/*.ts",
       "frontend/**/*.tsx"
     ],
     "typeRoots": [
-      "@types",
+      "_types",
       "node_modules/@types"
     ]
   }

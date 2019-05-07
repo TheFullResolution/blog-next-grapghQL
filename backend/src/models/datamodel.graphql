@@ -1,0 +1,7 @@
+type BlogPost {
+  id: ID! @id
+  title: String!
+  body: String!
+  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime! @createdAt
+}
