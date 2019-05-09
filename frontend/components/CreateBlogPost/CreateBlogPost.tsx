@@ -1,7 +1,17 @@
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import { Form, Field } from 'react-final-form'
+import { Formik, Form, Field, FieldProps } from 'formik'
 import { Editor } from '../Editor/Editor'
+import { createBlogPost } from '../../../_types/data';
+
+interface CreateBlogForm {
+  title: string
+  body: string
+}
+
+interface MutationData {
+  createBlogPost: createBlogPost
+}
 
 const CREATE_BLOG_POST_MUTATION = gql`
   mutation CREATE_ITEM_MUTATION($title: String!, $body: String!) {
@@ -12,9 +22,9 @@ const CREATE_BLOG_POST_MUTATION = gql`
 `
 
 export const CreateBlogPost = () => (
-  <Mutation mutation={CREATE_BLOG_POST_MUTATION}>
-    {(createBlogPost: any) => {
-      const onSubmit = async (values: any) => {
+  <Mutation<MutationData> mutation={CREATE_BLOG_POST_MUTATION}>
+    {(createBlogPost) => {
+      const onSubmit = async (values: CreateBlogForm) => {
         await createBlogPost({
           variables: {
             title: values.title,
@@ -23,30 +33,33 @@ export const CreateBlogPost = () => (
         })
       }
       return (
-        <Form onSubmit={onSubmit}>
-          {({ handleSubmit, submitting, pristine }) => (
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label>Title</label>
-                <Field
-                  name="title"
-                  component="input"
-                  type="text"
-                  placeholder="Title"
-                />
-              </div>
-              <div>
-                <label>Body</label>
-                <Field name="body">
-                  {({ input }) => <Editor handleChange={input.onChange} />}
-                </Field>
-              </div>
-              <button type="submit" disabled={submitting || pristine}>
-                Submit
-              </button>
-            </form>
+        <Formik initialValues={{ title: '', body: '' }} onSubmit={onSubmit}>
+          {() => (
+            <Form>
+              <Field name="title">
+                {({ field, form }: FieldProps<CreateBlogForm>) => (
+                  <div>
+                    <input
+                      type="text"
+                      {...field}
+                      placeholder="Title of the Post"
+                    />
+                    {form.touched.title &&
+                      form.errors.title &&
+                      form.errors.title}
+                  </div>
+                )}
+              </Field>
+              <Field name="body">
+                {({ field }: FieldProps<CreateBlogForm>) => (
+                  <div>
+                    <Editor handleChange={field.onChange} />
+                  </div>
+                )}
+              </Field>
+            </Form>
           )}
-        </Form>
+        </Formik>
       )
     }}
   </Mutation>

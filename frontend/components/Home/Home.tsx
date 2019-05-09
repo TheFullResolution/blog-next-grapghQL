@@ -2,6 +2,7 @@ import styles from './home.scss'
 
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
+import { BlogPost } from '../../../_types/data'
 
 const ALL_ARTICLES_QUERY = gql`
   query ALL_ARTICLES_QUERY {
@@ -13,15 +14,20 @@ const ALL_ARTICLES_QUERY = gql`
   }
 `
 
+interface QueryData {
+  blogPosts: BlogPost[]
+}
+
 const Home = () => (
   <div className={styles.container}>
-    <Query query={ALL_ARTICLES_QUERY}>
+    <Query<QueryData> query={ALL_ARTICLES_QUERY}>
       {({ data, error, loading }) => {
         if (loading) return <p>Loading...</p>
         if (error) return <p>Error: {error.message}</p>
+        if (!data) return <p>No Data</p>
         return (
           <>
-            {data.blogPosts.map((post: { [key: string]: string }) => (
+            {data.blogPosts.map((post) => (
               <section key={post.id}>
                 <h1>{post.title}</h1>
                 <p>{post.body}</p>

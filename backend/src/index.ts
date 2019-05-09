@@ -1,16 +1,17 @@
-// let's go!
-require('dotenv').config({ path: 'backend/variables.env' })
-
-import express from 'express'
-import cors from 'cors'
-import helmet from 'helmet'
+import { ApolloServer } from 'apollo-server-express'
 import cookieParser from 'cookie-parser'
-import bodyParser from 'body-parser'
+import cors from 'cors'
+import express from 'express'
+import { importSchema } from 'graphql-import'
+import helmet from 'helmet'
+import jwt from 'jsonwebtoken'
+
+import { prisma, User } from './generated'
 import { Mutation } from './resolvers/Mutation'
 import { Query } from './resolvers/Query'
-import { ApolloServer } from 'apollo-server-express'
-import { importSchema } from 'graphql-import'
-import { prisma } from './generated';
+
+// let's go!
+require('dotenv').config({ path: 'backend/variables.env' })
 
 const typeDefs = importSchema('./backend/src/schema.graphql')
 
@@ -43,11 +44,31 @@ const server = new ApolloServer({
 app.use(cors(corsOptions))
 app.use(helmet())
 app.use(cookieParser())
-app.use(bodyParser.json())
+
+app.use((req, res, next) => {
+  const { token } = req.cookies
+  if (token && process.env.APP_SECRET) {
+    console.log(token);
+    
+    const tokenData = jwt.verify(token, process.env.APP_SECRET)
+    req.userId = (tokenData as { userId: string }).userId
+  }
+  next()
+})
+
+app.use(async (req, res, next) => {
+  if (!req.userId) return next()
+
+  const user = await prisma.user({ id: req.userId })
+  if (user) {
+    req.user = user
+  }
+  next()
+})
 
 server.applyMiddleware({ app, cors: corsOptions })
 
-app.listen({ port: process.env.PORT || 4000 }, (err: any) => {
+app.listen({ port: process.env.PORT || 4000 }, (err: Error) => {
   console.log('\n'.repeat(10))
 
   if (err) throw err

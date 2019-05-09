@@ -5,6 +5,7 @@ type Mutation {
     title: String
     body: String
   ): BlogPost
+  signin(email: String!, password: String!): User!
 }
 
 type Query {
@@ -17,5 +18,6 @@ type Query {
     first: Int
     last: Int
   ): [BlogPost]!
+  me: User
   blogPost(where: BlogPostWhereUniqueInput!): BlogPost
 }

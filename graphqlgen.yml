@@ -5,4 +5,5 @@ output: ./backend/src/generated/api.ts
 
 models:
   files:
-    - ./backend/src/models/datamodel.ts
+    - ./backend/src/generated/index.ts
+    
