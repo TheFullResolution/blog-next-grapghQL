@@ -1,45 +1,53 @@
-import './_app.scss';
+import './_app.scss'
 
-import { NextComponentType, NextContext } from 'next';
-import App, { Container } from 'next/app';
-import { ApolloProvider } from 'react-apollo';
-
-import { Page } from '../components/Page/Page';
-import withData from '../lib/withData';
+import ApolloClient from 'apollo-client'
+import { NextComponentType, NextContext } from 'next'
+import App, { Container } from 'next/app'
+import { ApolloProvider } from 'react-apollo'
+import Head from 'next/head'
+import { Page } from '../components/Page/Page'
+import { withApolloConfigured } from '../utils/withApolloConfigured'
 
 interface Props {
-  apollo: any;
+  apollo: ApolloClient<unknown>
 }
 
 class MyApp extends App<Props> {
   public static async getInitialProps({
     Component,
-    ctx
+    ctx,
   }: {
-    Component: NextComponentType<any>;
-    ctx: NextContext;
+    Component: NextComponentType<Props>
+    ctx: NextContext
   }) {
+    let pageProps
     if (Component.getInitialProps) {
-      var pageProps = await Component.getInitialProps(ctx);
+      pageProps = await Component.getInitialProps(ctx)
     }
     // this exposes the query to the user
 
-    return { pageProps: { ...pageProps, query: ctx.query } };
+    return { pageProps: { ...pageProps, query: ctx.query } }
   }
 
   public render() {
-    const { Component, apollo, pageProps } = this.props;
+    const { Component, apollo, pageProps } = this.props
 
     return (
       <Container>
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Roboto"
+            rel="stylesheet"
+          />
+        </Head>
         <ApolloProvider client={apollo}>
           <Page>
             <Component {...pageProps} />
           </Page>
         </ApolloProvider>
       </Container>
-    );
+    )
   }
 }
 
-export default withData(MyApp);
+export default withApolloConfigured(MyApp)

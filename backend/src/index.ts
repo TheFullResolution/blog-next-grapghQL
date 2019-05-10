@@ -1,3 +1,5 @@
+require('dotenv').config({ path: 'backend/variables.env' })
+
 import { ApolloServer } from 'apollo-server-express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
@@ -11,7 +13,6 @@ import { Mutation } from './resolvers/Mutation'
 import { Query } from './resolvers/Query'
 
 // let's go!
-require('dotenv').config({ path: 'backend/variables.env' })
 
 const typeDefs = importSchema('./backend/src/schema.graphql')
 
