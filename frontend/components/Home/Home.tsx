@@ -1,5 +1,3 @@
-import styles from './home.scss'
-
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import { BlogPost } from '../../../_types/data'
@@ -19,7 +17,6 @@ interface QueryData {
 }
 
 const Home = () => (
-  <div className={styles.container}>
     <Query<QueryData> query={ALL_ARTICLES_QUERY}>
       {({ data, error, loading }) => {
         if (loading) return <p>Loading...</p>
@@ -27,7 +24,7 @@ const Home = () => (
         if (!data) return <p>No Data</p>
         return (
           <>
-            {data.blogPosts.map((post) => (
+            {data.blogPosts.map(post => (
               <section key={post.id}>
                 <h1>{post.title}</h1>
                 <p>{post.body}</p>
@@ -37,7 +34,6 @@ const Home = () => (
         )
       }}
     </Query>
-  </div>
 )
 
 export { Home }

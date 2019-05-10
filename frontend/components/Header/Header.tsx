@@ -3,7 +3,7 @@ import styles from './header.scss'
 import Link from 'next/link'
 import { routes, RoutPath } from '../../utils/routes'
 import { FaBookReader } from 'react-icons/fa'
-const routPathsArray = [RoutPath.create]
+const routPathsArray = [RoutPath.create, RoutPath.auth]
 
 const Header: React.FC = () => (
   <header className={styles.header}>

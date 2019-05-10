@@ -1,10 +1,11 @@
-import { Header } from "../Header/Header";
+import { Header } from '../Header/Header'
+import * as styles from './page.scss'
 
 const Page: React.FC = ({ children }) => (
-  <main>
+  <>
     <Header />
-    {children}
-  </main>
-);
+    <main className={styles.container}>{children}</main>
+  </>
+)
 
-export { Page };
+export { Page }
