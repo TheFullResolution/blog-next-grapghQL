@@ -1,5 +1,5 @@
-import { Header } from '../Header/Header'
 import * as styles from './page.scss'
+import { Header } from '../Header/Header'
 
 const Page: React.FC = ({ children }) => (
   <>

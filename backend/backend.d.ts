@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import cookieParser from 'cookie-parser'
-import { User } from './src/generated'
+import { User } from './generated'
 import { CookieOptions } from 'express';
 
 declare global {

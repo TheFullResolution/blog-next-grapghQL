@@ -1,20 +1,27 @@
 require('dotenv').config({ path: 'backend/variables.env' })
 
-import { ApolloServer } from 'apollo-server-express'
+import { ApolloServer, makeExecutableSchema } from 'apollo-server-express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import { importSchema } from 'graphql-import'
 import helmet from 'helmet'
 import jwt from 'jsonwebtoken'
-
-import { prisma, User } from './generated'
+import { prisma } from './generated'
 import { Mutation } from './resolvers/Mutation'
 import { Query } from './resolvers/Query'
 
 // let's go!
 
-const typeDefs = importSchema('./backend/src/schema.graphql')
+const typeDefs = importSchema('./backend/schema.graphql')
+
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers: {
+    Mutation,
+    Query,
+  },
+})
 
 const DEV = process.env.NODE_ENV !== 'production'
 
@@ -26,13 +33,7 @@ const corsOptions = {
 const app = express()
 
 const server = new ApolloServer({
-  //@ts-ignore
-  typeDefs,
-  //@ts-ignore
-  resolvers: {
-    Mutation,
-    Query,
-  },
+  schema,
   introspection: DEV,
   debug: DEV,
   playground: DEV,
@@ -49,8 +50,8 @@ app.use(cookieParser())
 app.use((req, res, next) => {
   const { token } = req.cookies
   if (token && process.env.APP_SECRET) {
-    console.log(token);
-    
+    console.log(token)
+
     const tokenData = jwt.verify(token, process.env.APP_SECRET)
     req.userId = (tokenData as { userId: string }).userId
   }
@@ -70,7 +71,7 @@ app.use(async (req, res, next) => {
 server.applyMiddleware({ app, cors: corsOptions })
 
 app.listen({ port: process.env.PORT || 4000 }, (err: Error) => {
-  console.log('\n'.repeat(10))
+  console.log('\n'.repeat(5))
 
   if (err) throw err
   console.log(

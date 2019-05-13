@@ -1,3 +1,3 @@
-import { Authenticate } from "../components/Authenticate/Authenticate";
+import { Authenticate } from '../components/main/Authenticate/Authenticate'
 
 export default Authenticate

@@ -1,0 +1,28 @@
+overwrite: true
+generates:
+  frontend/generated/graphql.tsx:
+    schema: http://localhost:4444/graphql
+    documents: "frontend/**/*.graphql"
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      withHOC: false
+      avoidOptionals: true
+      skipTypename: true
+      immutableTypes: true
+      maybeValue: "T"
+  backend/generated/graphql.ts:
+    schema: backend/schema.graphql
+    plugins:
+      - add: "import { Context } from '../models/context';"
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      contextType: Context
+      maybeValue: "T | undefined | null"
+      useIndexSignature: true
+      mappers:
+        User: ./index#User
+        BlogPost: ./index#BlogPost

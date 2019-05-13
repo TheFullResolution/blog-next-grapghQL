@@ -2,8 +2,8 @@
 
 type Mutation {
   createBlogPost(
-    title: String
-    body: String
+    title: String!
+    body: String!
   ): BlogPost
   signin(email: String!, password: String!): User!
 }

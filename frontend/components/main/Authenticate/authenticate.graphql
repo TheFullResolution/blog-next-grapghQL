@@ -1,0 +1,5 @@
+  mutation SIGNIN($email: String!, $password: String!) {
+    signin(email: $email, password: $password) {
+      id
+    }
+  }

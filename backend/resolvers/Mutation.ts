@@ -1,15 +1,15 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import ms from 'ms';
+import { MutationResolvers } from '../generated/graphql';
 
-import { MutationResolvers } from '../generated/api';
 
 function errorThrow(): never {
   throw new Error('Either email or password are not correct')
 }
 
-const Mutation: MutationResolvers.Type = {
-  async createBlogPost(parent, args, ctx, info) {
+const Mutation: MutationResolvers = {
+  async createBlogPost(parent, args, ctx) {
     if (!ctx.req.userId) {
       throw new Error('You must be logged in to do that!')
     }

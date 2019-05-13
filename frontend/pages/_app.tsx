@@ -3,9 +3,10 @@ import './_app.scss'
 import ApolloClient from 'apollo-client'
 import { NextComponentType, NextContext } from 'next'
 import App, { Container } from 'next/app'
-import { ApolloProvider } from 'react-apollo'
 import Head from 'next/head'
-import { Page } from '../components/Page/Page'
+import { ApolloProvider } from 'react-apollo'
+
+import { Page } from '../components/main/Page/Page'
 import { withApolloConfigured } from '../utils/withApolloConfigured'
 
 interface Props {

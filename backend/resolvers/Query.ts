@@ -1,7 +1,8 @@
-import { QueryResolvers } from '../generated/api'
-import { BlogPostWhereUniqueInput } from '../generated'
 
-const Query: QueryResolvers.Type = {
+import { BlogPostWhereUniqueInput } from '../generated'
+import { QueryResolvers } from '../generated/graphql';
+
+const Query: QueryResolvers = {
   async blogPost(parent, args, ctx, info) {
     //type errors TODO: remove once generators fixed
     const newArgs = args as unknown

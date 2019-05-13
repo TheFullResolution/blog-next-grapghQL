@@ -1,27 +1,11 @@
-import gql from 'graphql-tag'
-import { Query } from 'react-apollo'
-import { BlogPost } from '../../../_types/data'
-
-const ALL_ARTICLES_QUERY = gql`
-  query ALL_ARTICLES_QUERY {
-    blogPosts {
-      id
-      title
-      body
-    }
-  }
-`
-
-interface QueryData {
-  blogPosts: BlogPost[]
-}
+import { All_ArticlesComponent } from "../../../generated/graphql";
 
 const Home = () => (
-    <Query<QueryData> query={ALL_ARTICLES_QUERY}>
+    <All_ArticlesComponent>
       {({ data, error, loading }) => {
         if (loading) return <p>Loading...</p>
         if (error) return <p>Error: {error.message}</p>
-        if (!data) return <p>No Data</p>
+        if (!data || !data.blogPosts.length) return <p>No Data</p>
         return (
           <>
             {data.blogPosts.map(post => (
@@ -33,7 +17,7 @@ const Home = () => (
           </>
         )
       }}
-    </Query>
+    </All_ArticlesComponent>
 )
 
 export { Home }

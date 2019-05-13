@@ -1,29 +1,17 @@
-import { Mutation } from 'react-apollo'
-import gql from 'graphql-tag'
-import { Formik, Form, Field, FieldProps } from 'formik'
-import { Editor } from '../Editor/Editor'
-import { createBlogPost } from '../../../_types/data';
+import { Field, FieldProps, Form, Formik } from 'formik'
+
+import { Create_ItemComponent } from '../../../generated/graphql'
+import { Editor } from '../../blocks/Editor/Editor'
+import { Input } from '../../blocks/Input/Input'
 
 interface CreateBlogForm {
   title: string
   body: string
 }
 
-interface MutationData {
-  createBlogPost: createBlogPost
-}
-
-const CREATE_BLOG_POST_MUTATION = gql`
-  mutation CREATE_ITEM_MUTATION($title: String!, $body: String!) {
-    createBlogPost(title: $title, body: $body) {
-      id
-    }
-  }
-`
-
 export const CreateBlogPost = () => (
-  <Mutation<MutationData> mutation={CREATE_BLOG_POST_MUTATION}>
-    {(createBlogPost) => {
+  <Create_ItemComponent>
+    {createBlogPost => {
       const onSubmit = async (values: CreateBlogForm) => {
         await createBlogPost({
           variables: {
@@ -38,16 +26,15 @@ export const CreateBlogPost = () => (
             <Form>
               <Field name="title">
                 {({ field, form }: FieldProps<CreateBlogForm>) => (
-                  <div>
-                    <input
-                      type="text"
-                      {...field}
-                      placeholder="Title of the Post"
-                    />
-                    {form.touched.title &&
+                  <Input<CreateBlogForm>
+                    field={field}
+                    label="Title"
+                    error={
+                      form.touched.title &&
                       form.errors.title &&
-                      form.errors.title}
-                  </div>
+                      form.errors.title
+                    }
+                  />
                 )}
               </Field>
               <Field name="body">
@@ -62,5 +49,5 @@ export const CreateBlogPost = () => (
         </Formik>
       )
     }}
-  </Mutation>
+  </Create_ItemComponent>
 )
