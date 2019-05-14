@@ -37,8 +37,9 @@ const server = new ApolloServer({
   introspection: DEV,
   debug: DEV,
   playground: DEV,
-  context: ({ req }) => ({
+  context: ({ req, res }) => ({
     req,
+    res,
     db: prisma,
   }),
 })

@@ -4,7 +4,7 @@ import { Component } from 'react'
 import "react-mde/lib/styles/css/react-mde-all.css";
 
 interface Props {
-  handleChange: (value: any) => void
+  handleChange: (value: string) => void
 }
 
 export interface State {
@@ -31,6 +31,8 @@ export class Editor extends Component<Props, State> {
 
   private handleValueChange = (value: string) => {
     this.setState({ value })
+    console.log({value});
+    
     this.props.handleChange(value)
   }
 

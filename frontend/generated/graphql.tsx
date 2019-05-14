@@ -103,6 +103,7 @@ export type BlogPostWhereUniqueInput = {
 export type Mutation = {
   readonly createBlogPost: Maybe<BlogPost>
   readonly signin: User
+  readonly signup: User
 }
 
 export type MutationCreateBlogPostArgs = {
@@ -113,6 +114,12 @@ export type MutationCreateBlogPostArgs = {
 export type MutationSigninArgs = {
   email: Scalars['String']
   password: Scalars['String']
+}
+
+export type MutationSignupArgs = {
+  email: Scalars['String']
+  password: Scalars['String']
+  name: Scalars['String']
 }
 
 export enum Permission {
@@ -244,6 +251,14 @@ export type SigninMutationVariables = {
 
 export type SigninMutation = { readonly signin: Pick<User, 'id'> }
 
+export type SignupMutationVariables = {
+  email: Scalars['String']
+  password: Scalars['String']
+  name: Scalars['String']
+}
+
+export type SignupMutation = { readonly signup: Pick<User, 'id'> }
+
 export type Create_ItemMutationVariables = {
   title: Scalars['String']
   body: Scalars['String']
@@ -289,6 +304,33 @@ export const SigninComponent = (
 ) => (
   <ReactApollo.Mutation<SigninMutation, SigninMutationVariables>
     mutation={SigninDocument}
+    {...props}
+  />
+)
+
+export const SignupDocument = gql`
+  mutation SIGNUP($email: String!, $password: String!, $name: String!) {
+    signup(email: $email, password: $password, name: $name) {
+      id
+    }
+  }
+`
+export type SignupMutationFn = ReactApollo.MutationFn<
+  SignupMutation,
+  SignupMutationVariables
+>
+
+export const SignupComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<SignupMutation, SignupMutationVariables>,
+      'mutation'
+    >,
+    'variables'
+  > & { variables?: SignupMutationVariables },
+) => (
+  <ReactApollo.Mutation<SignupMutation, SignupMutationVariables>
+    mutation={SignupDocument}
     {...props}
   />
 )

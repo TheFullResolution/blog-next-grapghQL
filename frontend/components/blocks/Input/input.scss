@@ -3,5 +3,10 @@
     border-radius: $space-quarter;
     padding: $space-quarter;
     width: 100%;
+    display: block;
+    margin: {
+      bottom: $space-half;
+      top: $space-quarter;
+    }
   }
 }

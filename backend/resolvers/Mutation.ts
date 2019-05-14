@@ -1,8 +1,7 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import ms from 'ms';
-import { MutationResolvers } from '../generated/graphql';
-
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import ms from 'ms'
+import { MutationResolvers } from '../generated/graphql'
 
 function errorThrow(): never {
   throw new Error('Either email or password are not correct')
@@ -13,6 +12,10 @@ const Mutation: MutationResolvers = {
     if (!ctx.req.userId) {
       throw new Error('You must be logged in to do that!')
     }
+
+    console.log({args});
+    
+
     if (args.title && args.body) {
       const item = await ctx.db.createBlogPost({
         title: args.title,
@@ -29,25 +32,42 @@ const Mutation: MutationResolvers = {
   },
 
   async signin(parent, { email, password }, ctx, info) {
-    // 1. check if there is a user with that email
-    const user = await ctx.db.user({ email })
+    const user = await ctx.db.user({ email: email.toLowerCase() })
 
     if (!user) {
       return errorThrow()
     }
     const valid = await bcrypt.compare(password, user.password)
-    // 2. Check if their password is correct
     if (!valid) {
       return errorThrow()
     }
-    // 3. generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
-    // 4. Set the cookie with the token
+
     ctx.req.cookie('token', token, {
       httpOnly: true,
       maxAge: ms('1y'),
     })
-    // 5. Return the user
+    return user
+  },
+
+  async signup(parent, { email, password, name }, ctx, info) {
+    const lowercaseEmail = email.toLowerCase()
+    const hashPassword = await bcrypt.hash(password, 10)
+
+    const user = await ctx.db.createUser({
+      email: lowercaseEmail,
+      name,
+      password: hashPassword,
+      permissions: { set: ['USER'] },
+    })
+
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
+
+    ctx.res.cookie('token', token, {
+      httpOnly: true,
+      maxAge: ms('1y'),
+    })
+
     return user
   },
 }

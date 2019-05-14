@@ -105,6 +105,7 @@ export type BlogPostWhereUniqueInput = {
 export type Mutation = {
   createBlogPost?: Maybe<BlogPost>
   signin: User
+  signup: User
 }
 
 export type MutationCreateBlogPostArgs = {
@@ -115,6 +116,12 @@ export type MutationCreateBlogPostArgs = {
 export type MutationSigninArgs = {
   email: Scalars['String']
   password: Scalars['String']
+}
+
+export type MutationSignupArgs = {
+  email: Scalars['String']
+  password: Scalars['String']
+  name: Scalars['String']
 }
 
 export enum Permission {
@@ -370,6 +377,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     MutationSigninArgs
+  >
+  signup?: Resolver<
+    ResolversTypes['User'],
+    ParentType,
+    ContextType,
+    MutationSignupArgs
   >
 }>
 
