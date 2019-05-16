@@ -1,6 +1,7 @@
 import { FieldProps } from 'formik'
 
 import * as styles from './input.scss'
+import { classNames } from '../../../utils/classnames'
 
 interface Props<T> {
   field: FieldProps<T>['field']
@@ -19,9 +20,17 @@ export function Input<FORM>({
 }: Props<FORM>) {
   return (
     <div className={styles.container}>
-      <label htmlFor={field.name}>{label}</label>
-      <input id={field.name} type={type} {...field} placeholder={placeholder} />
-      {error}
+      <div className={styles.filedWrapper}>
+        <label htmlFor={field.name}>{label}</label>
+        {error && <span className={styles.message}>{error}</span>}
+      </div>
+      <input
+        className={classNames([error && styles.error])}
+        id={field.name}
+        type={type}
+        {...field}
+        placeholder={placeholder}
+      />
     </div>
   )
 }

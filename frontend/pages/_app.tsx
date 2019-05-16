@@ -1,4 +1,4 @@
-import './_app.scss'
+import '../styling/global.scss'
 
 import ApolloClient from 'apollo-client'
 import { NextComponentType, NextContext } from 'next'

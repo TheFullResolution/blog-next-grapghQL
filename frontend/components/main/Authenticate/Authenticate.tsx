@@ -1,16 +1,16 @@
 import { SigninComponent, SignupComponent } from '../../../generated/graphql'
 import { AuthenticateForm } from './AuthenticateForm'
 import { useState } from 'react'
-import { strEnumHelper } from '../../../utils/strEnumHelper'
+import { Button } from '../../blocks/Button/Button'
+
+import * as styles from './authenticate.scss'
+import { AUTH_STATE } from './auth.types';
 
 interface AuthForm {
   email: string
   name?: string
   password: string
 }
-
-const STATE = strEnumHelper(['Login', 'Signup'])
-type STATE = keyof typeof STATE
 
 function getActiveParam<T>(...params: T[]): T | undefined {
   const active = params.filter(el => !!el)
@@ -20,9 +20,9 @@ function getActiveParam<T>(...params: T[]): T | undefined {
 }
 
 export const Authenticate = () => {
-  const [state, setstate] = useState<STATE>(STATE.Login)
+  const [state, setstate] = useState<AUTH_STATE>(AUTH_STATE.Login)
 
-  const handleClick = (val: STATE) => () => {
+  const handleClick = (val: AUTH_STATE) => () => {
     setstate(val)
   }
 
@@ -38,14 +38,14 @@ export const Authenticate = () => {
             )
 
             const onSubmit = async (values: AuthForm) => {
-              if (state === STATE.Login)
+              if (state === AUTH_STATE.Login)
                 await signIn({
                   variables: {
                     email: values.email,
                     password: values.password,
                   },
                 })
-              if (state === STATE.Signup && values.name) {
+              if (state === AUTH_STATE.Signup && values.name) {
                 await signUp({
                   variables: {
                     email: values.email,
@@ -57,24 +57,29 @@ export const Authenticate = () => {
             }
 
             return (
-              <>
+              <div className={styles.container}>
                 <h2>{state}</h2>
 
-                {Object.values(STATE)
-                  .filter(val => val !== state)
-                  .map(name => (
-                    <button key={name} onClick={handleClick(name)}>
-                      Go to {name} instead
-                    </button>
-                  ))}
-
                 <AuthenticateForm
-                  showName={state === STATE.Signup}
                   error={error}
+                  state={state}
                   loading={!!loading}
                   onSubmit={onSubmit}
-                />
-              </>
+                >
+      
+                    {Object.values(AUTH_STATE)
+                      .filter(val => val !== state)
+                      .map(name => (
+                        <Button
+                          key={name}
+                          version="primary"
+                          onClick={handleClick(name)}
+                        >
+                          {name} instead
+                        </Button>
+                      ))}
+                </AuthenticateForm>
+              </div>
             )
           }}
         </SigninComponent>

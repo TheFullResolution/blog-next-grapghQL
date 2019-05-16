@@ -1,0 +1,15 @@
+.container {
+  h2 {
+    text-align: center
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: $space-double;
+
+  button + button {
+      margin-left: $space-single;
+  }
+}
