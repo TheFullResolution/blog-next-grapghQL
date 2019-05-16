@@ -1,5 +1,6 @@
-import { strEnumHelper } from './strEnumHelper'
 import { FaPencilAlt, FaUserAstronaut } from 'react-icons/fa'
+
+import { strEnumHelper } from './utils/strEnumHelper'
 
 export const RoutPath = strEnumHelper(['home', 'create', 'edit', 'auth'])
 export type RoutPath = keyof typeof RoutPath

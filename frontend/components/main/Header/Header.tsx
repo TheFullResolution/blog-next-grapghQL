@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { FaBookReader } from 'react-icons/fa'
 
-import { routes, RoutPath } from '../../../utils/routes'
+import { routes, RoutPath } from '../../../routes'
 import styles from './header.scss'
 
 const routPathsArray = [RoutPath.create, RoutPath.auth]
