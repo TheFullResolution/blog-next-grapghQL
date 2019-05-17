@@ -104,7 +104,8 @@ export type BlogPostWhereUniqueInput = {
 
 export type Mutation = {
   createBlogPost?: Maybe<BlogPost>
-  signin: User
+  login: User
+  logout?: Maybe<SuccessMessage>
   signup: User
 }
 
@@ -113,7 +114,7 @@ export type MutationCreateBlogPostArgs = {
   body: Scalars['String']
 }
 
-export type MutationSigninArgs = {
+export type MutationLoginArgs = {
   email: Scalars['String']
   password: Scalars['String']
 }
@@ -151,6 +152,10 @@ export type QueryBlogPostsArgs = {
 
 export type QueryBlogPostArgs = {
   where: BlogPostWhereUniqueInput
+}
+
+export type SuccessMessage = {
+  message?: Maybe<Scalars['String']>
 }
 
 export type User = {
@@ -342,6 +347,7 @@ export type ResolversTypes = ResolversObject<{
   Permission: Permission
   BlogPostWhereUniqueInput: BlogPostWhereUniqueInput
   Mutation: {}
+  SuccessMessage: SuccessMessage
   Boolean: Scalars['Boolean']
 }>
 
@@ -372,11 +378,16 @@ export type MutationResolvers<
     ContextType,
     MutationCreateBlogPostArgs
   >
-  signin?: Resolver<
+  login?: Resolver<
     ResolversTypes['User'],
     ParentType,
     ContextType,
-    MutationSigninArgs
+    MutationLoginArgs
+  >
+  logout?: Resolver<
+    Maybe<ResolversTypes['SuccessMessage']>,
+    ParentType,
+    ContextType
   >
   signup?: Resolver<
     ResolversTypes['User'],
@@ -403,6 +414,13 @@ export type QueryResolvers<
     ContextType,
     QueryBlogPostArgs
   >
+}>
+
+export type SuccessMessageResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes['SuccessMessage']
+> = ResolversObject<{
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
 }>
 
 export type UserResolvers<
@@ -435,6 +453,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   DateTime?: GraphQLScalarType
   Mutation?: MutationResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
+  SuccessMessage?: SuccessMessageResolvers<ContextType>
   User?: UserResolvers<ContextType>
 }>
 

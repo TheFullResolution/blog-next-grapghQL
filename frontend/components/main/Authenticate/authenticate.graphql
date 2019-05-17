@@ -1,5 +1,5 @@
-  mutation SIGNIN($email: String!, $password: String!) {
-    signin(email: $email, password: $password) {
+  mutation LOGIN($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       id
     }
   }

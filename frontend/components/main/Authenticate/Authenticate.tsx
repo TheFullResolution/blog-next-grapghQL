@@ -1,10 +1,14 @@
-import { SigninComponent, SignupComponent } from '../../../generated/graphql'
+import {
+  SignupComponent,
+  LoginComponent,
+  UserDataDocument,
+} from '../../../generated/graphql'
 import { AuthenticateForm } from './AuthenticateForm'
 import { useState } from 'react'
 import { Button } from '../../blocks/Button/Button'
 
 import * as styles from './authenticate.scss'
-import { AUTH_STATE } from './auth.types';
+import { AUTH_STATE } from './auth.types'
 
 interface AuthForm {
   email: string
@@ -27,10 +31,10 @@ export const Authenticate = () => {
   }
 
   return (
-    <SignupComponent>
+    <SignupComponent refetchQueries={[{ query: UserDataDocument }]}>
       {(signUp, signUpParams) => (
-        <SigninComponent>
-          {(signIn, signInParams) => {
+        <LoginComponent refetchQueries={[{ query: UserDataDocument }]}>
+          {(logIn, signInParams) => {
             const error = getActiveParam(signInParams.error, signUpParams.error)
             const loading = getActiveParam(
               signInParams.loading,
@@ -39,7 +43,7 @@ export const Authenticate = () => {
 
             const onSubmit = async (values: AuthForm) => {
               if (state === AUTH_STATE.Login)
-                await signIn({
+                await logIn({
                   variables: {
                     email: values.email,
                     password: values.password,
@@ -66,23 +70,22 @@ export const Authenticate = () => {
                   loading={!!loading}
                   onSubmit={onSubmit}
                 >
-      
-                    {Object.values(AUTH_STATE)
-                      .filter(val => val !== state)
-                      .map(name => (
-                        <Button
-                          key={name}
-                          version="primary"
-                          onClick={handleClick(name)}
-                        >
-                          {name} instead
-                        </Button>
-                      ))}
+                  {Object.values(AUTH_STATE)
+                    .filter(val => val !== state)
+                    .map(name => (
+                      <Button
+                        key={name}
+                        version="primary"
+                        onClick={handleClick(name)}
+                      >
+                        {name} instead
+                      </Button>
+                    ))}
                 </AuthenticateForm>
               </div>
             )
           }}
-        </SigninComponent>
+        </LoginComponent>
       )}
     </SignupComponent>
   )

@@ -102,7 +102,8 @@ export type BlogPostWhereUniqueInput = {
 
 export type Mutation = {
   readonly createBlogPost: Maybe<BlogPost>
-  readonly signin: User
+  readonly login: User
+  readonly logout: Maybe<SuccessMessage>
   readonly signup: User
 }
 
@@ -111,7 +112,7 @@ export type MutationCreateBlogPostArgs = {
   body: Scalars['String']
 }
 
-export type MutationSigninArgs = {
+export type MutationLoginArgs = {
   email: Scalars['String']
   password: Scalars['String']
 }
@@ -149,6 +150,10 @@ export type QueryBlogPostsArgs = {
 
 export type QueryBlogPostArgs = {
   where: BlogPostWhereUniqueInput
+}
+
+export type SuccessMessage = {
+  readonly message: Maybe<Scalars['String']>
 }
 
 export type User = {
@@ -244,12 +249,12 @@ export type UserWhereInput = {
   readonly OR: Maybe<ReadonlyArray<UserWhereInput>>
   readonly NOT: Maybe<ReadonlyArray<UserWhereInput>>
 }
-export type SigninMutationVariables = {
+export type LoginMutationVariables = {
   email: Scalars['String']
   password: Scalars['String']
 }
 
-export type SigninMutation = { readonly signin: Pick<User, 'id'> }
+export type LoginMutation = { readonly login: Pick<User, 'id'> }
 
 export type SignupMutationVariables = {
   email: Scalars['String']
@@ -268,6 +273,12 @@ export type Create_ItemMutation = {
   readonly createBlogPost: Maybe<Pick<BlogPost, 'id'>>
 }
 
+export type LogoutMutationVariables = {}
+
+export type LogoutMutation = {
+  readonly logout: Maybe<Pick<SuccessMessage, 'message'>>
+}
+
 export type All_ArticlesQueryVariables = {}
 
 export type All_ArticlesQuery = {
@@ -276,34 +287,40 @@ export type All_ArticlesQuery = {
   >
 }
 
+export type UserDataQueryVariables = {}
+
+export type UserDataQuery = {
+  readonly me: Maybe<Pick<User, 'id' | 'email' | 'name' | 'permissions'>>
+}
+
 import gql from 'graphql-tag'
 import * as React from 'react'
 import * as ReactApollo from 'react-apollo'
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
-export const SigninDocument = gql`
-  mutation SIGNIN($email: String!, $password: String!) {
-    signin(email: $email, password: $password) {
+export const LoginDocument = gql`
+  mutation LOGIN($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       id
     }
   }
 `
-export type SigninMutationFn = ReactApollo.MutationFn<
-  SigninMutation,
-  SigninMutationVariables
+export type LoginMutationFn = ReactApollo.MutationFn<
+  LoginMutation,
+  LoginMutationVariables
 >
 
-export const SigninComponent = (
+export const LoginComponent = (
   props: Omit<
     Omit<
-      ReactApollo.MutationProps<SigninMutation, SigninMutationVariables>,
+      ReactApollo.MutationProps<LoginMutation, LoginMutationVariables>,
       'mutation'
     >,
     'variables'
-  > & { variables?: SigninMutationVariables },
+  > & { variables?: LoginMutationVariables },
 ) => (
-  <ReactApollo.Mutation<SigninMutation, SigninMutationVariables>
-    mutation={SigninDocument}
+  <ReactApollo.Mutation<LoginMutation, LoginMutationVariables>
+    mutation={LoginDocument}
     {...props}
   />
 )
@@ -365,6 +382,33 @@ export const Create_ItemComponent = (
   />
 )
 
+export const LogoutDocument = gql`
+  mutation LOGOUT {
+    logout {
+      message
+    }
+  }
+`
+export type LogoutMutationFn = ReactApollo.MutationFn<
+  LogoutMutation,
+  LogoutMutationVariables
+>
+
+export const LogoutComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.MutationProps<LogoutMutation, LogoutMutationVariables>,
+      'mutation'
+    >,
+    'variables'
+  > & { variables?: LogoutMutationVariables },
+) => (
+  <ReactApollo.Mutation<LogoutMutation, LogoutMutationVariables>
+    mutation={LogoutDocument}
+    {...props}
+  />
+)
+
 export const All_ArticlesDocument = gql`
   query ALL_ARTICLES {
     blogPosts {
@@ -386,6 +430,32 @@ export const All_ArticlesComponent = (
 ) => (
   <ReactApollo.Query<All_ArticlesQuery, All_ArticlesQueryVariables>
     query={All_ArticlesDocument}
+    {...props}
+  />
+)
+
+export const UserDataDocument = gql`
+  query UserData {
+    me {
+      id
+      email
+      name
+      permissions
+    }
+  }
+`
+
+export const UserDataComponent = (
+  props: Omit<
+    Omit<
+      ReactApollo.QueryProps<UserDataQuery, UserDataQueryVariables>,
+      'query'
+    >,
+    'variables'
+  > & { variables?: UserDataQueryVariables },
+) => (
+  <ReactApollo.Query<UserDataQuery, UserDataQueryVariables>
+    query={UserDataDocument}
     {...props}
   />
 )

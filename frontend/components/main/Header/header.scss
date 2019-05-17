@@ -9,11 +9,15 @@
     justify-content: center;
     align-items: center;
     margin: 0;
-    margin-bottom: $space-double;
 
     svg {
       margin-right: $space-single;
     }
+  }
+
+  p {
+    text-align: center;
+    margin-top: $space-single;
   }
 
   .wrapper {
@@ -24,7 +28,12 @@
     display: flex;
     list-style: none;
     max-width: 600px;
-    margin: 0 auto;
+    margin: {
+      bottom: 0;
+      left: auto;
+      right: auto;
+      top: $space-double;
+    }
     li + li {
       margin-left: 10px;
     }
@@ -44,8 +53,8 @@
     }
 
     svg {
-        margin-right: $space-quarter;
-      }
+      margin-right: $space-quarter;
+    }
 
     &:hover {
       text-decoration: none;

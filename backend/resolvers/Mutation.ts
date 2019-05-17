@@ -13,8 +13,7 @@ const Mutation: MutationResolvers = {
       throw new Error('You must be logged in to do that!')
     }
 
-    console.log({args});
-    
+    console.log({ args })
 
     if (args.title && args.body) {
       const item = await ctx.db.createBlogPost({
@@ -31,7 +30,7 @@ const Mutation: MutationResolvers = {
     } else return null
   },
 
-  async signin(parent, { email, password }, ctx, info) {
+  async login(parent, { email, password }, ctx, info) {
     const user = await ctx.db.user({ email: email.toLowerCase() })
 
     if (!user) {
@@ -43,11 +42,16 @@ const Mutation: MutationResolvers = {
     }
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
 
-    ctx.req.cookie('token', token, {
+    ctx.res.cookie('token', token, {
       httpOnly: true,
       maxAge: ms('1y'),
     })
     return user
+  },
+
+  logout(parent, args, ctx, info) {
+    ctx.res.clearCookie('token')
+    return { message: 'Goodbye!' }
   },
 
   async signup(parent, { email, password, name }, ctx, info) {
