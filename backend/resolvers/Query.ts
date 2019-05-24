@@ -23,9 +23,11 @@ const Query: QueryResolvers = {
     if (!ctx.req.userId) {
       return null
     }
-    return await ctx.db.user({
+    const me =  await ctx.db.user({
       id: ctx.req.userId,
     })
+    
+    return me
   },
 }
 

@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import ms from 'ms'
 import { MutationResolvers } from '../generated/graphql'
+import { TOKEN } from '../index';
 
 function errorThrow(): never {
   throw new Error('Either email or password are not correct')
@@ -42,7 +43,7 @@ const Mutation: MutationResolvers = {
     }
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
 
-    ctx.res.cookie('token', token, {
+    ctx.res.cookie(TOKEN, token, {
       httpOnly: true,
       maxAge: ms('1y'),
     })
@@ -50,7 +51,7 @@ const Mutation: MutationResolvers = {
   },
 
   logout(parent, args, ctx, info) {
-    ctx.res.clearCookie('token')
+    ctx.res.clearCookie(TOKEN)
     return { message: 'Goodbye!' }
   },
 
@@ -67,7 +68,7 @@ const Mutation: MutationResolvers = {
 
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
 
-    ctx.res.cookie('token', token, {
+    ctx.res.cookie(TOKEN, token, {
       httpOnly: true,
       maxAge: ms('1y'),
     })

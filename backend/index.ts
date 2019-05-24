@@ -24,6 +24,7 @@ const schema = makeExecutableSchema({
 })
 
 const DEV = process.env.NODE_ENV !== 'production'
+export const TOKEN = 'blog-platform-v1'
 
 const corsOptions = {
   credentials: true,
@@ -49,10 +50,9 @@ app.use(helmet())
 app.use(cookieParser())
 
 app.use((req, res, next) => {
-  const { token } = req.cookies
+  
+  const token = req.cookies[TOKEN]
   if (token && process.env.APP_SECRET) {
-    console.log(token)
-
     const tokenData = jwt.verify(token, process.env.APP_SECRET)
     req.userId = (tokenData as { userId: string }).userId
   }
