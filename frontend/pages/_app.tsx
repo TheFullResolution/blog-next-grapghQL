@@ -1,13 +1,17 @@
 import '../styling/global.scss'
 
 import ApolloClient from 'apollo-client'
-import { NextComponentType, NextContext } from 'next'
+import { NextComponentType } from 'next'
+import { AppContext } from 'next-with-apollo'
 import App, { Container } from 'next/app'
 import Head from 'next/head'
+import { SingletonRouter } from 'next/router'
 import { ApolloProvider } from 'react-apollo'
-
+import pathToRegExp from 'path-to-regexp'
 import { Page } from '../components/main/Page/Page'
 import { withApolloConfigured } from '../utils/withApolloConfigured'
+import { UserDataDocument } from '../generated/graphql'
+import { RoutPath } from '../routes'
 
 interface Props {
   apollo: ApolloClient<unknown>
@@ -17,16 +21,31 @@ class MyApp extends App<Props> {
   public static async getInitialProps({
     Component,
     ctx,
+    router,
   }: {
     Component: NextComponentType<Props>
-    ctx: NextContext
+    ctx: AppContext
+    router: SingletonRouter
   }) {
     let pageProps
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx)
     }
-    // this exposes the query to the user
+    const user = await ctx.apolloClient.query({ query: UserDataDocument })
 
+    const match = pathToRegExp(`/${RoutPath.create}`).test(ctx.pathname)
+
+    if (user.data && match) {
+      if (ctx.res) {
+        ctx.res.writeHead(302, {
+          Location: RoutPath.auth,
+        })
+        ctx.res.end()
+      } else {
+        router.replace(RoutPath.auth)
+      }
+    }
+    // this exposes the query to the user
     return { pageProps: { ...pageProps, query: ctx.query } }
   }
 

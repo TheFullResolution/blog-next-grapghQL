@@ -27,13 +27,13 @@
   nav {
     display: flex;
     list-style: none;
-    max-width: 600px;
     margin: {
       bottom: 0;
       left: auto;
       right: auto;
       top: $space-double;
     }
+    max-width: 600px;
     li + li {
       margin-left: 10px;
     }
