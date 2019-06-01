@@ -1,0 +1,32 @@
+.container {
+  margin: {
+    bottom: $space-single;
+    top: $space-single;
+  }
+
+
+  input {
+    border-radius: $space-quarter;
+    border: 1px solid gray;
+    padding: $space-half;
+    width: 100%;
+    display: block;
+    font-size: inherit;
+    margin: {
+      bottom: $space-half;
+      top: $space-quarter;
+    }
+  }
+  .error {
+    border: 1px solid red;
+  }
+}
+
+.filedWrapper {
+  display: flex;
+}
+
+.message {
+  margin-left: auto;
+  color: red;
+}

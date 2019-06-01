@@ -1,45 +1,61 @@
-import './_app.scss';
+import '../styling/global.scss';
 
-import { NextComponentType, NextContext } from 'next';
+import ApolloClient from 'apollo-client';
+import { NextComponentType } from 'next';
+import { AppContext } from 'next-with-apollo';
 import App, { Container } from 'next/app';
+import Head from 'next/head';
+import { SingletonRouter } from 'next/router';
 import { ApolloProvider } from 'react-apollo';
 
-import { Page } from '../components/Page/Page';
-import withData from '../lib/withData';
+import { Page } from '../components/main/Page/Page';
+import { authCheck } from '../utils/authCheck';
+import { withApolloConfigured } from '../utils/withApolloConfigured';
 
 interface Props {
-  apollo: any;
+  apollo: ApolloClient<unknown>
 }
 
 class MyApp extends App<Props> {
   public static async getInitialProps({
     Component,
-    ctx
+    ctx,
+    router,
   }: {
-    Component: NextComponentType<any>;
-    ctx: NextContext;
+    Component: NextComponentType<Props>
+    ctx: AppContext
+    router: SingletonRouter
   }) {
+    let pageProps
     if (Component.getInitialProps) {
-      var pageProps = await Component.getInitialProps(ctx);
+      pageProps = await Component.getInitialProps(ctx)
     }
-    // this exposes the query to the user
 
-    return { pageProps: { ...pageProps, query: ctx.query } };
+    await authCheck(ctx, router)
+
+    // this exposes the query to the user
+    return { pageProps: { ...pageProps, query: ctx.query } }
   }
 
   public render() {
-    const { Component, apollo, pageProps } = this.props;
+    const { Component, apollo, pageProps } = this.props
 
     return (
       <Container>
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Roboto"
+            rel="stylesheet"
+          />
+        </Head>
         <ApolloProvider client={apollo}>
           <Page>
             <Component {...pageProps} />
           </Page>
         </ApolloProvider>
       </Container>
-    );
+    )
   }
 }
 
-export default withData(MyApp);
+export default withApolloConfigured(MyApp)

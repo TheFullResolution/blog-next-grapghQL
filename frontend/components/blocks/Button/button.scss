@@ -1,0 +1,58 @@
+.button {
+  display: inline-block;
+  border: none;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+  text-align: center;
+  text-transform: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+%styled {
+  padding: $space-half $space-single;
+  border-radius: $space-quarter;
+  transition: background-color 300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+@mixin createButtonStyle($color, $text) {
+  @extend %styled;
+  background-color: $color;
+  color: $text;
+
+  &:hover {
+    background-color: darken($color, 10%);
+  }
+
+
+  &:disabled {
+    background-color: scale-color($color-opposite-3, 10%);
+  }
+}
+
+
+.primary {
+  @include createButtonStyle($color-accent, white)
+}
+
+.secondary {
+  @include createButtonStyle($color-opposite-3, white)
+}

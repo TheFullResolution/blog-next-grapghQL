@@ -1,0 +1,7 @@
+ query ALL_ARTICLES {
+    blogPosts {
+      id
+      title
+      body
+    }
+  }

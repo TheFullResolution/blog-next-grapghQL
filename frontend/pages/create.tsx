@@ -1,3 +1,3 @@
-import { CreateBlogPost } from "../components/CreateBlogPost/CreateBlogPost";
+import { CreateBlogPost } from '../components/main/CreateBlogPost/CreateBlogPost'
 
 export default CreateBlogPost

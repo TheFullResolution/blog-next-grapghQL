@@ -32,6 +32,10 @@ module.exports = withPlugins([
   [
     withSass,
     {
+      sassLoaderOptions: {
+        data: '@import "./index";',
+        includePaths: [`${__dirname}/styling`],
+      },
       cssModules: true,
       cssLoaderOptions: {
         localIdentName: '[path]___[local]___[hash:base64:5]',

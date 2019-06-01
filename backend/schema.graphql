@@ -1,0 +1,26 @@
+# import * from './generated/prisma.graphql'
+
+type SuccessMessage {
+  message: String
+}
+
+type Mutation {
+  createBlogPost(title: String!, body: String!): BlogPost
+  login(email: String!, password: String!): User!
+  logout: SuccessMessage
+  signup(email: String!, password: String!, name: String!): User!
+}
+
+type Query {
+  blogPosts(
+    where: BlogPostWhereInput
+    orderBy: BlogPostOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [BlogPost]!
+  me: User
+  blogPost(where: BlogPostWhereUniqueInput!): BlogPost
+}
