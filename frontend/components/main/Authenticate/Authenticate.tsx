@@ -6,9 +6,11 @@ import {
 import { AuthenticateForm } from './AuthenticateForm'
 import { useState } from 'react'
 import { Button } from '../../blocks/Button/Button'
+import { withRouter } from 'next/router'
 
 import * as styles from './authenticate.scss'
 import { AUTH_STATE } from './auth.types'
+import { RoutPath, routes } from '../../../app/routes'
 
 interface AuthForm {
   email: string
@@ -23,11 +25,15 @@ function getActiveParam<T>(...params: T[]): T | undefined {
   return active[0]
 }
 
-export const Authenticate = () => {
+export const Authenticate = withRouter(function AuthenticateComponent(props) {
   const [state, setstate] = useState<AUTH_STATE>(AUTH_STATE.Login)
-
+  const { router } = props
   const handleClick = (val: AUTH_STATE) => () => {
     setstate(val)
+  }
+
+  const redirect = () => {
+    router && router.push(routes[RoutPath.home].path)
   }
 
   return (
@@ -42,21 +48,27 @@ export const Authenticate = () => {
             )
 
             const onSubmit = async (values: AuthForm) => {
-              if (state === AUTH_STATE.Login)
-                await logIn({
+              if (state === AUTH_STATE.Login) {
+                const id = await logIn({
                   variables: {
                     email: values.email,
                     password: values.password,
                   },
                 })
-              if (state === AUTH_STATE.Signup && values.name) {
-                await signUp({
+                if (id && id.data && id.data.login.id) {
+                  redirect()
+                }
+              } else if (state === AUTH_STATE.Signup && values.name) {
+                const id = await signUp({
                   variables: {
                     email: values.email,
                     password: values.password,
                     name: values.name,
                   },
                 })
+                if (id && id.data && id.data.signup.id) {
+                  redirect()
+                }
               }
             }
 
@@ -89,4 +101,4 @@ export const Authenticate = () => {
       )}
     </SignupComponent>
   )
-}
+})

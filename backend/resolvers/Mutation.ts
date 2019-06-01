@@ -13,9 +13,7 @@ const Mutation: MutationResolvers = {
     if (!ctx.req.userId) {
       throw new Error('You must be logged in to do that!')
     }
-
-    console.log({ args })
-
+    
     if (args.title && args.body) {
       const item = await ctx.db.createBlogPost({
         title: args.title,
