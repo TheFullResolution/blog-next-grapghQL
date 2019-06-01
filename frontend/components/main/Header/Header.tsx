@@ -1,21 +1,14 @@
-import Link from 'next/link'
-import { FaBookReader, FaWalking } from 'react-icons/fa'
+import Link from 'next/link';
+import { FaBookReader, FaWalking } from 'react-icons/fa';
 
-import { routes, RoutPath } from '../../../routes'
-import styles from './header.scss'
-import { User } from '../User/User'
-import {
-  LogoutComponent,
-  UserDataDocument,
-  UserDataQuery,
-} from '../../../generated/graphql'
-import { Button } from '../../blocks/Button/Button'
+import { routes, RoutPath } from '../../../app/routes';
+import { LogoutComponent, UserDataDocument } from '../../../generated/graphql';
+import { Button } from '../../blocks/Button/Button';
+import { isLoggedIn, User } from '../User/User';
+
+import styles from './header.scss';
 
 const routPathsArray = [RoutPath.create, RoutPath.auth]
-
-function isLoggedIn(data: UserDataQuery | undefined): data is UserDataQuery {
-  return !!(data !== undefined && data.me && data.me.id)
-}
 
 const Header: React.FC = () => (
   <User>
@@ -38,7 +31,6 @@ const Header: React.FC = () => (
                   {routPathsArray
                     .map(val => routes[val])
                     .filter(route => {
-                      if (route.auth === 'always') return true
                       if (isLoggedIn(data)) return route.auth
                       return !route.auth
                     })

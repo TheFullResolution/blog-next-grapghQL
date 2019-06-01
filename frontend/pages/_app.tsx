@@ -1,17 +1,16 @@
-import '../styling/global.scss'
+import '../styling/global.scss';
 
-import ApolloClient from 'apollo-client'
-import { NextComponentType } from 'next'
-import { AppContext } from 'next-with-apollo'
-import App, { Container } from 'next/app'
-import Head from 'next/head'
-import { SingletonRouter } from 'next/router'
-import { ApolloProvider } from 'react-apollo'
-import pathToRegExp from 'path-to-regexp'
-import { Page } from '../components/main/Page/Page'
-import { withApolloConfigured } from '../utils/withApolloConfigured'
-import { UserDataDocument } from '../generated/graphql'
-import { RoutPath } from '../routes'
+import ApolloClient from 'apollo-client';
+import { NextComponentType } from 'next';
+import { AppContext } from 'next-with-apollo';
+import App, { Container } from 'next/app';
+import Head from 'next/head';
+import { SingletonRouter } from 'next/router';
+import { ApolloProvider } from 'react-apollo';
+
+import { Page } from '../components/main/Page/Page';
+import { authCheck } from '../utils/authCheck';
+import { withApolloConfigured } from '../utils/withApolloConfigured';
 
 interface Props {
   apollo: ApolloClient<unknown>
@@ -31,20 +30,9 @@ class MyApp extends App<Props> {
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx)
     }
-    const user = await ctx.apolloClient.query({ query: UserDataDocument })
 
-    const match = pathToRegExp(`/${RoutPath.create}`).test(ctx.pathname)
+    await authCheck(ctx, router)
 
-    if (user.data && match) {
-      if (ctx.res) {
-        ctx.res.writeHead(302, {
-          Location: RoutPath.auth,
-        })
-        ctx.res.end()
-      } else {
-        router.replace(RoutPath.auth)
-      }
-    }
     // this exposes the query to the user
     return { pageProps: { ...pageProps, query: ctx.query } }
   }
