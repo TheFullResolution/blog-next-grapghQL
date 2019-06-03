@@ -1,0 +1,18 @@
+.container {
+  margin: {
+    bottom: $space-half;
+    top: $space-quarter;
+  }
+
+  & > :global(.react-mde-tabbed-layout) {
+    border: 1px solid gray;
+  }
+
+  .error {
+    color: red;
+    margin: {
+        bottom: $space-half;
+        top: $space-half;
+      }
+  }
+}

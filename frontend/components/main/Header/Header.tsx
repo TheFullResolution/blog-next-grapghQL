@@ -1,18 +1,19 @@
-import Link from 'next/link';
-import { FaBookReader, FaWalking } from 'react-icons/fa';
+import Link from 'next/link'
+import { FaBookReader, FaWalking } from 'react-icons/fa'
 
-import { routes, RoutPath } from '../../../app/routes';
-import { LogoutComponent, UserDataDocument } from '../../../generated/graphql';
-import { Button } from '../../blocks/Button/Button';
-import { isLoggedIn, User } from '../User/User';
+import { routes, RoutPath } from '../../../app/routes'
+import { LogoutComponent, UserDataDocument } from '../../../generated/graphql'
+import { Button } from '../../blocks/Button/Button'
+import { isLoggedIn, User } from '../User/User'
 
-import styles from './header.scss';
+import styles from './header.scss'
 
-const routPathsArray = [RoutPath.create, RoutPath.auth]
+const routPathsArray = Object.keys(RoutPath) as RoutPath[]
 
 const Header: React.FC = () => (
   <User>
-    {({ data }) => {
+    {({ payload, loggedIn }) => {
+      const { data } = payload
       return (
         <LogoutComponent refetchQueries={[{ query: UserDataDocument }]}>
           {logout => (
@@ -31,6 +32,7 @@ const Header: React.FC = () => (
                   {routPathsArray
                     .map(val => routes[val])
                     .filter(route => {
+                      if (route.auth === 'always') return true
                       if (isLoggedIn(data)) return route.auth
                       return !route.auth
                     })
@@ -40,16 +42,16 @@ const Header: React.FC = () => (
                           <Link href={route.path}>
                             <a className={styles.navLink}>
                               {route.icon}
-                              {route.path}
+                              {route.name}
                             </a>
                           </Link>
                         </li>
                       )
                     })}
-                  {isLoggedIn(data) && (
+                  {loggedIn && (
                     <Button className={styles.navLink} onClick={logout}>
                       <FaWalking />
-                      logout
+                      Logout
                     </Button>
                   )}
                 </nav>

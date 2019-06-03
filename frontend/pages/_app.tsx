@@ -1,16 +1,16 @@
-import '../styling/global.scss';
+import '../styling/global.scss'
 
-import ApolloClient from 'apollo-client';
-import { NextComponentType } from 'next';
-import { AppContext } from 'next-with-apollo';
-import App, { Container } from 'next/app';
-import Head from 'next/head';
-import { SingletonRouter } from 'next/router';
-import { ApolloProvider } from 'react-apollo';
+import ApolloClient from 'apollo-client'
+import { NextComponentType } from 'next'
+import { AppContext } from 'next-with-apollo'
+import App, { Container } from 'next/app'
+import Head from 'next/head'
+import { SingletonRouter } from 'next/router'
+import { ApolloProvider } from 'react-apollo'
 
-import { Page } from '../components/main/Page/Page';
-import { authCheck } from '../utils/authCheck';
-import { withApolloConfigured } from '../utils/withApolloConfigured';
+import { Page } from '../components/main/Page/Page'
+import { authCheck } from '../utils/authCheck'
+import { withApolloConfigured } from '../utils/withApolloConfigured'
 
 interface Props {
   apollo: ApolloClient<unknown>
@@ -47,6 +47,13 @@ class MyApp extends App<Props> {
             href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Roboto"
             rel="stylesheet"
           />
+          {process.env.NODE_ENV !== 'production' && (
+            <link
+              rel="stylesheet"
+              type="text/css"
+              href={'/_next/static/css/styles.chunk.css?v=' + Date.now()}
+            />
+          )}
         </Head>
         <ApolloProvider client={apollo}>
           <Page>

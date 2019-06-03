@@ -1,4 +1,9 @@
-import { FaPencilAlt, FaUserAstronaut } from 'react-icons/fa'
+import {
+  FaPencilAlt,
+  FaUserAstronaut,
+  FaHome,
+  FaHighlighter,
+} from 'react-icons/fa'
 
 import { strEnumHelper } from '../utils/strEnumHelper'
 
@@ -10,7 +15,7 @@ export type Routes = {
     path: key extends 'home' ? '/' : key
     name: string
     icon?: JSX.Element
-    auth?: boolean
+    auth: 'always' | boolean
   }
 }
 
@@ -18,6 +23,8 @@ export const routes: Routes = {
   [RoutPath.home]: {
     path: '/',
     name: 'Home',
+    auth: 'always',
+    icon: <FaHome />,
   },
   [RoutPath.create]: {
     path: RoutPath.create,
@@ -28,10 +35,13 @@ export const routes: Routes = {
   [RoutPath.edit]: {
     path: RoutPath.edit,
     name: 'Edit',
+    auth: true,
+    icon: <FaHighlighter />,
   },
   [RoutPath.auth]: {
     path: RoutPath.auth,
     name: 'Login/Sing Up',
     icon: <FaUserAstronaut />,
+    auth: false,
   },
 }
