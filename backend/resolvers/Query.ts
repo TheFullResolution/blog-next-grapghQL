@@ -1,12 +1,15 @@
-
-import { BlogPostWhereUniqueInput } from '../generated'
-import { QueryResolvers } from '../generated/graphql';
+import { BlogPostWhereUniqueInput, ID_Input } from '../generated'
+import { QueryResolvers } from '../generated/graphql'
 
 const Query: QueryResolvers = {
   async blogPost(parent, args, ctx, info) {
-    //type errors TODO: remove once generators fixed
-    const newArgs = args as unknown
-    const blog = await ctx.db.blogPost(newArgs as BlogPostWhereUniqueInput)
+    if (!args.where.id) {
+      throw new Error('Missing Id')
+    }
+
+    const id = args.where.id
+
+    const blog = await ctx.db.blogPost({ id })
 
     return blog
   },
@@ -23,10 +26,10 @@ const Query: QueryResolvers = {
     if (!ctx.req.userId) {
       return null
     }
-    const me =  await ctx.db.user({
+    const me = await ctx.db.user({
       id: ctx.req.userId,
     })
-    
+
     return me
   },
 }

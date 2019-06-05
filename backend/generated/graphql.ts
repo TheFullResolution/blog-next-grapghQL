@@ -1,6 +1,12 @@
 import { Context } from '../models/context'
-
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from 'graphql'
+import { User, BlogPost } from './index'
 export type Maybe<T> = T | undefined | null
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -12,6 +18,7 @@ export type Scalars = {
 }
 
 export type BlogPost = {
+  __typename?: 'BlogPost'
   id: Scalars['ID']
   title: Scalars['String']
   body: Scalars['String']
@@ -103,6 +110,7 @@ export type BlogPostWhereUniqueInput = {
 }
 
 export type Mutation = {
+  __typename?: 'Mutation'
   createBlogPost?: Maybe<BlogPost>
   login: User
   logout?: Maybe<SuccessMessage>
@@ -135,6 +143,7 @@ export enum Permission {
 }
 
 export type Query = {
+  __typename?: 'Query'
   blogPosts: Array<Maybe<BlogPost>>
   me?: Maybe<User>
   blogPost?: Maybe<BlogPost>
@@ -155,10 +164,12 @@ export type QueryBlogPostArgs = {
 }
 
 export type SuccessMessage = {
+  __typename?: 'SuccessMessage'
   message?: Maybe<Scalars['String']>
 }
 
 export type User = {
+  __typename?: 'User'
   id: Scalars['ID']
   name: Scalars['String']
   email: Scalars['String']
@@ -251,16 +262,6 @@ export type UserWhereInput = {
   OR?: Maybe<Array<UserWhereInput>>
   NOT?: Maybe<Array<UserWhereInput>>
 }
-import { User, BlogPost } from './index'
-
-import {
-  GraphQLResolveInfo,
-  GraphQLScalarType,
-  GraphQLScalarTypeConfig,
-} from 'graphql'
-
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
 export type WithIndex<TObject> = TObject & Record<string, any>
 export type ResolversObject<TObject> = WithIndex<TObject>
 

@@ -16,6 +16,8 @@ interface Props {
   apollo: ApolloClient<unknown>
 }
 
+export type PageComponent<T> = NextComponentType<{query: AppContext['query']} & T ,T, AppContext>
+
 class MyApp extends App<Props> {
   public static async getInitialProps({
     Component,
