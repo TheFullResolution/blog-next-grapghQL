@@ -10,17 +10,18 @@ interface Props {
 const PostItem: React.FC<Props> = ({ post }) => {
   return (
     <div className={styles.container}>
+      <div className={styles.wrapper}>
+        <Markdown>{post.body}</Markdown>
+        <div className={styles.hide}></div>
+      </div>
       <Link
         href={{
           pathname: '/post',
           query: { id: post.id },
         }}
       >
-        <a>
-          <h1>{post.title}</h1>
-        </a>
+        <a>Read now: {post.title}</a>
       </Link>
-      <Markdown>{post.body}</Markdown>
     </div>
   )
 }
