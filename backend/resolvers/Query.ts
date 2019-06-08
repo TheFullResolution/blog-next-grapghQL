@@ -10,8 +10,9 @@ const Query: QueryResolvers = {
     const id = args.where.id
 
     const blog = await ctx.db.blogPost({ id })
-
-    return blog
+    const user =  await ctx.db.blogPost({ id }).user()
+    
+    return {...blog, user}
   },
 
   async blogPosts(parent, args, ctx, info) {

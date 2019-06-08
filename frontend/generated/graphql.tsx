@@ -296,7 +296,11 @@ export type Blog_PostQueryVariables = {
 }
 
 export type Blog_PostQuery = {
-  readonly blogPost: Maybe<Pick<BlogPost, 'id' | 'title' | 'body'>>
+  readonly blogPost: Maybe<
+    Pick<BlogPost, 'id' | 'title' | 'body'> & {
+      readonly user: Pick<User, 'id'>
+    }
+  >
 }
 
 export type UserDataQueryVariables = {}
@@ -444,6 +448,9 @@ export const Blog_PostDocument = gql`
       id
       title
       body
+      user {
+        id
+      }
     }
   }
 `

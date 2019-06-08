@@ -3,5 +3,8 @@ query BLOG_POST($id: ID!) {
       id
       title
       body
+      user {
+        id
+      }
     }
   }
