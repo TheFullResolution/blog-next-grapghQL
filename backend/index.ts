@@ -13,7 +13,7 @@ import { Query } from './resolvers/Query'
 
 // let's go!
 
-const typeDefs = importSchema('./backend/schema.graphql')
+const typeDefs = importSchema('./backend/models/schema.graphql')
 
 const schema = makeExecutableSchema({
   typeDefs,

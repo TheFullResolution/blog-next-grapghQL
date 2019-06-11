@@ -1,5 +1,5 @@
-import { BlogPostWhereUniqueInput, ID_Input } from '../generated'
-import { QueryResolvers } from '../generated/graphql'
+import { BlogPostWhereUniqueInput, ID_Input, Prisma } from '../generated'
+import { QueryResolvers, BlogPost } from '../generated/graphql'
 
 const Query: QueryResolvers = {
   async blogPost(parent, args, ctx, info) {
@@ -10,14 +10,27 @@ const Query: QueryResolvers = {
     const id = args.where.id
 
     const blog = await ctx.db.blogPost({ id })
-    const user =  await ctx.db.blogPost({ id }).user()
-    
-    return {...blog, user}
+    const user = await ctx.db.blogPost({ id }).user()
+    const blogWithUser = blog ? { ...blog, user } : null
+
+    return blogWithUser
   },
 
   async blogPosts(parent, args, ctx, info) {
-    //type errors TODO: remove once generators fixed
-    const blogs = await ctx.db.blogPosts(args as object)
+    const fragment = `
+          fragment BlogPostWithUser on BlogPost {
+            id
+            title
+            body
+            user {
+              id
+            }
+          }
+          `
+
+    const blogs = await ctx.db
+      .blogPosts(args as Prisma['blogPosts']['arguments'])
+      .$fragment<BlogPost[]>(fragment)
 
     return blogs
   },

@@ -4,8 +4,7 @@ import {
   GraphQLScalarType,
   GraphQLScalarTypeConfig,
 } from 'graphql'
-import { User, BlogPost } from './index'
-export type Maybe<T> = T | undefined | null
+export type Maybe<T> = T | null
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -18,7 +17,6 @@ export type Scalars = {
 }
 
 export type BlogPost = {
-  __typename?: 'BlogPost'
   id: Scalars['ID']
   title: Scalars['String']
   body: Scalars['String']
@@ -27,18 +25,17 @@ export type BlogPost = {
   user: User
 }
 
-export enum BlogPostOrderByInput {
-  IdAsc = 'id_ASC',
-  IdDesc = 'id_DESC',
-  TitleAsc = 'title_ASC',
-  TitleDesc = 'title_DESC',
-  BodyAsc = 'body_ASC',
-  BodyDesc = 'body_DESC',
-  UpdatedAtAsc = 'updatedAt_ASC',
-  UpdatedAtDesc = 'updatedAt_DESC',
-  CreatedAtAsc = 'createdAt_ASC',
-  CreatedAtDesc = 'createdAt_DESC',
-}
+export type BlogPostOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'title_ASC'
+  | 'title_DESC'
+  | 'body_ASC'
+  | 'body_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
 
 export type BlogPostWhereInput = {
   id?: Maybe<Scalars['ID']>
@@ -110,7 +107,6 @@ export type BlogPostWhereUniqueInput = {
 }
 
 export type Mutation = {
-  __typename?: 'Mutation'
   createBlogPost?: Maybe<BlogPost>
   login: User
   logout?: Maybe<SuccessMessage>
@@ -133,17 +129,15 @@ export type MutationSignupArgs = {
   name: Scalars['String']
 }
 
-export enum Permission {
-  Admin = 'ADMIN',
-  User = 'USER',
-  Itemcreate = 'ITEMCREATE',
-  Itemupdate = 'ITEMUPDATE',
-  Itemdelete = 'ITEMDELETE',
-  Permissionupdate = 'PERMISSIONUPDATE',
-}
+export type Permission =
+  | 'ADMIN'
+  | 'USER'
+  | 'ITEMCREATE'
+  | 'ITEMUPDATE'
+  | 'ITEMDELETE'
+  | 'PERMISSIONUPDATE'
 
 export type Query = {
-  __typename?: 'Query'
   blogPosts: Array<Maybe<BlogPost>>
   me?: Maybe<User>
   blogPost?: Maybe<BlogPost>
@@ -164,12 +158,10 @@ export type QueryBlogPostArgs = {
 }
 
 export type SuccessMessage = {
-  __typename?: 'SuccessMessage'
   message?: Maybe<Scalars['String']>
 }
 
 export type User = {
-  __typename?: 'User'
   id: Scalars['ID']
   name: Scalars['String']
   email: Scalars['String']

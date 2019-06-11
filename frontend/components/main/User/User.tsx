@@ -11,7 +11,7 @@ interface ChildrenParams {
 }
 
 interface Props {
-  children: ({ payload }: ChildrenParams) => JSX.Element
+  children: ({ payload }: ChildrenParams) => JSX.Element | null
 }
 
 function isLoggedIn(data: UserDataQuery | undefined): data is UserDataQuery {
