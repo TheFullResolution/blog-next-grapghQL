@@ -1,11 +1,11 @@
-import React, { Children } from 'react'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { Editor } from '../../blocks/Editor/Editor'
-import { Input } from '../../blocks/Input/Input'
-import { Fieldset } from '../../blocks/Fieldset/Fieldset'
-import { Button } from '../../blocks/Button/Button'
+import { Field, FieldProps, Form, Formik } from 'formik';
+import React from 'react';
 
-import styles from './blogPostForm.scss'
+import { Button } from '../../blocks/Button/Button';
+import { Editor } from '../../blocks/Editor/Editor';
+import { Fieldset } from '../../blocks/Fieldset/Fieldset';
+import { Input } from '../../blocks/Input/Input';
+import styles from './blogPostForm.scss';
 
 export interface BlogFormValues {
   title: string

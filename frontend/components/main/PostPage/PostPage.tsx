@@ -7,12 +7,18 @@ import { User, isLoggedIn } from '../User/User'
 import Link from 'next/link'
 import { Button } from '../../blocks/Button/Button'
 import { routes, RoutPath } from '../../../app/routes'
+import { useState } from 'react'
+import { DeleteBlogPost } from '../DeleteBlogPost/DeleteBlogPost'
 
 interface Props {
   blogPost: Blog_PostQuery['blogPost']
 }
 
 const PostPage: NextFC<Props> = ({ blogPost }) => {
+  const [showAlert, setShowAlert] = useState(false)
+  const toggleShowAlert = () => {
+    setShowAlert(prevState => !prevState)
+  }
   return (
     <div className={styles.container}>
       <User>
@@ -27,8 +33,17 @@ const PostPage: NextFC<Props> = ({ blogPost }) => {
                     query: { id: blogPost.id },
                   }}
                 >
-                  <Button version="primary" type="link">Update Post</Button>
+                  <Button version="primary" type="link">
+                    Update Post
+                  </Button>
                 </Link>
+                <Button
+                  version="secondary"
+                  type="link"
+                  onClick={toggleShowAlert}
+                >
+                  Delete Post
+                </Button>
               </div>
             )
           }
@@ -38,6 +53,9 @@ const PostPage: NextFC<Props> = ({ blogPost }) => {
       </User>
       <h1>{blogPost.title}</h1>
       <Markdown>{blogPost.body}</Markdown>
+      {showAlert && (
+        <DeleteBlogPost id={blogPost.id} onClose={toggleShowAlert} />
+      )}
     </div>
   )
 }

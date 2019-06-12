@@ -1,0 +1,5 @@
+ mutation DELETE_BLOG_POST($id: ID!) {
+    deleteBlogPost(id: $id) {
+      id
+    }
+  }

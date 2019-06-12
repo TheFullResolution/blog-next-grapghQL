@@ -289,14 +289,12 @@ export type Create_Blog_PostMutation = {
   readonly createBlogPost: Pick<BlogPost, 'id'>
 }
 
-export type Update_Blog_PostMutationVariables = {
+export type Delete_Blog_PostMutationVariables = {
   id: Scalars['ID']
-  title: Scalars['String']
-  body: Scalars['String']
 }
 
-export type Update_Blog_PostMutation = {
-  readonly updateBlogPost: Pick<BlogPost, 'id'>
+export type Delete_Blog_PostMutation = {
+  readonly deleteBlogPost: Maybe<Pick<BlogPost, 'id'>>
 }
 
 export type LogoutMutationVariables = {}
@@ -323,6 +321,16 @@ export type Blog_PostQuery = {
       readonly user: Pick<User, 'id'>
     }
   >
+}
+
+export type Update_Blog_PostMutationVariables = {
+  id: Scalars['ID']
+  title: Scalars['String']
+  body: Scalars['String']
+}
+
+export type Update_Blog_PostMutation = {
+  readonly updateBlogPost: Pick<BlogPost, 'id'>
 }
 
 export type UserDataQueryVariables = {}
@@ -408,33 +416,33 @@ export const Create_Blog_PostComponent = (
   />
 )
 
-export const Update_Blog_PostDocument = gql`
-  mutation UPDATE_BLOG_POST($id: ID!, $title: String!, $body: String!) {
-    updateBlogPost(id: $id, title: $title, body: $body) {
+export const Delete_Blog_PostDocument = gql`
+  mutation DELETE_BLOG_POST($id: ID!) {
+    deleteBlogPost(id: $id) {
       id
     }
   }
 `
-export type Update_Blog_PostMutationFn = ReactApollo.MutationFn<
-  Update_Blog_PostMutation,
-  Update_Blog_PostMutationVariables
+export type Delete_Blog_PostMutationFn = ReactApollo.MutationFn<
+  Delete_Blog_PostMutation,
+  Delete_Blog_PostMutationVariables
 >
-export type Update_Blog_PostComponentProps = Omit<
+export type Delete_Blog_PostComponentProps = Omit<
   ReactApollo.MutationProps<
-    Update_Blog_PostMutation,
-    Update_Blog_PostMutationVariables
+    Delete_Blog_PostMutation,
+    Delete_Blog_PostMutationVariables
   >,
   'mutation'
 >
 
-export const Update_Blog_PostComponent = (
-  props: Update_Blog_PostComponentProps,
+export const Delete_Blog_PostComponent = (
+  props: Delete_Blog_PostComponentProps,
 ) => (
   <ReactApollo.Mutation<
-    Update_Blog_PostMutation,
-    Update_Blog_PostMutationVariables
+    Delete_Blog_PostMutation,
+    Delete_Blog_PostMutationVariables
   >
-    mutation={Update_Blog_PostDocument}
+    mutation={Delete_Blog_PostDocument}
     {...props}
   />
 )
@@ -506,6 +514,37 @@ export type Blog_PostComponentProps = Omit<
 export const Blog_PostComponent = (props: Blog_PostComponentProps) => (
   <ReactApollo.Query<Blog_PostQuery, Blog_PostQueryVariables>
     query={Blog_PostDocument}
+    {...props}
+  />
+)
+
+export const Update_Blog_PostDocument = gql`
+  mutation UPDATE_BLOG_POST($id: ID!, $title: String!, $body: String!) {
+    updateBlogPost(id: $id, title: $title, body: $body) {
+      id
+    }
+  }
+`
+export type Update_Blog_PostMutationFn = ReactApollo.MutationFn<
+  Update_Blog_PostMutation,
+  Update_Blog_PostMutationVariables
+>
+export type Update_Blog_PostComponentProps = Omit<
+  ReactApollo.MutationProps<
+    Update_Blog_PostMutation,
+    Update_Blog_PostMutationVariables
+  >,
+  'mutation'
+>
+
+export const Update_Blog_PostComponent = (
+  props: Update_Blog_PostComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    Update_Blog_PostMutation,
+    Update_Blog_PostMutationVariables
+  >
+    mutation={Update_Blog_PostDocument}
     {...props}
   />
 )
