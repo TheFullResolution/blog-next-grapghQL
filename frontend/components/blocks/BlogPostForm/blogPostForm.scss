@@ -1,0 +1,9 @@
+.submit {
+  display: flex;
+  margin-top: $space-single;
+  justify-content: flex-end;
+
+  & > * {
+    margin-left: $space-single;
+  }
+}

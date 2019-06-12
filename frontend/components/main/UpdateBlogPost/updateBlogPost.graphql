@@ -1,0 +1,5 @@
+ mutation UPDATE_BLOG_POST($id: ID!, $title: String!, $body: String!) {
+    updateBlogPost(id: $id, title: $title, body: $body) {
+      id
+    }
+  }

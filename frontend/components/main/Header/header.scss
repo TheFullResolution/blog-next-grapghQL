@@ -8,10 +8,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     margin: 0;
-
+    padding: 0 $space-container;
     svg {
       margin-right: $space-single;
+    }
+
+    span {
+      text-align: center;
     }
   }
 

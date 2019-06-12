@@ -8,7 +8,7 @@ import { isLoggedIn, User } from '../User/User'
 
 import styles from './header.scss'
 
-const routPathsArray = Object.keys(RoutPath) as RoutPath[]
+const routPathsArray = [RoutPath.home, RoutPath.create, RoutPath.auth]
 
 const Header: React.FC = () => (
   <User>
@@ -21,7 +21,7 @@ const Header: React.FC = () => (
               <Link href={routes[RoutPath.home].path}>
                 <a>
                   <h1>
-                    <FaBookReader /> Blog Platform with GraphQL
+                    <FaBookReader /><span>Blog Platform with GraphQL</span>
                   </h1>
                 </a>
               </Link>

@@ -105,7 +105,9 @@ export type BlogPostWhereUniqueInput = {
 }
 
 export type Mutation = {
-  readonly createBlogPost: User
+  readonly createBlogPost: BlogPost
+  readonly updateBlogPost: BlogPost
+  readonly deleteBlogPost: Maybe<BlogPost>
   readonly login: User
   readonly logout: Maybe<SuccessMessage>
   readonly signup: User
@@ -114,6 +116,16 @@ export type Mutation = {
 export type MutationCreateBlogPostArgs = {
   title: Scalars['String']
   body: Scalars['String']
+}
+
+export type MutationUpdateBlogPostArgs = {
+  id: Scalars['ID']
+  title: Scalars['String']
+  body: Scalars['String']
+}
+
+export type MutationDeleteBlogPostArgs = {
+  id: Scalars['ID']
 }
 
 export type MutationLoginArgs = {
@@ -268,12 +280,24 @@ export type SignupMutationVariables = {
 
 export type SignupMutation = { readonly signup: Pick<User, 'id'> }
 
-export type Create_ItemMutationVariables = {
+export type Create_Blog_PostMutationVariables = {
   title: Scalars['String']
   body: Scalars['String']
 }
 
-export type Create_ItemMutation = { readonly createBlogPost: Pick<User, 'id'> }
+export type Create_Blog_PostMutation = {
+  readonly createBlogPost: Pick<BlogPost, 'id'>
+}
+
+export type Update_Blog_PostMutationVariables = {
+  id: Scalars['ID']
+  title: Scalars['String']
+  body: Scalars['String']
+}
+
+export type Update_Blog_PostMutation = {
+  readonly updateBlogPost: Pick<BlogPost, 'id'>
+}
 
 export type LogoutMutationVariables = {}
 
@@ -353,25 +377,64 @@ export const SignupComponent = (props: SignupComponentProps) => (
   />
 )
 
-export const Create_ItemDocument = gql`
-  mutation CREATE_ITEM($title: String!, $body: String!) {
+export const Create_Blog_PostDocument = gql`
+  mutation CREATE_BLOG_POST($title: String!, $body: String!) {
     createBlogPost(title: $title, body: $body) {
       id
     }
   }
 `
-export type Create_ItemMutationFn = ReactApollo.MutationFn<
-  Create_ItemMutation,
-  Create_ItemMutationVariables
+export type Create_Blog_PostMutationFn = ReactApollo.MutationFn<
+  Create_Blog_PostMutation,
+  Create_Blog_PostMutationVariables
 >
-export type Create_ItemComponentProps = Omit<
-  ReactApollo.MutationProps<Create_ItemMutation, Create_ItemMutationVariables>,
+export type Create_Blog_PostComponentProps = Omit<
+  ReactApollo.MutationProps<
+    Create_Blog_PostMutation,
+    Create_Blog_PostMutationVariables
+  >,
   'mutation'
 >
 
-export const Create_ItemComponent = (props: Create_ItemComponentProps) => (
-  <ReactApollo.Mutation<Create_ItemMutation, Create_ItemMutationVariables>
-    mutation={Create_ItemDocument}
+export const Create_Blog_PostComponent = (
+  props: Create_Blog_PostComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    Create_Blog_PostMutation,
+    Create_Blog_PostMutationVariables
+  >
+    mutation={Create_Blog_PostDocument}
+    {...props}
+  />
+)
+
+export const Update_Blog_PostDocument = gql`
+  mutation UPDATE_BLOG_POST($id: ID!, $title: String!, $body: String!) {
+    updateBlogPost(id: $id, title: $title, body: $body) {
+      id
+    }
+  }
+`
+export type Update_Blog_PostMutationFn = ReactApollo.MutationFn<
+  Update_Blog_PostMutation,
+  Update_Blog_PostMutationVariables
+>
+export type Update_Blog_PostComponentProps = Omit<
+  ReactApollo.MutationProps<
+    Update_Blog_PostMutation,
+    Update_Blog_PostMutationVariables
+  >,
+  'mutation'
+>
+
+export const Update_Blog_PostComponent = (
+  props: Update_Blog_PostComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    Update_Blog_PostMutation,
+    Update_Blog_PostMutationVariables
+  >
+    mutation={Update_Blog_PostDocument}
     {...props}
   />
 )

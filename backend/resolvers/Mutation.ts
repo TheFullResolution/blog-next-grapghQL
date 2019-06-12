@@ -8,7 +8,7 @@ function errorThrow(): never {
   throw new Error('Either email or password are not correct')
 }
 
-const Mutation: MutationResolvers = {
+const Mutation: Required<MutationResolvers> = {
   async createBlogPost(parent, args, ctx) {
     if (!ctx.req.userId) {
       throw new Error('You must be logged in to do that!')
@@ -25,12 +25,50 @@ const Mutation: MutationResolvers = {
           id: ctx.req.userId,
         },
       },
-    })  
+    })
 
-    const user = await ctx.db.blogPost({ id: blog.id}).user()
+    const user = await ctx.db.blogPost({ id: blog.id }).user()
     const blogWithUser = { ...blog, user }
 
+    return blogWithUser
+  },
+  async updateBlogPost(parent, args, ctx) {
+    if (!ctx.req.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
 
+    if (!args.title || !args.body) {
+      throw new Error('Invalid values provided')
+    }
+
+    const id = args.id
+
+    const blog = await ctx.db.updateBlogPost({
+      where: { id },
+      data: {
+        title: args.title,
+        body: args.body,
+      },
+    })
+
+    const user = await ctx.db.blogPost({ id: blog.id }).user()
+    const blogWithUser = { ...blog, user }
+
+    return blogWithUser
+  },
+  async deleteBlogPost(parent, args, ctx) {
+    if (!ctx.req.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
+
+    const id = args.id
+
+    const blog = await ctx.db.deleteBlogPost({
+      id,
+    })
+
+    const user = await ctx.db.blogPost({ id: blog.id }).user()
+    const blogWithUser = { ...blog, user }
     return blogWithUser
   },
 

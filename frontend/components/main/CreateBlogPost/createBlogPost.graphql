@@ -1,4 +1,4 @@
- mutation CREATE_ITEM($title: String!, $body: String!) {
+ mutation CREATE_BLOG_POST($title: String!, $body: String!) {
     createBlogPost(title: $title, body: $body) {
       id
     }

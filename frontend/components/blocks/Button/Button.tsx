@@ -1,23 +1,45 @@
 import * as styles from './button.scss'
 import { classNames } from '../../../utils/classnames'
 
-interface Props {
-  type?: React.ButtonHTMLAttributes<{}>['type']
+interface CommonProps {
   className?: string
   version?: 'primary' | 'secondary'
   onClick?: () => void
+}
+
+interface LinkProps extends CommonProps {
+  type?: 'link'
+}
+
+interface ButtonProps extends CommonProps {
+  type?: React.ButtonHTMLAttributes<{}>['type']
   disabled?: boolean
 }
 
-const Button: React.FC<Props> = ({
-  type = 'button',
-  onClick = () => {},
-  disabled,
-  children,
-  version,
-  className,
-}) => {
+type Props = ButtonProps | LinkProps
+
+function isPropsForLinkElement(
+  props: ButtonProps | LinkProps,
+): props is LinkProps {
+  return !!(props.type && props.type === 'link')
+}
+
+const Button: React.FC<Props> = props => {
+  const { onClick = () => {}, children, version, className } = props
   const versionClass = version && styles[version]
+
+  if (isPropsForLinkElement(props)) {
+    return (
+      <a
+        className={classNames([styles.button, versionClass, className])}
+        onClick={onClick}
+      >
+        {children}
+      </a>
+    )
+  }
+
+  const { type = 'button', disabled } = props
 
   return (
     <button

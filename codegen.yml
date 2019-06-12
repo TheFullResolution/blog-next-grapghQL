@@ -22,5 +22,5 @@ generates:
     config:
       contextType: Context
       useIndexSignature: true
-      skipTypename: true
       enumsAsTypes: true
+      noSchemaStitching: true
