@@ -2,7 +2,7 @@ import { FaHome, FaPencilAlt, FaUserAstronaut } from 'react-icons/fa';
 
 import { strEnumHelper } from '../utils/strEnumHelper';
 
-export const RoutPath = strEnumHelper(['home', 'create', 'update', 'auth', 'post'])
+export const RoutPath = strEnumHelper(['home', 'create', 'update', 'auth', 'post', 'account'])
 export type RoutPath = keyof typeof RoutPath
 
 export type Routes = {
@@ -42,5 +42,11 @@ export const routes: Routes = {
     name: 'Login/Sing Up',
     icon: <FaUserAstronaut />,
     auth: false,
+  },
+  [RoutPath.account]: {
+    path: RoutPath.account,
+    name: 'My Account',
+    icon: <FaUserAstronaut />,
+    auth: true,
   },
 }

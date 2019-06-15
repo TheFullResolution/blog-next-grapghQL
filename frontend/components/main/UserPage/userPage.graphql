@@ -1,0 +1,6 @@
+query USER_BLOG_POST($id: ID!) {
+    blogPosts(where: { user: {id: $id} }) {
+      id
+      title
+    }
+  }

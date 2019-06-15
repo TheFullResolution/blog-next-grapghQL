@@ -8,7 +8,7 @@ import { isLoggedIn, User } from '../User/User'
 
 import styles from './header.scss'
 
-const routPathsArray = [RoutPath.home, RoutPath.create, RoutPath.auth]
+const routPathsArray = [RoutPath.home, RoutPath.create, RoutPath.auth, RoutPath.account]
 
 const Header: React.FC = () => (
   <User>

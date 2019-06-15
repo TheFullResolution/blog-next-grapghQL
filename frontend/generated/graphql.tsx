@@ -339,6 +339,14 @@ export type UserDataQuery = {
   readonly me: Maybe<Pick<User, 'id' | 'email' | 'name' | 'permissions'>>
 }
 
+export type User_Blog_PostQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type User_Blog_PostQuery = {
+  readonly blogPosts: ReadonlyArray<Maybe<Pick<BlogPost, 'id' | 'title'>>>
+}
+
 export const LoginDocument = gql`
   mutation LOGIN($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -567,6 +575,29 @@ export type UserDataComponentProps = Omit<
 export const UserDataComponent = (props: UserDataComponentProps) => (
   <ReactApollo.Query<UserDataQuery, UserDataQueryVariables>
     query={UserDataDocument}
+    {...props}
+  />
+)
+
+export const User_Blog_PostDocument = gql`
+  query USER_BLOG_POST($id: ID!) {
+    blogPosts(where: { user: { id: $id } }) {
+      id
+      title
+    }
+  }
+`
+export type User_Blog_PostComponentProps = Omit<
+  ReactApollo.QueryProps<User_Blog_PostQuery, User_Blog_PostQueryVariables>,
+  'query'
+> &
+  ({ variables: User_Blog_PostQueryVariables; skip?: false } | { skip: true })
+
+export const User_Blog_PostComponent = (
+  props: User_Blog_PostComponentProps,
+) => (
+  <ReactApollo.Query<User_Blog_PostQuery, User_Blog_PostQueryVariables>
+    query={User_Blog_PostDocument}
     {...props}
   />
 )
