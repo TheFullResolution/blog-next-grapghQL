@@ -1,14 +1,14 @@
 ---
-to: frontend/components/<%= folder %>/<%= Name %>/<%= Name %>.tsx
+to: frontend/components/<%= folder %>/<%= camelizeName %>/<%= camelizeName %>.tsx
 ---
-import * as styles from './<%= name %>.scss'
+import * as styles from './<%= camelizeLowerName %>.scss'
 
 interface Props {
 
 }
 
-const <%= Name %>: React.FC<Props> = () => {
-  return <div className={styles.container}><%= Name %> works!</div>
+const <%= camelizeName %>: React.FC<Props> = () => {
+  return <div className={styles.container}><%= camelizeName %> works!</div>
 }
 
-export { <%= Name %> }
+export { <%= camelizeName %> }

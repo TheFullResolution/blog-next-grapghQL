@@ -1,4 +1,4 @@
- query ALL_ARTICLES {
+ query ALL_BLOG_POSTS {
     blogPosts {
       id
       title

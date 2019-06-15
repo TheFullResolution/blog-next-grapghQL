@@ -1,13 +1,8 @@
-import {
-  FaPencilAlt,
-  FaUserAstronaut,
-  FaHome,
-  FaHighlighter,
-} from 'react-icons/fa'
+import { FaHome, FaPencilAlt, FaUserAstronaut } from 'react-icons/fa';
 
-import { strEnumHelper } from '../utils/strEnumHelper'
+import { strEnumHelper } from '../utils/strEnumHelper';
 
-export const RoutPath = strEnumHelper(['home', 'create', 'edit', 'auth'])
+export const RoutPath = strEnumHelper(['home', 'create', 'update', 'auth', 'post'])
 export type RoutPath = keyof typeof RoutPath
 
 export type Routes = {
@@ -32,11 +27,15 @@ export const routes: Routes = {
     auth: true,
     icon: <FaPencilAlt />,
   },
-  [RoutPath.edit]: {
-    path: RoutPath.edit,
+  [RoutPath.post]: {
+    path: RoutPath.post,
+    name: 'Post',
+    auth: false,
+  },
+  [RoutPath.update]: {
+    path: RoutPath.update,
     name: 'Edit',
     auth: true,
-    icon: <FaHighlighter />,
   },
   [RoutPath.auth]: {
     path: RoutPath.auth,

@@ -14,15 +14,13 @@ generates:
       immutableTypes: true
       maybeValue: "T"
   backend/generated/graphql.ts:
-    schema: backend/schema.graphql
+    schema: backend/models/schema.graphql
     plugins:
       - add: "import { Context } from '../models/context';"
       - "typescript"
       - "typescript-resolvers"
     config:
       contextType: Context
-      maybeValue: "T | undefined | null"
       useIndexSignature: true
-      mappers:
-        User: ./index#User
-        BlogPost: ./index#BlogPost
+      enumsAsTypes: true
+      noSchemaStitching: true

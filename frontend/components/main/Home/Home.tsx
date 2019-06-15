@@ -1,8 +1,8 @@
-import { All_ArticlesComponent } from '../../../generated/graphql'
-import Markdown from 'markdown-to-jsx'
+import { All_Blog_PostsComponent } from '../../../generated/graphql'
+import { PostItem } from '../../blocks/PostItem/PostItem';
 
 const Home = () => (
-  <All_ArticlesComponent>
+  <All_Blog_PostsComponent>
     {({ data, error, loading }) => {
       if (loading) return <p>Loading...</p>
       if (error) return <p>Error: {error.message}</p>
@@ -11,14 +11,13 @@ const Home = () => (
         <>
           {data.blogPosts.map(post => (
             <section key={post.id}>
-              <h1>{post.title}</h1>
-              <Markdown>{post.body}</Markdown>
+              <PostItem post={post}/>
             </section>
           ))}
         </>
       )
     }}
-  </All_ArticlesComponent>
+  </All_Blog_PostsComponent>
 )
 
 export { Home }

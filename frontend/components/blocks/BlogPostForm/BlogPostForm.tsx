@@ -1,23 +1,28 @@
-import React from 'react'
-import { Field, FieldProps, Form, Formik } from 'formik'
-import { Editor } from '../../blocks/Editor/Editor'
-import { Input } from '../../blocks/Input/Input'
-import { Fieldset } from '../../blocks/Fieldset/Fieldset'
-import { Button } from '../../blocks/Button/Button'
-import { CreateBlogForm } from './CreateBlogPost'
+import { Field, FieldProps, Form, Formik } from 'formik';
+import React from 'react';
 
-import styles from './createblogpost.scss'
+import { Button } from '../../blocks/Button/Button';
+import { Editor } from '../../blocks/Editor/Editor';
+import { Fieldset } from '../../blocks/Fieldset/Fieldset';
+import { Input } from '../../blocks/Input/Input';
+import styles from './blogPostForm.scss';
+
+export interface BlogFormValues {
+  title: string
+  body: string
+}
 
 interface Props {
-  onSubmit: (values: CreateBlogForm) => Promise<void>
+  onSubmit: (values: BlogFormValues) => Promise<void>
   loading: boolean
   error?: string
+  initialValues?: BlogFormValues
 }
 
 const MIN_BLOG_POST_LENGTH = 920
 
-const validate = (values: CreateBlogForm): Partial<CreateBlogForm> => {
-  let errors: Partial<CreateBlogForm> = {}
+const validate = (values: BlogFormValues): Partial<BlogFormValues> => {
+  let errors: Partial<BlogFormValues> = {}
   if (!values.title) {
     errors.title = 'Required'
   }
@@ -31,16 +36,18 @@ const validate = (values: CreateBlogForm): Partial<CreateBlogForm> => {
   return errors
 }
 
-export const CreateBlogPostForm: React.FC<Props> = ({
+export const BlogPostForm: React.FC<Props> = ({
   onSubmit,
   loading,
   error,
+  children,
+  initialValues = {
+    title: '',
+    body: '*Create Your Blog Post Here*',
+  },
 }) => (
-  <Formik<CreateBlogForm>
-    initialValues={{
-      title: '',
-      body: '*Create Your Blog Post Here*',
-    }}
+  <Formik<BlogFormValues>
+    initialValues={initialValues}
     validate={validate}
     onSubmit={onSubmit}
   >
@@ -48,8 +55,8 @@ export const CreateBlogPostForm: React.FC<Props> = ({
       <Form>
         <Fieldset loading={loading}>
           <Field name="title">
-            {({ field, form }: FieldProps<CreateBlogForm>) => (
-              <Input<CreateBlogForm>
+            {({ field, form }: FieldProps<BlogFormValues>) => (
+              <Input<BlogFormValues>
                 field={field}
                 label="Title"
                 error={
@@ -59,7 +66,7 @@ export const CreateBlogPostForm: React.FC<Props> = ({
             )}
           </Field>
           <Field name="body">
-            {({ field, form }: FieldProps<CreateBlogForm>) => {
+            {({ field, form }: FieldProps<BlogFormValues>) => {
               const onChange = (val: string) => {
                 form.setFieldValue('body', val)
               }
@@ -81,6 +88,7 @@ export const CreateBlogPostForm: React.FC<Props> = ({
           <Button type="submit" version="primary">
             Submit
           </Button>
+          {children}
         </div>
       </Form>
     )}

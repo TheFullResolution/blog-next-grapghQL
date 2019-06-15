@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const inflection = require('inflection')
+
 module.exports = {
-  prompt: ({ prompter, args }) =>
+  prompt: ({ prompter }) =>
     prompter
       .prompt([
         {
@@ -19,5 +22,9 @@ module.exports = {
           message: 'Add graphql file?',
         },
       ])
-      .then(({ name, ...rest }) => ({ ...rest, name: name.toLowerCase() })),
+      .then(({ name, ...rest }) => ({
+        ...rest,
+        camelizeName: inflection.camelize(name),
+        camelizeLowerName: inflection.camelize(name, true),
+      })),
 }

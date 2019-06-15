@@ -1,5 +1,5 @@
 ---
-to: frontend/components/<%= folder %>/<%= Name %>/<%= name %>.scss
+to: frontend/components/<%= folder %>/<%= camelizeName %>/<%= camelizeLowerName %>.scss
 ---
 .container {
     

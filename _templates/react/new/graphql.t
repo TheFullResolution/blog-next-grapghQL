@@ -1,3 +1,3 @@
 ---
-to: "<%= graphql ? `frontend/components/${folder}/${Name}/${name}.graphql` : null %>" 
+to: "<%= graphql ? `frontend/components/${folder}/${camelizeName}/${camelizeLowerName}.graphql` : null %>" 
 ---

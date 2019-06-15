@@ -1,6 +1,11 @@
 import { Context } from '../models/context'
-
-export type Maybe<T> = T | undefined | null
+import {
+  GraphQLResolveInfo,
+  GraphQLScalarType,
+  GraphQLScalarTypeConfig,
+} from 'graphql'
+export type Maybe<T> = T | null
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -12,6 +17,7 @@ export type Scalars = {
 }
 
 export type BlogPost = {
+  __typename?: 'BlogPost'
   id: Scalars['ID']
   title: Scalars['String']
   body: Scalars['String']
@@ -20,18 +26,17 @@ export type BlogPost = {
   user: User
 }
 
-export enum BlogPostOrderByInput {
-  IdAsc = 'id_ASC',
-  IdDesc = 'id_DESC',
-  TitleAsc = 'title_ASC',
-  TitleDesc = 'title_DESC',
-  BodyAsc = 'body_ASC',
-  BodyDesc = 'body_DESC',
-  UpdatedAtAsc = 'updatedAt_ASC',
-  UpdatedAtDesc = 'updatedAt_DESC',
-  CreatedAtAsc = 'createdAt_ASC',
-  CreatedAtDesc = 'createdAt_DESC',
-}
+export type BlogPostOrderByInput =
+  | 'id_ASC'
+  | 'id_DESC'
+  | 'title_ASC'
+  | 'title_DESC'
+  | 'body_ASC'
+  | 'body_DESC'
+  | 'updatedAt_ASC'
+  | 'updatedAt_DESC'
+  | 'createdAt_ASC'
+  | 'createdAt_DESC'
 
 export type BlogPostWhereInput = {
   id?: Maybe<Scalars['ID']>
@@ -103,7 +108,10 @@ export type BlogPostWhereUniqueInput = {
 }
 
 export type Mutation = {
-  createBlogPost?: Maybe<BlogPost>
+  __typename?: 'Mutation'
+  createBlogPost: BlogPost
+  updateBlogPost: BlogPost
+  deleteBlogPost?: Maybe<BlogPost>
   login: User
   logout?: Maybe<SuccessMessage>
   signup: User
@@ -112,6 +120,16 @@ export type Mutation = {
 export type MutationCreateBlogPostArgs = {
   title: Scalars['String']
   body: Scalars['String']
+}
+
+export type MutationUpdateBlogPostArgs = {
+  id: Scalars['ID']
+  title: Scalars['String']
+  body: Scalars['String']
+}
+
+export type MutationDeleteBlogPostArgs = {
+  id: Scalars['ID']
 }
 
 export type MutationLoginArgs = {
@@ -125,16 +143,16 @@ export type MutationSignupArgs = {
   name: Scalars['String']
 }
 
-export enum Permission {
-  Admin = 'ADMIN',
-  User = 'USER',
-  Itemcreate = 'ITEMCREATE',
-  Itemupdate = 'ITEMUPDATE',
-  Itemdelete = 'ITEMDELETE',
-  Permissionupdate = 'PERMISSIONUPDATE',
-}
+export type Permission =
+  | 'ADMIN'
+  | 'USER'
+  | 'ITEMCREATE'
+  | 'ITEMUPDATE'
+  | 'ITEMDELETE'
+  | 'PERMISSIONUPDATE'
 
 export type Query = {
+  __typename?: 'Query'
   blogPosts: Array<Maybe<BlogPost>>
   me?: Maybe<User>
   blogPost?: Maybe<BlogPost>
@@ -155,10 +173,12 @@ export type QueryBlogPostArgs = {
 }
 
 export type SuccessMessage = {
+  __typename?: 'SuccessMessage'
   message?: Maybe<Scalars['String']>
 }
 
 export type User = {
+  __typename?: 'User'
   id: Scalars['ID']
   name: Scalars['String']
   email: Scalars['String']
@@ -251,16 +271,6 @@ export type UserWhereInput = {
   OR?: Maybe<Array<UserWhereInput>>
   NOT?: Maybe<Array<UserWhereInput>>
 }
-import { User, BlogPost } from './index'
-
-import {
-  GraphQLResolveInfo,
-  GraphQLScalarType,
-  GraphQLScalarTypeConfig,
-} from 'graphql'
-
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-
 export type WithIndex<TObject> = TObject & Record<string, any>
 export type ResolversObject<TObject> = WithIndex<TObject>
 
@@ -271,14 +281,12 @@ export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   info: GraphQLResolveInfo,
 ) => Promise<TResult> | TResult
 
-export type StitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>
-}
-
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
-  | ResolverFn<TResult, TParent, TContext, TArgs>
-  | StitchingResolver<TResult, TParent, TContext, TArgs>
+export type Resolver<
+  TResult,
+  TParent = {},
+  TContext = {},
+  TArgs = {}
+> = ResolverFn<TResult, TParent, TContext, TArgs>
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
@@ -373,10 +381,22 @@ export type MutationResolvers<
   ParentType = ResolversTypes['Mutation']
 > = ResolversObject<{
   createBlogPost?: Resolver<
-    Maybe<ResolversTypes['BlogPost']>,
+    ResolversTypes['BlogPost'],
     ParentType,
     ContextType,
     MutationCreateBlogPostArgs
+  >
+  updateBlogPost?: Resolver<
+    ResolversTypes['BlogPost'],
+    ParentType,
+    ContextType,
+    MutationUpdateBlogPostArgs
+  >
+  deleteBlogPost?: Resolver<
+    Maybe<ResolversTypes['BlogPost']>,
+    ParentType,
+    ContextType,
+    MutationDeleteBlogPostArgs
   >
   login?: Resolver<
     ResolversTypes['User'],

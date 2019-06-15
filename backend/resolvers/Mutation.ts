@@ -2,31 +2,74 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import ms from 'ms'
 import { MutationResolvers } from '../generated/graphql'
-import { TOKEN } from '../index';
+import { TOKEN } from '../index'
 
 function errorThrow(): never {
   throw new Error('Either email or password are not correct')
 }
 
-const Mutation: MutationResolvers = {
+const Mutation: Required<MutationResolvers> = {
   async createBlogPost(parent, args, ctx) {
     if (!ctx.req.userId) {
       throw new Error('You must be logged in to do that!')
     }
-    
-    if (args.title && args.body) {
-      const item = await ctx.db.createBlogPost({
+
+    if (!args.title || !args.body) {
+      throw new Error('Invalid values provided')
+    }
+    const blog = await ctx.db.createBlogPost({
+      title: args.title,
+      body: args.body,
+      user: {
+        connect: {
+          id: ctx.req.userId,
+        },
+      },
+    })
+
+    const user = await ctx.db.blogPost({ id: blog.id }).user()
+    const blogWithUser = { ...blog, user }
+
+    return blogWithUser
+  },
+  async updateBlogPost(parent, args, ctx) {
+    if (!ctx.req.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
+
+    if (!args.title || !args.body) {
+      throw new Error('Invalid values provided')
+    }
+
+    const id = args.id
+
+    const blog = await ctx.db.updateBlogPost({
+      where: { id },
+      data: {
         title: args.title,
         body: args.body,
-        user: {
-          connect: {
-            id: ctx.req.userId,
-          },
-        },
-      })
+      },
+    })
 
-      return item
-    } else return null
+    const user = await ctx.db.blogPost({ id: blog.id }).user()
+    const blogWithUser = { ...blog, user }
+
+    return blogWithUser
+  },
+  async deleteBlogPost(parent, args, ctx) {
+    if (!ctx.req.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
+
+    const id = args.id
+
+    const blog = await ctx.db.deleteBlogPost({
+      id,
+    })
+
+    const user = await ctx.db.blogPost({ id: blog.id }).user()
+    const blogWithUser = { ...blog, user }
+    return blogWithUser
   },
 
   async login(parent, { email, password }, ctx, info) {

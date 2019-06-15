@@ -1,4 +1,8 @@
+import gql from 'graphql-tag'
+import * as ReactApollo from 'react-apollo'
+import * as React from 'react'
 export type Maybe<T> = T
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string
@@ -101,7 +105,9 @@ export type BlogPostWhereUniqueInput = {
 }
 
 export type Mutation = {
-  readonly createBlogPost: Maybe<BlogPost>
+  readonly createBlogPost: BlogPost
+  readonly updateBlogPost: BlogPost
+  readonly deleteBlogPost: Maybe<BlogPost>
   readonly login: User
   readonly logout: Maybe<SuccessMessage>
   readonly signup: User
@@ -110,6 +116,16 @@ export type Mutation = {
 export type MutationCreateBlogPostArgs = {
   title: Scalars['String']
   body: Scalars['String']
+}
+
+export type MutationUpdateBlogPostArgs = {
+  id: Scalars['ID']
+  title: Scalars['String']
+  body: Scalars['String']
+}
+
+export type MutationDeleteBlogPostArgs = {
+  id: Scalars['ID']
 }
 
 export type MutationLoginArgs = {
@@ -264,13 +280,21 @@ export type SignupMutationVariables = {
 
 export type SignupMutation = { readonly signup: Pick<User, 'id'> }
 
-export type Create_ItemMutationVariables = {
+export type Create_Blog_PostMutationVariables = {
   title: Scalars['String']
   body: Scalars['String']
 }
 
-export type Create_ItemMutation = {
-  readonly createBlogPost: Maybe<Pick<BlogPost, 'id'>>
+export type Create_Blog_PostMutation = {
+  readonly createBlogPost: Pick<BlogPost, 'id'>
+}
+
+export type Delete_Blog_PostMutationVariables = {
+  id: Scalars['ID']
+}
+
+export type Delete_Blog_PostMutation = {
+  readonly deleteBlogPost: Maybe<Pick<BlogPost, 'id'>>
 }
 
 export type LogoutMutationVariables = {}
@@ -279,12 +303,34 @@ export type LogoutMutation = {
   readonly logout: Maybe<Pick<SuccessMessage, 'message'>>
 }
 
-export type All_ArticlesQueryVariables = {}
+export type All_Blog_PostsQueryVariables = {}
 
-export type All_ArticlesQuery = {
+export type All_Blog_PostsQuery = {
   readonly blogPosts: ReadonlyArray<
     Maybe<Pick<BlogPost, 'id' | 'title' | 'body'>>
   >
+}
+
+export type Blog_PostQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type Blog_PostQuery = {
+  readonly blogPost: Maybe<
+    Pick<BlogPost, 'id' | 'title' | 'body'> & {
+      readonly user: Pick<User, 'id'>
+    }
+  >
+}
+
+export type Update_Blog_PostMutationVariables = {
+  id: Scalars['ID']
+  title: Scalars['String']
+  body: Scalars['String']
+}
+
+export type Update_Blog_PostMutation = {
+  readonly updateBlogPost: Pick<BlogPost, 'id'>
 }
 
 export type UserDataQueryVariables = {}
@@ -292,11 +338,6 @@ export type UserDataQueryVariables = {}
 export type UserDataQuery = {
   readonly me: Maybe<Pick<User, 'id' | 'email' | 'name' | 'permissions'>>
 }
-
-import gql from 'graphql-tag'
-import * as React from 'react'
-import * as ReactApollo from 'react-apollo'
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export const LoginDocument = gql`
   mutation LOGIN($email: String!, $password: String!) {
@@ -309,16 +350,12 @@ export type LoginMutationFn = ReactApollo.MutationFn<
   LoginMutation,
   LoginMutationVariables
 >
+export type LoginComponentProps = Omit<
+  ReactApollo.MutationProps<LoginMutation, LoginMutationVariables>,
+  'mutation'
+>
 
-export const LoginComponent = (
-  props: Omit<
-    Omit<
-      ReactApollo.MutationProps<LoginMutation, LoginMutationVariables>,
-      'mutation'
-    >,
-    'variables'
-  > & { variables?: LoginMutationVariables },
-) => (
+export const LoginComponent = (props: LoginComponentProps) => (
   <ReactApollo.Mutation<LoginMutation, LoginMutationVariables>
     mutation={LoginDocument}
     {...props}
@@ -336,48 +373,76 @@ export type SignupMutationFn = ReactApollo.MutationFn<
   SignupMutation,
   SignupMutationVariables
 >
+export type SignupComponentProps = Omit<
+  ReactApollo.MutationProps<SignupMutation, SignupMutationVariables>,
+  'mutation'
+>
 
-export const SignupComponent = (
-  props: Omit<
-    Omit<
-      ReactApollo.MutationProps<SignupMutation, SignupMutationVariables>,
-      'mutation'
-    >,
-    'variables'
-  > & { variables?: SignupMutationVariables },
-) => (
+export const SignupComponent = (props: SignupComponentProps) => (
   <ReactApollo.Mutation<SignupMutation, SignupMutationVariables>
     mutation={SignupDocument}
     {...props}
   />
 )
 
-export const Create_ItemDocument = gql`
-  mutation CREATE_ITEM($title: String!, $body: String!) {
+export const Create_Blog_PostDocument = gql`
+  mutation CREATE_BLOG_POST($title: String!, $body: String!) {
     createBlogPost(title: $title, body: $body) {
       id
     }
   }
 `
-export type Create_ItemMutationFn = ReactApollo.MutationFn<
-  Create_ItemMutation,
-  Create_ItemMutationVariables
+export type Create_Blog_PostMutationFn = ReactApollo.MutationFn<
+  Create_Blog_PostMutation,
+  Create_Blog_PostMutationVariables
+>
+export type Create_Blog_PostComponentProps = Omit<
+  ReactApollo.MutationProps<
+    Create_Blog_PostMutation,
+    Create_Blog_PostMutationVariables
+  >,
+  'mutation'
 >
 
-export const Create_ItemComponent = (
-  props: Omit<
-    Omit<
-      ReactApollo.MutationProps<
-        Create_ItemMutation,
-        Create_ItemMutationVariables
-      >,
-      'mutation'
-    >,
-    'variables'
-  > & { variables?: Create_ItemMutationVariables },
+export const Create_Blog_PostComponent = (
+  props: Create_Blog_PostComponentProps,
 ) => (
-  <ReactApollo.Mutation<Create_ItemMutation, Create_ItemMutationVariables>
-    mutation={Create_ItemDocument}
+  <ReactApollo.Mutation<
+    Create_Blog_PostMutation,
+    Create_Blog_PostMutationVariables
+  >
+    mutation={Create_Blog_PostDocument}
+    {...props}
+  />
+)
+
+export const Delete_Blog_PostDocument = gql`
+  mutation DELETE_BLOG_POST($id: ID!) {
+    deleteBlogPost(id: $id) {
+      id
+    }
+  }
+`
+export type Delete_Blog_PostMutationFn = ReactApollo.MutationFn<
+  Delete_Blog_PostMutation,
+  Delete_Blog_PostMutationVariables
+>
+export type Delete_Blog_PostComponentProps = Omit<
+  ReactApollo.MutationProps<
+    Delete_Blog_PostMutation,
+    Delete_Blog_PostMutationVariables
+  >,
+  'mutation'
+>
+
+export const Delete_Blog_PostComponent = (
+  props: Delete_Blog_PostComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    Delete_Blog_PostMutation,
+    Delete_Blog_PostMutationVariables
+  >
+    mutation={Delete_Blog_PostDocument}
     {...props}
   />
 )
@@ -393,24 +458,20 @@ export type LogoutMutationFn = ReactApollo.MutationFn<
   LogoutMutation,
   LogoutMutationVariables
 >
+export type LogoutComponentProps = Omit<
+  ReactApollo.MutationProps<LogoutMutation, LogoutMutationVariables>,
+  'mutation'
+>
 
-export const LogoutComponent = (
-  props: Omit<
-    Omit<
-      ReactApollo.MutationProps<LogoutMutation, LogoutMutationVariables>,
-      'mutation'
-    >,
-    'variables'
-  > & { variables?: LogoutMutationVariables },
-) => (
+export const LogoutComponent = (props: LogoutComponentProps) => (
   <ReactApollo.Mutation<LogoutMutation, LogoutMutationVariables>
     mutation={LogoutDocument}
     {...props}
   />
 )
 
-export const All_ArticlesDocument = gql`
-  query ALL_ARTICLES {
+export const All_Blog_PostsDocument = gql`
+  query ALL_BLOG_POSTS {
     blogPosts {
       id
       title
@@ -418,18 +479,72 @@ export const All_ArticlesDocument = gql`
     }
   }
 `
+export type All_Blog_PostsComponentProps = Omit<
+  ReactApollo.QueryProps<All_Blog_PostsQuery, All_Blog_PostsQueryVariables>,
+  'query'
+>
 
-export const All_ArticlesComponent = (
-  props: Omit<
-    Omit<
-      ReactApollo.QueryProps<All_ArticlesQuery, All_ArticlesQueryVariables>,
-      'query'
-    >,
-    'variables'
-  > & { variables?: All_ArticlesQueryVariables },
+export const All_Blog_PostsComponent = (
+  props: All_Blog_PostsComponentProps,
 ) => (
-  <ReactApollo.Query<All_ArticlesQuery, All_ArticlesQueryVariables>
-    query={All_ArticlesDocument}
+  <ReactApollo.Query<All_Blog_PostsQuery, All_Blog_PostsQueryVariables>
+    query={All_Blog_PostsDocument}
+    {...props}
+  />
+)
+
+export const Blog_PostDocument = gql`
+  query BLOG_POST($id: ID!) {
+    blogPost(where: { id: $id }) {
+      id
+      title
+      body
+      user {
+        id
+      }
+    }
+  }
+`
+export type Blog_PostComponentProps = Omit<
+  ReactApollo.QueryProps<Blog_PostQuery, Blog_PostQueryVariables>,
+  'query'
+> &
+  ({ variables: Blog_PostQueryVariables; skip?: false } | { skip: true })
+
+export const Blog_PostComponent = (props: Blog_PostComponentProps) => (
+  <ReactApollo.Query<Blog_PostQuery, Blog_PostQueryVariables>
+    query={Blog_PostDocument}
+    {...props}
+  />
+)
+
+export const Update_Blog_PostDocument = gql`
+  mutation UPDATE_BLOG_POST($id: ID!, $title: String!, $body: String!) {
+    updateBlogPost(id: $id, title: $title, body: $body) {
+      id
+    }
+  }
+`
+export type Update_Blog_PostMutationFn = ReactApollo.MutationFn<
+  Update_Blog_PostMutation,
+  Update_Blog_PostMutationVariables
+>
+export type Update_Blog_PostComponentProps = Omit<
+  ReactApollo.MutationProps<
+    Update_Blog_PostMutation,
+    Update_Blog_PostMutationVariables
+  >,
+  'mutation'
+>
+
+export const Update_Blog_PostComponent = (
+  props: Update_Blog_PostComponentProps,
+) => (
+  <ReactApollo.Mutation<
+    Update_Blog_PostMutation,
+    Update_Blog_PostMutationVariables
+  >
+    mutation={Update_Blog_PostDocument}
     {...props}
   />
 )
@@ -444,16 +559,12 @@ export const UserDataDocument = gql`
     }
   }
 `
+export type UserDataComponentProps = Omit<
+  ReactApollo.QueryProps<UserDataQuery, UserDataQueryVariables>,
+  'query'
+>
 
-export const UserDataComponent = (
-  props: Omit<
-    Omit<
-      ReactApollo.QueryProps<UserDataQuery, UserDataQueryVariables>,
-      'query'
-    >,
-    'variables'
-  > & { variables?: UserDataQueryVariables },
-) => (
+export const UserDataComponent = (props: UserDataComponentProps) => (
   <ReactApollo.Query<UserDataQuery, UserDataQueryVariables>
     query={UserDataDocument}
     {...props}

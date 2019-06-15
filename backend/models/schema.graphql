@@ -1,11 +1,13 @@
-# import * from './generated/prisma.graphql'
+# import * from '../generated/prisma.graphql'
 
 type SuccessMessage {
   message: String
 }
 
 type Mutation {
-  createBlogPost(title: String!, body: String!): BlogPost
+  createBlogPost(title: String!, body: String!): BlogPost!
+  updateBlogPost(id: ID!, title: String!, body: String!): BlogPost!
+  deleteBlogPost(id: ID!): BlogPost
   login(email: String!, password: String!): User!
   logout: SuccessMessage
   signup(email: String!, password: String!, name: String!): User!
