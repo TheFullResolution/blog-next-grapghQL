@@ -1,3 +1,29 @@
 .container {
-    
+  border-radius: 5px;
+}
+
+.title {
+  font-size: 1.2rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: $space-double;
+
+  svg {
+    fill: $color-opposite;
+    margin-left: $space-half;
+    margin-right: $space-half;
+  }
+}
+
+.description {
+  margin-bottom: $space-double;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  button + button {
+    margin-left: $space-single;
+  }
 }

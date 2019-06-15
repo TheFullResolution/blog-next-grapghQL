@@ -26,7 +26,7 @@ const PostPage: NextFC<Props> = ({ blogPost }) => {
           const { data } = payload
           if (isLoggedIn(data) && data.me.id === blogPost.user.id) {
             return (
-              <div>
+              <div className={styles.buttons}>
                 <Link
                   href={{
                     pathname: `/${routes[RoutPath.update].path}`,
@@ -37,11 +37,7 @@ const PostPage: NextFC<Props> = ({ blogPost }) => {
                     Update Post
                   </Button>
                 </Link>
-                <Button
-                  version="secondary"
-                  type="link"
-                  onClick={toggleShowAlert}
-                >
+                <Button version="secondary" onClick={toggleShowAlert}>
                   Delete Post
                 </Button>
               </div>
