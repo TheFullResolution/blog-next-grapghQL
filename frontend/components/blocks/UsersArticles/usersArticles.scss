@@ -1,0 +1,13 @@
+.container {
+  list-style: none;
+  padding: 0;
+
+  a {
+    color: $color-opposite;
+  }
+}
+
+.post {
+  border-bottom: 1px solid $color-accent-2;
+  padding-bottom: $space-double;
+}
