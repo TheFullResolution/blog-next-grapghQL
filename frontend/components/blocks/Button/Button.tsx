@@ -4,7 +4,7 @@ import { forwardRef } from 'react'
 
 interface CommonProps {
   className?: string
-  version?: 'primary' | 'secondary'
+  version?: 'primary' | 'secondary' | 'like'
   onClick?: () => void
   children: React.ReactNode;
 }

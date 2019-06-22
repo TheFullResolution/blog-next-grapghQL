@@ -56,3 +56,7 @@
 .secondary {
   @include createButtonStyle($color-opposite-3, white)
 }
+
+.like {
+  @include createButtonStyle($color-opposite-2, black)
+}

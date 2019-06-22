@@ -5,6 +5,7 @@ import {
   GraphQLScalarTypeConfig,
 } from 'graphql'
 export type Maybe<T> = T | null
+export type MaybePromise<T> = Promise<T> | T
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -107,10 +108,48 @@ export type BlogPostWhereUniqueInput = {
   id?: Maybe<Scalars['ID']>
 }
 
+export type Like = {
+  __typename?: 'Like'
+  id: Scalars['ID']
+  user: User
+  blogPost: BlogPost
+}
+
+export type LikeOrderByInput = 'id_ASC' | 'id_DESC'
+
+export type LikeWhereInput = {
+  id?: Maybe<Scalars['ID']>
+  id_not?: Maybe<Scalars['ID']>
+  id_in?: Maybe<Array<Scalars['ID']>>
+  id_not_in?: Maybe<Array<Scalars['ID']>>
+  id_lt?: Maybe<Scalars['ID']>
+  id_lte?: Maybe<Scalars['ID']>
+  id_gt?: Maybe<Scalars['ID']>
+  id_gte?: Maybe<Scalars['ID']>
+  id_contains?: Maybe<Scalars['ID']>
+  id_not_contains?: Maybe<Scalars['ID']>
+  id_starts_with?: Maybe<Scalars['ID']>
+  id_not_starts_with?: Maybe<Scalars['ID']>
+  id_ends_with?: Maybe<Scalars['ID']>
+  id_not_ends_with?: Maybe<Scalars['ID']>
+  user?: Maybe<UserWhereInput>
+  blogPost?: Maybe<BlogPostWhereInput>
+  AND?: Maybe<Array<LikeWhereInput>>
+  OR?: Maybe<Array<LikeWhereInput>>
+  NOT?: Maybe<Array<LikeWhereInput>>
+}
+
+export type LikeWithIdOnly = {
+  __typename?: 'LikeWithIdOnly'
+  id: Scalars['ID']
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   createBlogPost: BlogPost
+  createLike: LikeWithIdOnly
   updateBlogPost: BlogPost
+  deleteLike?: Maybe<LikeWithIdOnly>
   deleteBlogPost?: Maybe<BlogPost>
   login: User
   logout?: Maybe<SuccessMessage>
@@ -122,10 +161,18 @@ export type MutationCreateBlogPostArgs = {
   body: Scalars['String']
 }
 
+export type MutationCreateLikeArgs = {
+  blogPost: Scalars['ID']
+}
+
 export type MutationUpdateBlogPostArgs = {
   id: Scalars['ID']
   title: Scalars['String']
   body: Scalars['String']
+}
+
+export type MutationDeleteLikeArgs = {
+  id: Scalars['ID']
 }
 
 export type MutationDeleteBlogPostArgs = {
@@ -154,6 +201,7 @@ export type Permission =
 export type Query = {
   __typename?: 'Query'
   blogPosts: Array<Maybe<BlogPost>>
+  likes: Array<Maybe<Like>>
   me?: Maybe<User>
   blogPost?: Maybe<BlogPost>
 }
@@ -161,6 +209,16 @@ export type Query = {
 export type QueryBlogPostsArgs = {
   where?: Maybe<BlogPostWhereInput>
   orderBy?: Maybe<BlogPostOrderByInput>
+  skip?: Maybe<Scalars['Int']>
+  after?: Maybe<Scalars['String']>
+  before?: Maybe<Scalars['String']>
+  first?: Maybe<Scalars['Int']>
+  last?: Maybe<Scalars['Int']>
+}
+
+export type QueryLikesArgs = {
+  where?: Maybe<LikeWhereInput>
+  orderBy?: Maybe<LikeOrderByInput>
   skip?: Maybe<Scalars['Int']>
   after?: Maybe<Scalars['String']>
   before?: Maybe<Scalars['String']>
@@ -341,22 +399,26 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Query: {}
+  Query: MaybePromise<{}>
   BlogPostWhereInput: BlogPostWhereInput
-  ID: Scalars['ID']
-  String: Scalars['String']
-  DateTime: Scalars['DateTime']
+  ID: MaybePromise<Scalars['ID']>
+  String: MaybePromise<Scalars['String']>
+  DateTime: MaybePromise<Scalars['DateTime']>
   UserWhereInput: UserWhereInput
-  Float: Scalars['Float']
+  Float: MaybePromise<Scalars['Float']>
   BlogPostOrderByInput: BlogPostOrderByInput
-  Int: Scalars['Int']
-  BlogPost: BlogPost
-  User: User
+  Int: MaybePromise<Scalars['Int']>
+  BlogPost: MaybePromise<BlogPost>
+  User: MaybePromise<User>
   Permission: Permission
+  LikeWhereInput: LikeWhereInput
+  LikeOrderByInput: LikeOrderByInput
+  Like: MaybePromise<Like>
   BlogPostWhereUniqueInput: BlogPostWhereUniqueInput
-  Mutation: {}
-  SuccessMessage: SuccessMessage
-  Boolean: Scalars['Boolean']
+  Mutation: MaybePromise<{}>
+  LikeWithIdOnly: MaybePromise<LikeWithIdOnly>
+  SuccessMessage: MaybePromise<SuccessMessage>
+  Boolean: MaybePromise<Scalars['Boolean']>
 }>
 
 export type BlogPostResolvers<
@@ -376,6 +438,22 @@ export interface DateTimeScalarConfig
   name: 'DateTime'
 }
 
+export type LikeResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes['Like']
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  blogPost?: Resolver<ResolversTypes['BlogPost'], ParentType, ContextType>
+}>
+
+export type LikeWithIdOnlyResolvers<
+  ContextType = Context,
+  ParentType = ResolversTypes['LikeWithIdOnly']
+> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
+}>
+
 export type MutationResolvers<
   ContextType = Context,
   ParentType = ResolversTypes['Mutation']
@@ -386,11 +464,23 @@ export type MutationResolvers<
     ContextType,
     MutationCreateBlogPostArgs
   >
+  createLike?: Resolver<
+    ResolversTypes['LikeWithIdOnly'],
+    ParentType,
+    ContextType,
+    MutationCreateLikeArgs
+  >
   updateBlogPost?: Resolver<
     ResolversTypes['BlogPost'],
     ParentType,
     ContextType,
     MutationUpdateBlogPostArgs
+  >
+  deleteLike?: Resolver<
+    Maybe<ResolversTypes['LikeWithIdOnly']>,
+    ParentType,
+    ContextType,
+    MutationDeleteLikeArgs
   >
   deleteBlogPost?: Resolver<
     Maybe<ResolversTypes['BlogPost']>,
@@ -426,6 +516,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryBlogPostsArgs
+  >
+  likes?: Resolver<
+    Array<Maybe<ResolversTypes['Like']>>,
+    ParentType,
+    ContextType,
+    QueryLikesArgs
   >
   me?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>
   blogPost?: Resolver<
@@ -471,6 +567,8 @@ export type UserResolvers<
 export type Resolvers<ContextType = Context> = ResolversObject<{
   BlogPost?: BlogPostResolvers<ContextType>
   DateTime?: GraphQLScalarType
+  Like?: LikeResolvers<ContextType>
+  LikeWithIdOnly?: LikeWithIdOnlyResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   SuccessMessage?: SuccessMessageResolvers<ContextType>

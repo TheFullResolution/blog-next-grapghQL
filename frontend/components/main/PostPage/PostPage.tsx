@@ -9,6 +9,7 @@ import { Button } from '../../blocks/Button/Button'
 import { routes, RoutPath } from '../../../app/routes'
 import { useState } from 'react'
 import { DeleteBlogPost } from '../DeleteBlogPost/DeleteBlogPost'
+import { Like } from '../Like/Like';
 
 interface Props {
   blogPost: Blog_PostQuery['blogPost']
@@ -47,11 +48,12 @@ const PostPage: NextFC<Props> = ({ blogPost }) => {
           return null
         }}
       </User>
-      <h1>{blogPost.title}</h1>
+
       <Markdown>{blogPost.body}</Markdown>
       {showAlert && (
         <DeleteBlogPost id={blogPost.id} onClose={toggleShowAlert} />
       )}
+      <Like blogPostId={blogPost.id}/>
     </div>
   )
 }

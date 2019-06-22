@@ -2,6 +2,7 @@ import gql from 'graphql-tag'
 import * as ReactApollo from 'react-apollo'
 import * as React from 'react'
 export type Maybe<T> = T
+export type MaybePromise<T> = Promise<T> | T
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -104,9 +105,48 @@ export type BlogPostWhereUniqueInput = {
   readonly id: Maybe<Scalars['ID']>
 }
 
+export type Like = {
+  readonly id: Scalars['ID']
+  readonly user: User
+  readonly blogPost: BlogPost
+}
+
+export enum LikeOrderByInput {
+  IdAsc = 'id_ASC',
+  IdDesc = 'id_DESC',
+}
+
+export type LikeWhereInput = {
+  readonly id: Maybe<Scalars['ID']>
+  readonly id_not: Maybe<Scalars['ID']>
+  readonly id_in: Maybe<ReadonlyArray<Scalars['ID']>>
+  readonly id_not_in: Maybe<ReadonlyArray<Scalars['ID']>>
+  readonly id_lt: Maybe<Scalars['ID']>
+  readonly id_lte: Maybe<Scalars['ID']>
+  readonly id_gt: Maybe<Scalars['ID']>
+  readonly id_gte: Maybe<Scalars['ID']>
+  readonly id_contains: Maybe<Scalars['ID']>
+  readonly id_not_contains: Maybe<Scalars['ID']>
+  readonly id_starts_with: Maybe<Scalars['ID']>
+  readonly id_not_starts_with: Maybe<Scalars['ID']>
+  readonly id_ends_with: Maybe<Scalars['ID']>
+  readonly id_not_ends_with: Maybe<Scalars['ID']>
+  readonly user: Maybe<UserWhereInput>
+  readonly blogPost: Maybe<BlogPostWhereInput>
+  readonly AND: Maybe<ReadonlyArray<LikeWhereInput>>
+  readonly OR: Maybe<ReadonlyArray<LikeWhereInput>>
+  readonly NOT: Maybe<ReadonlyArray<LikeWhereInput>>
+}
+
+export type LikeWithIdOnly = {
+  readonly id: Scalars['ID']
+}
+
 export type Mutation = {
   readonly createBlogPost: BlogPost
+  readonly createLike: LikeWithIdOnly
   readonly updateBlogPost: BlogPost
+  readonly deleteLike: Maybe<LikeWithIdOnly>
   readonly deleteBlogPost: Maybe<BlogPost>
   readonly login: User
   readonly logout: Maybe<SuccessMessage>
@@ -118,10 +158,18 @@ export type MutationCreateBlogPostArgs = {
   body: Scalars['String']
 }
 
+export type MutationCreateLikeArgs = {
+  blogPost: Scalars['ID']
+}
+
 export type MutationUpdateBlogPostArgs = {
   id: Scalars['ID']
   title: Scalars['String']
   body: Scalars['String']
+}
+
+export type MutationDeleteLikeArgs = {
+  id: Scalars['ID']
 }
 
 export type MutationDeleteBlogPostArgs = {
@@ -150,6 +198,7 @@ export enum Permission {
 
 export type Query = {
   readonly blogPosts: ReadonlyArray<Maybe<BlogPost>>
+  readonly likes: ReadonlyArray<Maybe<Like>>
   readonly me: Maybe<User>
   readonly blogPost: Maybe<BlogPost>
 }
@@ -157,6 +206,16 @@ export type Query = {
 export type QueryBlogPostsArgs = {
   where: Maybe<BlogPostWhereInput>
   orderBy: Maybe<BlogPostOrderByInput>
+  skip: Maybe<Scalars['Int']>
+  after: Maybe<Scalars['String']>
+  before: Maybe<Scalars['String']>
+  first: Maybe<Scalars['Int']>
+  last: Maybe<Scalars['Int']>
+}
+
+export type QueryLikesArgs = {
+  where: Maybe<LikeWhereInput>
+  orderBy: Maybe<LikeOrderByInput>
   skip: Maybe<Scalars['Int']>
   after: Maybe<Scalars['String']>
   before: Maybe<Scalars['String']>
@@ -309,6 +368,32 @@ export type All_Blog_PostsQuery = {
   readonly blogPosts: ReadonlyArray<
     Maybe<Pick<BlogPost, 'id' | 'title' | 'body'>>
   >
+}
+
+export type Likes_For_BlogpostQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type Likes_For_BlogpostQuery = {
+  readonly likes: ReadonlyArray<
+    Maybe<Pick<Like, 'id'> & { readonly user: Pick<User, 'id'> }>
+  >
+}
+
+export type Delete_LikeMutationVariables = {
+  id: Scalars['ID']
+}
+
+export type Delete_LikeMutation = {
+  readonly deleteLike: Maybe<Pick<LikeWithIdOnly, 'id'>>
+}
+
+export type Create_LikeMutationVariables = {
+  id: Scalars['ID']
+}
+
+export type Create_LikeMutation = {
+  readonly createLike: Pick<LikeWithIdOnly, 'id'>
 }
 
 export type Blog_PostQueryVariables = {
@@ -499,6 +584,82 @@ export const All_Blog_PostsComponent = (
 ) => (
   <ReactApollo.Query<All_Blog_PostsQuery, All_Blog_PostsQueryVariables>
     query={All_Blog_PostsDocument}
+    {...props}
+  />
+)
+
+export const Likes_For_BlogpostDocument = gql`
+  query LIKES_FOR_BLOGPOST($id: ID!) {
+    likes(where: { blogPost: { id: $id } }) {
+      id
+      user {
+        id
+      }
+    }
+  }
+`
+export type Likes_For_BlogpostComponentProps = Omit<
+  ReactApollo.QueryProps<
+    Likes_For_BlogpostQuery,
+    Likes_For_BlogpostQueryVariables
+  >,
+  'query'
+> &
+  (
+    | { variables: Likes_For_BlogpostQueryVariables; skip?: false }
+    | { skip: true })
+
+export const Likes_For_BlogpostComponent = (
+  props: Likes_For_BlogpostComponentProps,
+) => (
+  <ReactApollo.Query<Likes_For_BlogpostQuery, Likes_For_BlogpostQueryVariables>
+    query={Likes_For_BlogpostDocument}
+    {...props}
+  />
+)
+
+export const Delete_LikeDocument = gql`
+  mutation DELETE_LIKE($id: ID!) {
+    deleteLike(id: $id) {
+      id
+    }
+  }
+`
+export type Delete_LikeMutationFn = ReactApollo.MutationFn<
+  Delete_LikeMutation,
+  Delete_LikeMutationVariables
+>
+export type Delete_LikeComponentProps = Omit<
+  ReactApollo.MutationProps<Delete_LikeMutation, Delete_LikeMutationVariables>,
+  'mutation'
+>
+
+export const Delete_LikeComponent = (props: Delete_LikeComponentProps) => (
+  <ReactApollo.Mutation<Delete_LikeMutation, Delete_LikeMutationVariables>
+    mutation={Delete_LikeDocument}
+    {...props}
+  />
+)
+
+export const Create_LikeDocument = gql`
+  mutation CREATE_LIKE($id: ID!) {
+    createLike(blogPost: $id) {
+      id
+    }
+  }
+`
+export type Create_LikeMutationFn = ReactApollo.MutationFn<
+  Create_LikeMutation,
+  Create_LikeMutationVariables
+>
+export type Create_LikeComponentProps = Omit<
+  ReactApollo.MutationProps<Create_LikeMutation, Create_LikeMutationVariables>,
+  'mutation'
+>
+
+export const Create_LikeComponent = (props: Create_LikeComponentProps) => (
+  <ReactApollo.Mutation<Create_LikeMutation, Create_LikeMutationVariables>
+    mutation={Create_LikeDocument}
     {...props}
   />
 )

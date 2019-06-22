@@ -11,18 +11,12 @@ import { withRouter } from 'next/router'
 import * as styles from './authenticate.scss'
 import { AUTH_STATE } from './auth.types'
 import { RoutPath, routes } from '../../../app/routes'
+import { getActiveParam } from '../../../utils/getActiveParam';
 
 interface AuthForm {
   email: string
   name?: string
   password: string
-}
-
-function getActiveParam<T>(...params: T[]): T | undefined {
-  const active = params.filter(el => !!el)
-
-  if (!active.length) return undefined
-  return active[0]
 }
 
 export const Authenticate = withRouter(function AuthenticateComponent(props) {

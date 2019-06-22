@@ -72,6 +72,42 @@ const Mutation: Required<MutationResolvers> = {
     return blogWithUser
   },
 
+  async createLike(parent, args, ctx) {
+    if (!ctx.req.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
+
+    if (!args.blogPost) {
+      throw new Error('Invalid values provided')
+    }
+    const like = await ctx.db.createLike({
+      blogPost: {
+        connect: {
+          id: args.blogPost,
+        },
+      },
+      user: {
+        connect: {
+          id: ctx.req.userId,
+        },
+      },
+    })
+    return like
+  },
+
+  async deleteLike(parent, args, ctx) {
+    if (!ctx.req.userId) {
+      throw new Error('You must be logged in to do that!')
+    }
+
+    const id = args.id
+
+    const like = await ctx.db.deleteLike({
+      id,
+    })
+
+    return like
+  },
   async login(parent, { email, password }, ctx, info) {
     const user = await ctx.db.user({ email: email.toLowerCase() })
 

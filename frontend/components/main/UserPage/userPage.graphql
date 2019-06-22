@@ -1,7 +1,7 @@
 query USER_BLOG_POSTS($id: ID!) {
-    blogPosts(where: { user: {id: $id} }) {
-      id
-      title
-      body
-    }
+  blogPosts(where: { user: { id: $id } }) {
+    id
+    title
+    body
   }
+}

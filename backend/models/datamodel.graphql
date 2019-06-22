@@ -25,3 +25,9 @@ type User {
   resetTokenExpiry: Float
   permissions: [Permission] @scalarList(strategy: RELATION)
 }
+
+type Like {
+  id: ID! @id
+  user: User!
+  blogPost: BlogPost!
+}
