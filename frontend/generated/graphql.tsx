@@ -339,12 +339,14 @@ export type UserDataQuery = {
   readonly me: Maybe<Pick<User, 'id' | 'email' | 'name' | 'permissions'>>
 }
 
-export type User_Blog_PostQueryVariables = {
+export type User_Blog_PostsQueryVariables = {
   id: Scalars['ID']
 }
 
-export type User_Blog_PostQuery = {
-  readonly blogPosts: ReadonlyArray<Maybe<Pick<BlogPost, 'id' | 'title'>>>
+export type User_Blog_PostsQuery = {
+  readonly blogPosts: ReadonlyArray<
+    Maybe<Pick<BlogPost, 'id' | 'title' | 'body'>>
+  >
 }
 
 export const LoginDocument = gql`
@@ -579,25 +581,26 @@ export const UserDataComponent = (props: UserDataComponentProps) => (
   />
 )
 
-export const User_Blog_PostDocument = gql`
-  query USER_BLOG_POST($id: ID!) {
+export const User_Blog_PostsDocument = gql`
+  query USER_BLOG_POSTS($id: ID!) {
     blogPosts(where: { user: { id: $id } }) {
       id
       title
+      body
     }
   }
 `
-export type User_Blog_PostComponentProps = Omit<
-  ReactApollo.QueryProps<User_Blog_PostQuery, User_Blog_PostQueryVariables>,
+export type User_Blog_PostsComponentProps = Omit<
+  ReactApollo.QueryProps<User_Blog_PostsQuery, User_Blog_PostsQueryVariables>,
   'query'
 > &
-  ({ variables: User_Blog_PostQueryVariables; skip?: false } | { skip: true })
+  ({ variables: User_Blog_PostsQueryVariables; skip?: false } | { skip: true })
 
-export const User_Blog_PostComponent = (
-  props: User_Blog_PostComponentProps,
+export const User_Blog_PostsComponent = (
+  props: User_Blog_PostsComponentProps,
 ) => (
-  <ReactApollo.Query<User_Blog_PostQuery, User_Blog_PostQueryVariables>
-    query={User_Blog_PostDocument}
+  <ReactApollo.Query<User_Blog_PostsQuery, User_Blog_PostsQueryVariables>
+    query={User_Blog_PostsDocument}
     {...props}
   />
 )

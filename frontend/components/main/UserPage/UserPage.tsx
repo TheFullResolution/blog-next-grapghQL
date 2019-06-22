@@ -1,29 +1,29 @@
 import * as styles from './userPage.scss'
 import { User, isLoggedIn } from '../User/User'
-import { User_Blog_PostComponent } from '../../../generated/graphql'
+import { User_Blog_PostsComponent } from '../../../generated/graphql'
+import { UsersArticles } from '../../blocks/UsersArticles/UsersArticles'
 
-interface Props {}
-
-const UserPage: React.FC<Props> = () => {
+const UserPage: React.FC = () => {
   return (
-    <User>
-      {({ payload }) => {
-        if (isLoggedIn(payload.data)) {
-          return (
-            <User_Blog_PostComponent variables={{ id: payload.data.me.id }}>
-              {({ data }) => (
-                <ul>
-                  {data &&
-                    data.blogPosts.map(post => (
-                      <li key={post.id}>{post.title}</li>
-                    ))}
-                </ul>
-              )}
-            </User_Blog_PostComponent>
-          )
-        } else return null
-      }}
-    </User>
+    <section className={styles.container}>
+      <h1 className={styles.heading}>Account Page</h1>
+      <User>
+        {({ payload }) => {
+          if (isLoggedIn(payload.data)) {
+            return (
+              <User_Blog_PostsComponent variables={{ id: payload.data.me.id }}>
+                {({ data }) => (
+                  <>
+                    <h2>List of your articles:</h2>
+                    {data && <UsersArticles data={data} />}
+                  </>
+                )}
+              </User_Blog_PostsComponent>
+            )
+          } else return null
+        }}
+      </User>
+    </section>
   )
 }
 
