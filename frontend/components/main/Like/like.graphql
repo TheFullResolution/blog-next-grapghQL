@@ -7,14 +7,14 @@ query LIKES_FOR_BLOGPOST($id: ID!) {
   }
 }
 
-mutation DELETE_LIKE($id: ID!) {
-  deleteLike(id: $id) {
+mutation DELETE_LIKE($likeId: ID!) {
+  deleteLike(id: $likeId) {
     id
   }
 }
 
-mutation CREATE_LIKE($id: ID!) {
-  createLike(blogPost: $id) {
+mutation CREATE_LIKE($blogPostId: ID!) {
+  createLike(blogPost: $blogPostId) {
     id
   }
 }

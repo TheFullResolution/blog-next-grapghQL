@@ -5,7 +5,6 @@ import {
   GraphQLScalarTypeConfig,
 } from 'graphql'
 export type Maybe<T> = T | null
-export type MaybePromise<T> = Promise<T> | T
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -332,6 +331,8 @@ export type UserWhereInput = {
 export type WithIndex<TObject> = TObject & Record<string, any>
 export type ResolversObject<TObject> = WithIndex<TObject>
 
+export type ResolverTypeWrapper<T> = Promise<T> | T
+
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
   parent: TParent,
   args: TArgs,
@@ -399,31 +400,55 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Query: MaybePromise<{}>
+  Query: ResolverTypeWrapper<{}>
   BlogPostWhereInput: BlogPostWhereInput
-  ID: MaybePromise<Scalars['ID']>
-  String: MaybePromise<Scalars['String']>
-  DateTime: MaybePromise<Scalars['DateTime']>
+  ID: ResolverTypeWrapper<Scalars['ID']>
+  String: ResolverTypeWrapper<Scalars['String']>
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>
   UserWhereInput: UserWhereInput
-  Float: MaybePromise<Scalars['Float']>
+  Float: ResolverTypeWrapper<Scalars['Float']>
   BlogPostOrderByInput: BlogPostOrderByInput
-  Int: MaybePromise<Scalars['Int']>
-  BlogPost: MaybePromise<BlogPost>
-  User: MaybePromise<User>
+  Int: ResolverTypeWrapper<Scalars['Int']>
+  BlogPost: ResolverTypeWrapper<BlogPost>
+  User: ResolverTypeWrapper<User>
   Permission: Permission
   LikeWhereInput: LikeWhereInput
   LikeOrderByInput: LikeOrderByInput
-  Like: MaybePromise<Like>
+  Like: ResolverTypeWrapper<Like>
   BlogPostWhereUniqueInput: BlogPostWhereUniqueInput
-  Mutation: MaybePromise<{}>
-  LikeWithIdOnly: MaybePromise<LikeWithIdOnly>
-  SuccessMessage: MaybePromise<SuccessMessage>
-  Boolean: MaybePromise<Scalars['Boolean']>
+  Mutation: ResolverTypeWrapper<{}>
+  LikeWithIdOnly: ResolverTypeWrapper<LikeWithIdOnly>
+  SuccessMessage: ResolverTypeWrapper<SuccessMessage>
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
+}>
+
+/** Mapping between all available schema types and the resolvers parents */
+export type ResolversParentTypes = ResolversObject<{
+  Query: {}
+  BlogPostWhereInput: BlogPostWhereInput
+  ID: Scalars['ID']
+  String: Scalars['String']
+  DateTime: Scalars['DateTime']
+  UserWhereInput: UserWhereInput
+  Float: Scalars['Float']
+  BlogPostOrderByInput: BlogPostOrderByInput
+  Int: Scalars['Int']
+  BlogPost: BlogPost
+  User: User
+  Permission: Permission
+  LikeWhereInput: LikeWhereInput
+  LikeOrderByInput: LikeOrderByInput
+  Like: Like
+  BlogPostWhereUniqueInput: BlogPostWhereUniqueInput
+  Mutation: {}
+  LikeWithIdOnly: LikeWithIdOnly
+  SuccessMessage: SuccessMessage
+  Boolean: Scalars['Boolean']
 }>
 
 export type BlogPostResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes['BlogPost']
+  ParentType = ResolversParentTypes['BlogPost']
 > = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
@@ -440,7 +465,7 @@ export interface DateTimeScalarConfig
 
 export type LikeResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes['Like']
+  ParentType = ResolversParentTypes['Like']
 > = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
@@ -449,14 +474,14 @@ export type LikeResolvers<
 
 export type LikeWithIdOnlyResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes['LikeWithIdOnly']
+  ParentType = ResolversParentTypes['LikeWithIdOnly']
 > = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
 }>
 
 export type MutationResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes['Mutation']
+  ParentType = ResolversParentTypes['Mutation']
 > = ResolversObject<{
   createBlogPost?: Resolver<
     ResolversTypes['BlogPost'],
@@ -509,7 +534,7 @@ export type MutationResolvers<
 
 export type QueryResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes['Query']
+  ParentType = ResolversParentTypes['Query']
 > = ResolversObject<{
   blogPosts?: Resolver<
     Array<Maybe<ResolversTypes['BlogPost']>>,
@@ -534,14 +559,14 @@ export type QueryResolvers<
 
 export type SuccessMessageResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes['SuccessMessage']
+  ParentType = ResolversParentTypes['SuccessMessage']
 > = ResolversObject<{
   message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
 }>
 
 export type UserResolvers<
   ContextType = Context,
-  ParentType = ResolversTypes['User']
+  ParentType = ResolversParentTypes['User']
 > = ResolversObject<{
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>

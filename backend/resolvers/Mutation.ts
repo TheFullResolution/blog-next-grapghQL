@@ -92,7 +92,7 @@ const Mutation: Required<MutationResolvers> = {
         },
       },
     })
-    return like
+    return {id: like.id}
   },
 
   async deleteLike(parent, args, ctx) {
@@ -106,7 +106,7 @@ const Mutation: Required<MutationResolvers> = {
       id,
     })
 
-    return like
+    return {id: like.id}
   },
   async login(parent, { email, password }, ctx, info) {
     const user = await ctx.db.user({ email: email.toLowerCase() })

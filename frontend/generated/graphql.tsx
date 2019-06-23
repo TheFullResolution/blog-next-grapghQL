@@ -2,7 +2,6 @@ import gql from 'graphql-tag'
 import * as ReactApollo from 'react-apollo'
 import * as React from 'react'
 export type Maybe<T> = T
-export type MaybePromise<T> = Promise<T> | T
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -381,7 +380,7 @@ export type Likes_For_BlogpostQuery = {
 }
 
 export type Delete_LikeMutationVariables = {
-  id: Scalars['ID']
+  likeId: Scalars['ID']
 }
 
 export type Delete_LikeMutation = {
@@ -389,7 +388,7 @@ export type Delete_LikeMutation = {
 }
 
 export type Create_LikeMutationVariables = {
-  id: Scalars['ID']
+  blogPostId: Scalars['ID']
 }
 
 export type Create_LikeMutation = {
@@ -619,8 +618,8 @@ export const Likes_For_BlogpostComponent = (
 )
 
 export const Delete_LikeDocument = gql`
-  mutation DELETE_LIKE($id: ID!) {
-    deleteLike(id: $id) {
+  mutation DELETE_LIKE($likeId: ID!) {
+    deleteLike(id: $likeId) {
       id
     }
   }
@@ -642,8 +641,8 @@ export const Delete_LikeComponent = (props: Delete_LikeComponentProps) => (
 )
 
 export const Create_LikeDocument = gql`
-  mutation CREATE_LIKE($id: ID!) {
-    createLike(blogPost: $id) {
+  mutation CREATE_LIKE($blogPostId: ID!) {
+    createLike(blogPost: $blogPostId) {
       id
     }
   }
