@@ -1,7 +1,7 @@
 import { BlogPostWhereUniqueInput, ID_Input, Prisma } from '../generated'
-import { QueryResolvers, BlogPost } from '../generated/graphql'
+import { QueryResolvers, BlogPost, Like } from '../generated/graphql'
 
-const Query: QueryResolvers = {
+const Query: Required<QueryResolvers> = {
   async blogPost(parent, args, ctx, info) {
     if (!args.where.id) {
       throw new Error('Missing Id')
@@ -33,6 +33,26 @@ const Query: QueryResolvers = {
       .$fragment<BlogPost[]>(fragment)
 
     return blogs
+  },
+
+  async likes(parent, args, ctx, info) {
+    const fragment = `
+    fragment LikesWithPostAndUser on Like {
+      id
+      user {
+        id
+      }
+      blogPost {
+        id
+      }
+    }
+    `
+    
+    const likes = await ctx.db
+      .likes(args as Prisma['likes']['arguments'])
+      .$fragment<Like[]>(fragment)
+
+    return likes
   },
 
   async me(parent, args, ctx, info) {

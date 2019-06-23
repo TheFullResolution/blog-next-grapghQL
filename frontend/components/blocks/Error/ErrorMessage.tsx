@@ -1,11 +1,16 @@
 import * as styles from './errorMessage.scss'
+import { classNames } from '../../../utils/classnames'
 
 interface Props {
-  error: string
+  className?: string
 }
 
-const ErrorMessage: React.FC<Props> = ({error}) => {
-  return <div className={styles.container}>{error}</div>
+const ErrorMessage: React.FC<Props> = ({ className, children }) => {
+  return (
+    <div className={classNames([styles.container, className])}>
+      <div className={styles.wrapper}>{children}</div>
+    </div>
+  )
 }
 
 export { ErrorMessage }

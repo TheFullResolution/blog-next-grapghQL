@@ -49,7 +49,7 @@ const DeleteBlogPost = withRouter(
                   Once you delete the blog post, it is impossible to reverse the
                   action.
                 </AlertDialogDescription>
-                {error && <ErrorMessage error={error.message}></ErrorMessage>}
+                {error && <ErrorMessage>{error.message}</ErrorMessage>}
                 <div className={styles.buttons}>
                   <Button version="secondary" disabled={loading} onClick={onClick}>
                     Yes, delete

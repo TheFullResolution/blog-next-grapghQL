@@ -1,0 +1,20 @@
+query LIKES_FOR_BLOGPOST($id: ID!) {
+  likes(where: { blogPost: { id: $id } }) {
+    id
+    user {
+      id
+    }
+  }
+}
+
+mutation DELETE_LIKE($likeId: ID!) {
+  deleteLike(id: $likeId) {
+    id
+  }
+}
+
+mutation CREATE_LIKE($blogPostId: ID!) {
+  createLike(blogPost: $blogPostId) {
+    id
+  }
+}
