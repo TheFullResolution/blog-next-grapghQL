@@ -12,7 +12,7 @@ import { ErrorMessage } from '../../blocks/Error/ErrorMessage'
 interface Props {
   onClick: () => void
   likeCount: number
-  likeState: 'userLiked' | 'default'
+  likeId: string | undefined
   loading?: boolean
   error?: string
 }
@@ -27,41 +27,36 @@ function getPeoplePlural(likeCount: Props['likeCount']) {
   }
 }
 
-function getLabel(state: Props['likeState'], likeCount: Props['likeCount']) {
-  switch (state) {
-    case 'userLiked': {
-      const countMinusUser = likeCount - 1
-      return `You ${countMinusUser > 0 ? 'and' : ''} ${getPeoplePlural(
-        countMinusUser,
-      )} liked it`
-    }
-
-    default:
-      return `${likeCount === 0 ? '0' : getPeoplePlural(likeCount)} liked it`
+function getLabel(likeId: Props['likeId'], likeCount: Props['likeCount']) {
+  if (likeId) {
+    const countMinusUser = likeCount - 1
+    return `You ${countMinusUser > 0 ? 'and' : ''} ${getPeoplePlural(
+      countMinusUser,
+    )} liked it`
   }
+
+  return `${likeCount === 0 ? '0' : getPeoplePlural(likeCount)} liked it`
 }
 
-function getButtonLabel(state: Props['likeState']) {
-  switch (state) {
-    case 'userLiked':
-      return (
-        <>
-          <FaThumbsDown /> Unlike this
-        </>
-      )
-    default:
-      return (
-        <>
-          <FaThumbsUp /> Like this
-        </>
-      )
+function getButtonLabel(likeId: Props['likeId']) {
+  if (likeId) {
+    return (
+      <>
+        <FaThumbsDown /> Unlike this
+      </>
+    )
   }
+  return (
+    <>
+      <FaThumbsUp /> Like this
+    </>
+  )
 }
 
 const LikeForm: React.FC<Props> = ({
   onClick,
   likeCount,
-  likeState,
+  likeId,
   error,
   loading,
 }) => {
@@ -69,7 +64,7 @@ const LikeForm: React.FC<Props> = ({
     <>
       <div className={styles.container}>
         <p>
-          <FaRegCheckCircle /> {getLabel(likeState, likeCount)}
+          <FaRegCheckCircle /> {getLabel(likeId, likeCount)}
         </p>
         <Button
           version="like"
@@ -78,7 +73,7 @@ const LikeForm: React.FC<Props> = ({
           disabled={loading}
         >
           {!loading ? (
-            getButtonLabel(likeState)
+            getButtonLabel(likeId)
           ) : (
             <FaCircleNotch className={styles.loader} />
           )}

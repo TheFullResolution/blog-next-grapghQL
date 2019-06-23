@@ -7,10 +7,9 @@ import {
 } from '../../../../generated/graphql'
 
 export interface CreatOnClickParams {
-  userId: string | null
-  likeId?: string | null
+  userId: string | undefined
+  likeId?: string
   blogPostId: string
-  likeState: 'userLiked' | 'default'
   createLike: MutationFn<Create_LikeMutation, Create_LikeMutationVariables>
   deleteLike: MutationFn<Delete_LikeMutation, Delete_LikeMutationVariables>
   onClickAuthError: () => void
@@ -21,7 +20,6 @@ export function createOnClick({
   userId,
   likeId,
   blogPostId,
-  likeState,
   createLike,
   deleteLike,
   onClickAuthError,
@@ -32,14 +30,13 @@ export function createOnClick({
       onClickAuthError()
     }
   }
-  if (likeState === 'default') {
+  if (!likeId) {
     return () => {
       createLike({ variables: { blogPostId } })
     }
   }
-  if (likeState === 'userLiked' && likeId) {
+  if (likeId) {
     return () => {
-      console.log({ likeId })
       deleteLike({ variables: { likeId } })
     }
   }

@@ -21,12 +21,12 @@ interface Props {
 }
 
 function findUserLikeId(
-  userId: string | null,
+  userId: string | undefined,
   likes: Likes_For_BlogpostQuery['likes'],
 ) {
-  if (!userId) return null
+  if (!userId) return undefined
   const like = likes.find(like => like.user.id === userId)
-  return like ? like.id : null
+  return like ? like.id : undefined
 }
 
 function getError(error: string | ApolloError) {
@@ -41,16 +41,14 @@ function getLikeValues(
   payload: QueryResult<UserDataQuery, UserDataQueryVariables>,
   data: Likes_For_BlogpostQuery | undefined,
 ) {
-  const userId = isLoggedIn(payload.data) ? payload.data.me.id : null
+  const userId = isLoggedIn(payload.data) ? payload.data.me.id : undefined
   const validLikes = data && data.likes
   const likeId = validLikes && findUserLikeId(userId, validLikes)
-  const likeState: 'userLiked' | 'default' = likeId ? 'userLiked' : 'default'
 
   return {
     userId,
     validLikes,
     likeId,
-    likeState,
   }
 }
 
@@ -62,7 +60,7 @@ function getRefetchQuery(blogPostId: string) {
 }
 
 const Like: React.FC<Props> = ({ blogPostId }) => {
-  const [authError, setAuthError] = useState<string | null>(null)
+  const [authError, setAuthError] = useState<string | undefined>(undefined)
   const onClickAuthError = () => {
     setAuthError('You have to be logged in to like the article')
   }
@@ -82,15 +80,13 @@ const Like: React.FC<Props> = ({ blogPostId }) => {
                   refetchQueries={[getRefetchQuery(blogPostId)]}
                 >
                   {(deleteLike, deleteLikeParams) => {
-                    const {
-                      userId,
-                      validLikes,
-                      likeId,
-                      likeState,
-                    } = getLikeValues(payload, data)
+                    const { userId, validLikes, likeId } = getLikeValues(
+                      payload,
+                      data,
+                    )
 
                     const error = getActiveParam<
-                      ApolloError | string | undefined | null
+                      ApolloError | string | undefined
                     >(createLikeParams.error, deleteLikeParams.error, authError)
 
                     const loading = getActiveParam(
@@ -102,7 +98,6 @@ const Like: React.FC<Props> = ({ blogPostId }) => {
                       userId,
                       likeId,
                       blogPostId,
-                      likeState,
                       createLike,
                       deleteLike,
                       onClickAuthError,
@@ -111,9 +106,9 @@ const Like: React.FC<Props> = ({ blogPostId }) => {
                     return (
                       <LikeForm
                         likeCount={validLikes ? validLikes.length : 0}
-                        likeState={likeState}
+                        likeId={likeId}
                         onClick={onClick}
-                        error={error ? getError(error) : undefined}
+                        error={error && getError(error)}
                         loading={loading}
                       />
                     )

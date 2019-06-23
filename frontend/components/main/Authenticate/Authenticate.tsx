@@ -11,7 +11,7 @@ import { withRouter } from 'next/router'
 import * as styles from './authenticate.scss'
 import { AUTH_STATE } from './auth.types'
 import { RoutPath, routes } from '../../../app/routes'
-import { getActiveParam } from '../../../utils/getActiveParam';
+import { getActiveParam } from '../../../utils/getActiveParam'
 
 interface AuthForm {
   email: string
@@ -26,8 +26,16 @@ export const Authenticate = withRouter(function AuthenticateComponent(props) {
     setstate(val)
   }
 
-  const redirect = () => {
-    router && router.push(routes[RoutPath.home].path)
+  const redirectAfterAuth = () => {
+    if (router) {
+      const query = router.query
+
+      if (query && query.redirect && typeof query.redirect === 'string') {
+        router.push(query.redirect)
+      } else {
+        router.push(routes[RoutPath.home].path)
+      }
+    }
   }
 
   return (
@@ -50,7 +58,7 @@ export const Authenticate = withRouter(function AuthenticateComponent(props) {
                   },
                 })
                 if (id && id.data && id.data.login.id) {
-                  redirect()
+                  redirectAfterAuth()
                 }
               } else if (state === AUTH_STATE.Signup && values.name) {
                 const id = await signUp({
@@ -61,7 +69,7 @@ export const Authenticate = withRouter(function AuthenticateComponent(props) {
                   },
                 })
                 if (id && id.data && id.data.signup.id) {
-                  redirect()
+                  redirectAfterAuth()
                 }
               }
             }
