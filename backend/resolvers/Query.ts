@@ -35,6 +35,17 @@ const Query: Required<QueryResolvers> = {
     return blogs
   },
 
+  async blogPostsConnection(parent, args, ctx, info) {
+    const pageInfo = await ctx.db
+      .blogPostsConnection(args as Prisma['blogPostsConnection']['arguments'])
+      .pageInfo()
+    const aggregate = await ctx.db
+      .blogPostsConnection(args as Prisma['blogPostsConnection']['arguments'])
+      .aggregate()
+
+    return { pageInfo, aggregate }
+  },
+
   async likes(parent, args, ctx, info) {
     const fragment = `
     fragment LikesWithPostAndUser on Like {
@@ -47,7 +58,7 @@ const Query: Required<QueryResolvers> = {
       }
     }
     `
-    
+
     const likes = await ctx.db
       .likes(args as Prisma['likes']['arguments'])
       .$fragment<Like[]>(fragment)

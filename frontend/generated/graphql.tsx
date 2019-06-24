@@ -13,6 +13,10 @@ export type Scalars = {
   DateTime: any
 }
 
+export type AggregateBlogPost = {
+  readonly count: Scalars['Int']
+}
+
 export type BlogPost = {
   readonly id: Scalars['ID']
   readonly title: Scalars['String']
@@ -20,6 +24,11 @@ export type BlogPost = {
   readonly updatedAt: Scalars['DateTime']
   readonly createdAt: Scalars['DateTime']
   readonly user: User
+}
+
+export type BlogPostConnectionFiltered = {
+  readonly pageInfo: PageInfo
+  readonly aggregate: AggregateBlogPost
 }
 
 export enum BlogPostOrderByInput {
@@ -186,6 +195,13 @@ export type MutationSignupArgs = {
   name: Scalars['String']
 }
 
+export type PageInfo = {
+  readonly hasNextPage: Scalars['Boolean']
+  readonly hasPreviousPage: Scalars['Boolean']
+  readonly startCursor: Maybe<Scalars['String']>
+  readonly endCursor: Maybe<Scalars['String']>
+}
+
 export enum Permission {
   Admin = 'ADMIN',
   User = 'USER',
@@ -197,6 +213,7 @@ export enum Permission {
 
 export type Query = {
   readonly blogPosts: ReadonlyArray<Maybe<BlogPost>>
+  readonly blogPostsConnection: BlogPostConnectionFiltered
   readonly likes: ReadonlyArray<Maybe<Like>>
   readonly me: Maybe<User>
   readonly blogPost: Maybe<BlogPost>
@@ -210,6 +227,10 @@ export type QueryBlogPostsArgs = {
   before: Maybe<Scalars['String']>
   first: Maybe<Scalars['Int']>
   last: Maybe<Scalars['Int']>
+}
+
+export type QueryBlogPostsConnectionArgs = {
+  where: Maybe<BlogPostWhereInput>
 }
 
 export type QueryLikesArgs = {
@@ -393,6 +414,14 @@ export type Create_LikeMutationVariables = {
 
 export type Create_LikeMutation = {
   readonly createLike: Pick<LikeWithIdOnly, 'id'>
+}
+
+export type Pagination_QueryQueryVariables = {}
+
+export type Pagination_QueryQuery = {
+  readonly blogPostsConnection: {
+    readonly aggregate: Pick<AggregateBlogPost, 'count'>
+  }
 }
 
 export type Blog_PostQueryVariables = {
@@ -659,6 +688,29 @@ export type Create_LikeComponentProps = Omit<
 export const Create_LikeComponent = (props: Create_LikeComponentProps) => (
   <ReactApollo.Mutation<Create_LikeMutation, Create_LikeMutationVariables>
     mutation={Create_LikeDocument}
+    {...props}
+  />
+)
+
+export const Pagination_QueryDocument = gql`
+  query PAGINATION_QUERY {
+    blogPostsConnection {
+      aggregate {
+        count
+      }
+    }
+  }
+`
+export type Pagination_QueryComponentProps = Omit<
+  ReactApollo.QueryProps<Pagination_QueryQuery, Pagination_QueryQueryVariables>,
+  'query'
+>
+
+export const Pagination_QueryComponent = (
+  props: Pagination_QueryComponentProps,
+) => (
+  <ReactApollo.Query<Pagination_QueryQuery, Pagination_QueryQueryVariables>
+    query={Pagination_QueryDocument}
     {...props}
   />
 )

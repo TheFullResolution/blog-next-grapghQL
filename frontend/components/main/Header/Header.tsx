@@ -25,7 +25,7 @@ function getRedirect(router: SingletonRouter) {
 
 const Header = withRouter(function HeaderComponent({ router }) {
   const redirect = router && getRedirect(router)
-
+ 
   return (
     <User>
       {({ payload, loggedIn }) => {

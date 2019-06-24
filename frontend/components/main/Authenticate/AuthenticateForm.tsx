@@ -53,10 +53,14 @@ export const AuthenticateForm: React.FC<Props> = ({
   children,
 }) => {
   const validate = createValidate(state)
-
+  const initialValues = {
+    email: '',
+    password: '',
+    name: ''
+  }
   return (
     <Formik<AuthForm>
-      initialValues={{ email: '', password: '' }}
+      initialValues={initialValues}
       onSubmit={onSubmit}
       validate={validate}
     >

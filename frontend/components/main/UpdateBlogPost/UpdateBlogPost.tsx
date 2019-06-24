@@ -4,6 +4,7 @@ import { routes, RoutPath } from '../../../app/routes'
 import {
   Blog_PostQuery,
   Update_Blog_PostComponent,
+  Blog_PostDocument,
 } from '../../../generated/graphql'
 import {
   BlogFormValues,
@@ -17,13 +18,21 @@ interface Props {
   blogPost: Blog_PostQuery['blogPost']
 }
 
+function getRefetchQuery(blogPostId: string) {
+  return {
+    query: Blog_PostDocument,
+    variables: { id: blogPostId },
+  }
+}
+
+
 const UpdateBlogPost = withRouter<Props>(function EditBlogPostComponent({
   router,
   id,
   blogPost,
 }) {
   return (
-    <Update_Blog_PostComponent>
+    <Update_Blog_PostComponent refetchQueries={[getRefetchQuery(blogPost.id)]}>
       {(updateBlogPost, { error, loading }) => {
         const onSubmit = async (values: BlogFormValues) => {
           const post = await updateBlogPost({
