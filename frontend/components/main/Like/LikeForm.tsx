@@ -61,8 +61,8 @@ const LikeForm: React.FC<Props> = ({
   loading,
 }) => {
   return (
-    <>
-      <div className={styles.container}>
+    <div className={styles.container}>
+      <div className={styles.wrapper}>
         <p>
           <FaRegCheckCircle /> {getLabel(likeId, likeCount)}
         </p>
@@ -80,7 +80,7 @@ const LikeForm: React.FC<Props> = ({
         </Button>
       </div>
       {error && <ErrorMessage className={styles.error}>{error}</ErrorMessage>}
-    </>
+    </div>
   )
 }
 

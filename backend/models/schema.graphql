@@ -8,6 +8,11 @@ type LikeWithIdOnly {
   id: ID!
 }
 
+type BlogPostConnectionFiltered {
+  pageInfo: PageInfo!
+  aggregate: AggregateBlogPost!
+}
+
 type Mutation {
   createBlogPost(title: String!, body: String!): BlogPost!
   createLike(blogPost: ID!): LikeWithIdOnly!
@@ -29,6 +34,7 @@ type Query {
     first: Int
     last: Int
   ): [BlogPost]!
+  blogPostsConnection(where: BlogPostWhereInput): BlogPostConnectionFiltered!
   likes(
     where: LikeWhereInput
     orderBy: LikeOrderByInput

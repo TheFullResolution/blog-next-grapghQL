@@ -18,6 +18,7 @@ import { QueryResult } from 'react-apollo'
 
 interface Props {
   blogPostId: string
+  blogPostAuthorId: string
 }
 
 function findUserLikeId(
@@ -59,14 +60,9 @@ function getRefetchQuery(blogPostId: string) {
   }
 }
 
-const Like: React.FC<Props> = ({ blogPostId }) => {
+const Like: React.FC<Props> = ({ blogPostId, blogPostAuthorId }) => {
   const [authError, setAuthError] = useState<string | undefined>(undefined)
-  const onClickAuthError = () => {
-    setAuthError('You have to be logged in to like the article')
-  }
-  const onClickError = () => {
-    setAuthError('Sorry, something went wrong')
-  }
+
   return (
     <User>
       {({ payload }) => (
@@ -95,13 +91,13 @@ const Like: React.FC<Props> = ({ blogPostId }) => {
                     )
 
                     const onClick = createOnClick({
-                      userId,
-                      likeId,
+                      blogPostAuthorId,
                       blogPostId,
                       createLike,
                       deleteLike,
-                      onClickAuthError,
-                      onClickError,
+                      likeId,
+                      setAuthError,
+                      userId,
                     })
                     return (
                       <LikeForm

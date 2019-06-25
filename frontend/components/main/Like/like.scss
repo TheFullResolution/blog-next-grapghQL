@@ -1,7 +1,16 @@
 .container {
-  display: inline-flex;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.wrapper {
+  display: flex;
+  flex: none;
   flex-wrap: wrap;
   align-items: center;
+  margin: $space-double 0;
   padding: $space-single;
   border-radius: $space-half;
   border: 1px solid $color-accent-2;
@@ -34,10 +43,11 @@
 
 .error {
   flex-basis: 100%;
+  margin-top: 0;
 }
 
 .loader {
-   animation: rotating 1s linear infinite;
+  animation: rotating 1s linear infinite;
 }
 
 @keyframes rotating {

@@ -13,6 +13,10 @@ export type Scalars = {
   DateTime: any
 }
 
+export type AggregateBlogPost = {
+  readonly count: Scalars['Int']
+}
+
 export type BlogPost = {
   readonly id: Scalars['ID']
   readonly title: Scalars['String']
@@ -20,6 +24,11 @@ export type BlogPost = {
   readonly updatedAt: Scalars['DateTime']
   readonly createdAt: Scalars['DateTime']
   readonly user: User
+}
+
+export type BlogPostConnectionFiltered = {
+  readonly pageInfo: PageInfo
+  readonly aggregate: AggregateBlogPost
 }
 
 export enum BlogPostOrderByInput {
@@ -186,6 +195,13 @@ export type MutationSignupArgs = {
   name: Scalars['String']
 }
 
+export type PageInfo = {
+  readonly hasNextPage: Scalars['Boolean']
+  readonly hasPreviousPage: Scalars['Boolean']
+  readonly startCursor: Maybe<Scalars['String']>
+  readonly endCursor: Maybe<Scalars['String']>
+}
+
 export enum Permission {
   Admin = 'ADMIN',
   User = 'USER',
@@ -197,6 +213,7 @@ export enum Permission {
 
 export type Query = {
   readonly blogPosts: ReadonlyArray<Maybe<BlogPost>>
+  readonly blogPostsConnection: BlogPostConnectionFiltered
   readonly likes: ReadonlyArray<Maybe<Like>>
   readonly me: Maybe<User>
   readonly blogPost: Maybe<BlogPost>
@@ -210,6 +227,10 @@ export type QueryBlogPostsArgs = {
   before: Maybe<Scalars['String']>
   first: Maybe<Scalars['Int']>
   last: Maybe<Scalars['Int']>
+}
+
+export type QueryBlogPostsConnectionArgs = {
+  where: Maybe<BlogPostWhereInput>
 }
 
 export type QueryLikesArgs = {
@@ -361,7 +382,10 @@ export type LogoutMutation = {
   readonly logout: Maybe<Pick<SuccessMessage, 'message'>>
 }
 
-export type All_Blog_PostsQueryVariables = {}
+export type All_Blog_PostsQueryVariables = {
+  skip: Scalars['Int']
+  first: Scalars['Int']
+}
 
 export type All_Blog_PostsQuery = {
   readonly blogPosts: ReadonlyArray<
@@ -395,14 +419,22 @@ export type Create_LikeMutation = {
   readonly createLike: Pick<LikeWithIdOnly, 'id'>
 }
 
+export type Pagination_QueryQueryVariables = {}
+
+export type Pagination_QueryQuery = {
+  readonly blogPostsConnection: {
+    readonly aggregate: Pick<AggregateBlogPost, 'count'>
+  }
+}
+
 export type Blog_PostQueryVariables = {
   id: Scalars['ID']
 }
 
 export type Blog_PostQuery = {
   readonly blogPost: Maybe<
-    Pick<BlogPost, 'id' | 'title' | 'body'> & {
-      readonly user: Pick<User, 'id'>
+    Pick<BlogPost, 'id' | 'title' | 'body' | 'createdAt'> & {
+      readonly user: Pick<User, 'id' | 'name'>
     }
   >
 }
@@ -565,8 +597,8 @@ export const LogoutComponent = (props: LogoutComponentProps) => (
 )
 
 export const All_Blog_PostsDocument = gql`
-  query ALL_BLOG_POSTS {
-    blogPosts {
+  query ALL_BLOG_POSTS($skip: Int!, $first: Int!) {
+    blogPosts(first: $first, skip: $skip, orderBy: createdAt_DESC) {
       id
       title
       body
@@ -576,7 +608,8 @@ export const All_Blog_PostsDocument = gql`
 export type All_Blog_PostsComponentProps = Omit<
   ReactApollo.QueryProps<All_Blog_PostsQuery, All_Blog_PostsQueryVariables>,
   'query'
->
+> &
+  ({ variables: All_Blog_PostsQueryVariables; skip?: false } | { skip: true })
 
 export const All_Blog_PostsComponent = (
   props: All_Blog_PostsComponentProps,
@@ -663,14 +696,39 @@ export const Create_LikeComponent = (props: Create_LikeComponentProps) => (
   />
 )
 
+export const Pagination_QueryDocument = gql`
+  query PAGINATION_QUERY {
+    blogPostsConnection {
+      aggregate {
+        count
+      }
+    }
+  }
+`
+export type Pagination_QueryComponentProps = Omit<
+  ReactApollo.QueryProps<Pagination_QueryQuery, Pagination_QueryQueryVariables>,
+  'query'
+>
+
+export const Pagination_QueryComponent = (
+  props: Pagination_QueryComponentProps,
+) => (
+  <ReactApollo.Query<Pagination_QueryQuery, Pagination_QueryQueryVariables>
+    query={Pagination_QueryDocument}
+    {...props}
+  />
+)
+
 export const Blog_PostDocument = gql`
   query BLOG_POST($id: ID!) {
     blogPost(where: { id: $id }) {
       id
       title
       body
+      createdAt
       user {
         id
+        name
       }
     }
   }

@@ -1,5 +1,5 @@
- query ALL_BLOG_POSTS {
-    blogPosts {
+ query ALL_BLOG_POSTS($skip: Int!, $first: Int!) {
+    blogPosts(first: $first, skip: $skip, orderBy: createdAt_DESC) {
       id
       title
       body

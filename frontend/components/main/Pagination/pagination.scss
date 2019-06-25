@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.text {
+  text-align: center;
+  padding: 0 $space-single;
+}
+
+.hidden {
+  visibility: hidden;
+}

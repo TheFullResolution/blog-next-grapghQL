@@ -16,6 +16,11 @@ export type Scalars = {
   DateTime: any
 }
 
+export type AggregateBlogPost = {
+  __typename?: 'AggregateBlogPost'
+  count: Scalars['Int']
+}
+
 export type BlogPost = {
   __typename?: 'BlogPost'
   id: Scalars['ID']
@@ -24,6 +29,12 @@ export type BlogPost = {
   updatedAt: Scalars['DateTime']
   createdAt: Scalars['DateTime']
   user: User
+}
+
+export type BlogPostConnectionFiltered = {
+  __typename?: 'BlogPostConnectionFiltered'
+  pageInfo: PageInfo
+  aggregate: AggregateBlogPost
 }
 
 export type BlogPostOrderByInput =
@@ -189,6 +200,14 @@ export type MutationSignupArgs = {
   name: Scalars['String']
 }
 
+export type PageInfo = {
+  __typename?: 'PageInfo'
+  hasNextPage: Scalars['Boolean']
+  hasPreviousPage: Scalars['Boolean']
+  startCursor?: Maybe<Scalars['String']>
+  endCursor?: Maybe<Scalars['String']>
+}
+
 export type Permission =
   | 'ADMIN'
   | 'USER'
@@ -200,6 +219,7 @@ export type Permission =
 export type Query = {
   __typename?: 'Query'
   blogPosts: Array<Maybe<BlogPost>>
+  blogPostsConnection: BlogPostConnectionFiltered
   likes: Array<Maybe<Like>>
   me?: Maybe<User>
   blogPost?: Maybe<BlogPost>
@@ -213,6 +233,10 @@ export type QueryBlogPostsArgs = {
   before?: Maybe<Scalars['String']>
   first?: Maybe<Scalars['Int']>
   last?: Maybe<Scalars['Int']>
+}
+
+export type QueryBlogPostsConnectionArgs = {
+  where?: Maybe<BlogPostWhereInput>
 }
 
 export type QueryLikesArgs = {
@@ -412,6 +436,10 @@ export type ResolversTypes = ResolversObject<{
   BlogPost: ResolverTypeWrapper<BlogPost>
   User: ResolverTypeWrapper<User>
   Permission: Permission
+  BlogPostConnectionFiltered: ResolverTypeWrapper<BlogPostConnectionFiltered>
+  PageInfo: ResolverTypeWrapper<PageInfo>
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
+  AggregateBlogPost: ResolverTypeWrapper<AggregateBlogPost>
   LikeWhereInput: LikeWhereInput
   LikeOrderByInput: LikeOrderByInput
   Like: ResolverTypeWrapper<Like>
@@ -419,7 +447,6 @@ export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>
   LikeWithIdOnly: ResolverTypeWrapper<LikeWithIdOnly>
   SuccessMessage: ResolverTypeWrapper<SuccessMessage>
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
 }>
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -436,6 +463,10 @@ export type ResolversParentTypes = ResolversObject<{
   BlogPost: BlogPost
   User: User
   Permission: Permission
+  BlogPostConnectionFiltered: BlogPostConnectionFiltered
+  PageInfo: PageInfo
+  Boolean: Scalars['Boolean']
+  AggregateBlogPost: AggregateBlogPost
   LikeWhereInput: LikeWhereInput
   LikeOrderByInput: LikeOrderByInput
   Like: Like
@@ -443,7 +474,13 @@ export type ResolversParentTypes = ResolversObject<{
   Mutation: {}
   LikeWithIdOnly: LikeWithIdOnly
   SuccessMessage: SuccessMessage
-  Boolean: Scalars['Boolean']
+}>
+
+export type AggregateBlogPostResolvers<
+  ContextType = Context,
+  ParentType = ResolversParentTypes['AggregateBlogPost']
+> = ResolversObject<{
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
 }>
 
 export type BlogPostResolvers<
@@ -456,6 +493,18 @@ export type BlogPostResolvers<
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+}>
+
+export type BlogPostConnectionFilteredResolvers<
+  ContextType = Context,
+  ParentType = ResolversParentTypes['BlogPostConnectionFiltered']
+> = ResolversObject<{
+  pageInfo?: Resolver<ResolversTypes['PageInfo'], ParentType, ContextType>
+  aggregate?: Resolver<
+    ResolversTypes['AggregateBlogPost'],
+    ParentType,
+    ContextType
+  >
 }>
 
 export interface DateTimeScalarConfig
@@ -532,6 +581,20 @@ export type MutationResolvers<
   >
 }>
 
+export type PageInfoResolvers<
+  ContextType = Context,
+  ParentType = ResolversParentTypes['PageInfo']
+> = ResolversObject<{
+  hasNextPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  hasPreviousPage?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  startCursor?: Resolver<
+    Maybe<ResolversTypes['String']>,
+    ParentType,
+    ContextType
+  >
+  endCursor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+}>
+
 export type QueryResolvers<
   ContextType = Context,
   ParentType = ResolversParentTypes['Query']
@@ -541,6 +604,12 @@ export type QueryResolvers<
     ParentType,
     ContextType,
     QueryBlogPostsArgs
+  >
+  blogPostsConnection?: Resolver<
+    ResolversTypes['BlogPostConnectionFiltered'],
+    ParentType,
+    ContextType,
+    QueryBlogPostsConnectionArgs
   >
   likes?: Resolver<
     Array<Maybe<ResolversTypes['Like']>>,
@@ -590,11 +659,14 @@ export type UserResolvers<
 }>
 
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  AggregateBlogPost?: AggregateBlogPostResolvers<ContextType>
   BlogPost?: BlogPostResolvers<ContextType>
+  BlogPostConnectionFiltered?: BlogPostConnectionFilteredResolvers<ContextType>
   DateTime?: GraphQLScalarType
   Like?: LikeResolvers<ContextType>
   LikeWithIdOnly?: LikeWithIdOnlyResolvers<ContextType>
   Mutation?: MutationResolvers<ContextType>
+  PageInfo?: PageInfoResolvers<ContextType>
   Query?: QueryResolvers<ContextType>
   SuccessMessage?: SuccessMessageResolvers<ContextType>
   User?: UserResolvers<ContextType>

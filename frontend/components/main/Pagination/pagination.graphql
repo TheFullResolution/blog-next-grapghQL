@@ -1,0 +1,7 @@
+ query PAGINATION_QUERY {
+    blogPostsConnection {
+      aggregate {
+        count
+      }
+    }
+  }
