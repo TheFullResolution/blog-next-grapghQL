@@ -8,6 +8,7 @@ import { isLoggedIn, User } from '../User/User'
 
 import styles from './header.scss'
 import { withRouter, SingletonRouter } from 'next/router'
+import { Search } from '../Search/Search'
 
 const routPathsArray = [
   RoutPath.home,
@@ -25,7 +26,7 @@ function getRedirect(router: SingletonRouter) {
 
 const Header = withRouter(function HeaderComponent({ router }) {
   const redirect = router && getRedirect(router)
- 
+
   return (
     <User>
       {({ payload, loggedIn }) => {
@@ -82,6 +83,7 @@ const Header = withRouter(function HeaderComponent({ router }) {
                     )}
                   </nav>
                 </div>
+                <Search></Search>
               </header>
             )}
           </LogoutComponent>

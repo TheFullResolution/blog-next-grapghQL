@@ -439,6 +439,14 @@ export type Blog_PostQuery = {
   >
 }
 
+export type Search_Blog_Posts_QueryQueryVariables = {
+  searchTerm: Scalars['String']
+}
+
+export type Search_Blog_Posts_QueryQuery = {
+  readonly blogPosts: ReadonlyArray<Maybe<Pick<BlogPost, 'id' | 'title'>>>
+}
+
 export type Update_Blog_PostMutationVariables = {
   id: Scalars['ID']
   title: Scalars['String']
@@ -742,6 +750,44 @@ export type Blog_PostComponentProps = Omit<
 export const Blog_PostComponent = (props: Blog_PostComponentProps) => (
   <ReactApollo.Query<Blog_PostQuery, Blog_PostQueryVariables>
     query={Blog_PostDocument}
+    {...props}
+  />
+)
+
+export const Search_Blog_Posts_QueryDocument = gql`
+  query SEARCH_BLOG_POSTS_QUERY($searchTerm: String!) {
+    blogPosts(
+      where: {
+        OR: [
+          { title_contains: $searchTerm }
+          { user: { name_contains: $searchTerm } }
+        ]
+      }
+    ) {
+      id
+      title
+    }
+  }
+`
+export type Search_Blog_Posts_QueryComponentProps = Omit<
+  ReactApollo.QueryProps<
+    Search_Blog_Posts_QueryQuery,
+    Search_Blog_Posts_QueryQueryVariables
+  >,
+  'query'
+> &
+  (
+    | { variables: Search_Blog_Posts_QueryQueryVariables; skip?: false }
+    | { skip: true })
+
+export const Search_Blog_Posts_QueryComponent = (
+  props: Search_Blog_Posts_QueryComponentProps,
+) => (
+  <ReactApollo.Query<
+    Search_Blog_Posts_QueryQuery,
+    Search_Blog_Posts_QueryQueryVariables
+  >
+    query={Search_Blog_Posts_QueryDocument}
     {...props}
   />
 )

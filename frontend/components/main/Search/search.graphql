@@ -1,0 +1,13 @@
+query SEARCH_BLOG_POSTS_QUERY($searchTerm: String!) {
+  blogPosts(
+    where: {
+      OR: [
+        { title_contains: $searchTerm }
+        { user: { name_contains: $searchTerm } }
+      ]
+    }
+  ) {
+    id
+    title
+  }
+}

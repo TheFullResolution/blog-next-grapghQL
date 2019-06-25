@@ -27,6 +27,7 @@
   "homepage": "https://github.com/TheFullResolution/personal-website#readme",
   "dependencies": {
     "@reach/alert-dialog": "0.2.9",
+    "@types/lodash.debounce": "^4.0.6",
     "apollo-boost": "0.4.3",
     "apollo-client": "2.6.3",
     "apollo-server-express": "2.6.4",
@@ -35,6 +36,7 @@
     "cookie-parser": "1.4.4",
     "cors": "2.8.5",
     "dotenv": "8.0.0",
+    "downshift": "^3.2.10",
     "express": "4.17.1",
     "formik": "1.5.7",
     "graphql": "14.3.1",
@@ -42,6 +44,7 @@
     "graphql-import": "0.7.1",
     "helmet": "3.18.0",
     "jsonwebtoken": "8.5.1",
+    "lodash.debounce": "^4.0.8",
     "markdown-to-jsx": "^6.10.2",
     "ms": "2.1.2",
     "next": "8.1.0",
