@@ -10,26 +10,35 @@ export interface CreatOnClickParams {
   userId: string | undefined
   likeId?: string
   blogPostId: string
+  blogPostAuthorId: string
   createLike: MutationFn<Create_LikeMutation, Create_LikeMutationVariables>
   deleteLike: MutationFn<Delete_LikeMutation, Delete_LikeMutationVariables>
-  onClickAuthError: () => void
-  onClickError: () => void
+  setAuthError: (value: React.SetStateAction<string | undefined>) => void
 }
 
 export function createOnClick({
-  userId,
-  likeId,
+  blogPostAuthorId,
   blogPostId,
   createLike,
   deleteLike,
-  onClickAuthError,
-  onClickError,
+  likeId,
+  setAuthError,
+  userId,
 }: CreatOnClickParams) {
   if (!userId) {
     return () => {
-      onClickAuthError()
+      setAuthError('You have to be logged in to like the article')
     }
   }
+
+  if (blogPostAuthorId === userId) {
+    return () => {
+      setAuthError(
+        "I know you like your work, but you can't like your own article",
+      )
+    }
+  }
+
   if (!likeId) {
     return () => {
       createLike({ variables: { blogPostId } })
@@ -41,6 +50,6 @@ export function createOnClick({
     }
   }
   return () => {
-    onClickError()
+    setAuthError('Sorry, something went wrong')
   }
 }

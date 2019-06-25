@@ -382,7 +382,10 @@ export type LogoutMutation = {
   readonly logout: Maybe<Pick<SuccessMessage, 'message'>>
 }
 
-export type All_Blog_PostsQueryVariables = {}
+export type All_Blog_PostsQueryVariables = {
+  skip: Scalars['Int']
+  first: Scalars['Int']
+}
 
 export type All_Blog_PostsQuery = {
   readonly blogPosts: ReadonlyArray<
@@ -430,8 +433,8 @@ export type Blog_PostQueryVariables = {
 
 export type Blog_PostQuery = {
   readonly blogPost: Maybe<
-    Pick<BlogPost, 'id' | 'title' | 'body'> & {
-      readonly user: Pick<User, 'id'>
+    Pick<BlogPost, 'id' | 'title' | 'body' | 'createdAt'> & {
+      readonly user: Pick<User, 'id' | 'name'>
     }
   >
 }
@@ -594,8 +597,8 @@ export const LogoutComponent = (props: LogoutComponentProps) => (
 )
 
 export const All_Blog_PostsDocument = gql`
-  query ALL_BLOG_POSTS {
-    blogPosts {
+  query ALL_BLOG_POSTS($skip: Int!, $first: Int!) {
+    blogPosts(first: $first, skip: $skip, orderBy: createdAt_DESC) {
       id
       title
       body
@@ -605,7 +608,8 @@ export const All_Blog_PostsDocument = gql`
 export type All_Blog_PostsComponentProps = Omit<
   ReactApollo.QueryProps<All_Blog_PostsQuery, All_Blog_PostsQueryVariables>,
   'query'
->
+> &
+  ({ variables: All_Blog_PostsQueryVariables; skip?: false } | { skip: true })
 
 export const All_Blog_PostsComponent = (
   props: All_Blog_PostsComponentProps,
@@ -721,8 +725,10 @@ export const Blog_PostDocument = gql`
       id
       title
       body
+      createdAt
       user {
         id
+        name
       }
     }
   }

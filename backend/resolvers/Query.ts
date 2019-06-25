@@ -22,6 +22,8 @@ const Query: Required<QueryResolvers> = {
             id
             title
             body
+            createdAt
+            updatedAt
             user {
               id
             }

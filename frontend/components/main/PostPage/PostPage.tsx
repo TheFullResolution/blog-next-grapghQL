@@ -1,15 +1,16 @@
-import { NextFC } from 'next'
-
-import { Blog_PostQuery, Blog_PostComponent } from '../../../generated/graphql'
-import * as styles from './postPage.scss'
 import Markdown from 'markdown-to-jsx'
-import { User, isLoggedIn } from '../User/User'
+import { NextFC } from 'next'
 import Link from 'next/link'
-import { Button } from '../../blocks/Button/Button'
-import { routes, RoutPath } from '../../../app/routes'
 import { useState } from 'react'
+
+import { routes, RoutPath } from '../../../app/routes'
+import { Blog_PostComponent, Blog_PostQuery } from '../../../generated/graphql'
+import { Button } from '../../blocks/Button/Button'
 import { DeleteBlogPost } from '../DeleteBlogPost/DeleteBlogPost'
 import { Like } from '../Like/Like'
+import { isLoggedIn, User } from '../User/User'
+import * as styles from './postPage.scss'
+import { FaPencilAlt } from 'react-icons/fa'
 
 interface Props {
   blogPost: Blog_PostQuery['blogPost']
@@ -54,10 +55,17 @@ const PostPage: NextFC<Props> = ({ blogPost: blogPostInitial }) => {
             </User>
 
             <Markdown>{blogPost.body}</Markdown>
+            <p className={styles.author}>
+              <FaPencilAlt /> Written by {blogPost.user.name} on{' '}
+              {new Date(blogPost.createdAt).toLocaleDateString()}
+            </p>
             {showAlert && (
               <DeleteBlogPost id={blogPost.id} onClose={toggleShowAlert} />
             )}
-            <Like blogPostId={blogPost.id} />
+            <Like
+              blogPostId={blogPost.id}
+              blogPostAuthorId={blogPost.user.id}
+            />
           </div>
         )
       }}

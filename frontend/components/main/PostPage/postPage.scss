@@ -7,3 +7,10 @@
     margin-left: $space-single;
   }
 }
+
+.author {
+  text-align: right;
+  svg {
+    vertical-align: middle;
+  }
+}

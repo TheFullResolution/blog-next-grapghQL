@@ -1,11 +1,18 @@
 import { All_Blog_PostsComponent } from '../../../generated/graphql'
 import { PostItem } from '../../blocks/PostItem/PostItem'
 import { Pagination } from '../Pagination/Pagination'
+import { perPage } from '../../../app/config'
 
-const Home: React.FC = () => (
+interface Props {
+  page: number
+}
+
+const Home: React.FC<Props> = ({ page }) => (
   <>
-    <Pagination />
-    <All_Blog_PostsComponent>
+    <Pagination page={page} />
+    <All_Blog_PostsComponent
+      variables={{ skip: page * perPage - perPage, first: perPage }}
+    >
       {({ data, error, loading }) => {
         if (loading) return <p>Loading...</p>
         if (error) return <p>Error: {error.message}</p>
@@ -19,6 +26,7 @@ const Home: React.FC = () => (
         )
       }}
     </All_Blog_PostsComponent>
+    <Pagination page={page} />
   </>
 )
 
