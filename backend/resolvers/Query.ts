@@ -26,6 +26,7 @@ const Query: Required<QueryResolvers> = {
             updatedAt
             user {
               id
+              name
             }
           }
           `
@@ -57,6 +58,8 @@ const Query: Required<QueryResolvers> = {
       }
       blogPost {
         id
+        title
+        body
       }
     }
     `

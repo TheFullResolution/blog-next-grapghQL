@@ -444,7 +444,13 @@ export type Search_Blog_Posts_QueryQueryVariables = {
 }
 
 export type Search_Blog_Posts_QueryQuery = {
-  readonly blogPosts: ReadonlyArray<Maybe<Pick<BlogPost, 'id' | 'title'>>>
+  readonly blogPosts: ReadonlyArray<
+    Maybe<
+      Pick<BlogPost, 'id' | 'title'> & {
+        readonly user: Pick<User, 'id' | 'name'>
+      }
+    >
+  >
 }
 
 export type Update_Blog_PostMutationVariables = {
@@ -468,8 +474,18 @@ export type User_Blog_PostsQueryVariables = {
 }
 
 export type User_Blog_PostsQuery = {
-  readonly blogPosts: ReadonlyArray<
-    Maybe<Pick<BlogPost, 'id' | 'title' | 'body'>>
+  readonly blogPosts: ReadonlyArray<Maybe<Pick<BlogPost, 'id' | 'title'>>>
+}
+
+export type User_LikesQueryVariables = {
+  id: Scalars['ID']
+}
+
+export type User_LikesQuery = {
+  readonly likes: ReadonlyArray<
+    Maybe<
+      Pick<Like, 'id'> & { readonly blogPost: Pick<BlogPost, 'id' | 'title'> }
+    >
   >
 }
 
@@ -766,6 +782,10 @@ export const Search_Blog_Posts_QueryDocument = gql`
     ) {
       id
       title
+      user {
+        id
+        name
+      }
     }
   }
 `
@@ -850,7 +870,6 @@ export const User_Blog_PostsDocument = gql`
     blogPosts(where: { user: { id: $id } }) {
       id
       title
-      body
     }
   }
 `
@@ -865,6 +884,30 @@ export const User_Blog_PostsComponent = (
 ) => (
   <ReactApollo.Query<User_Blog_PostsQuery, User_Blog_PostsQueryVariables>
     query={User_Blog_PostsDocument}
+    {...props}
+  />
+)
+
+export const User_LikesDocument = gql`
+  query USER_LIKES($id: ID!) {
+    likes(where: { user: { id: $id } }) {
+      id
+      blogPost {
+        id
+        title
+      }
+    }
+  }
+`
+export type User_LikesComponentProps = Omit<
+  ReactApollo.QueryProps<User_LikesQuery, User_LikesQueryVariables>,
+  'query'
+> &
+  ({ variables: User_LikesQueryVariables; skip?: false } | { skip: true })
+
+export const User_LikesComponent = (props: User_LikesComponentProps) => (
+  <ReactApollo.Query<User_LikesQuery, User_LikesQueryVariables>
+    query={User_LikesDocument}
     {...props}
   />
 )

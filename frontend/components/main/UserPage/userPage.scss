@@ -1,5 +1,17 @@
 .container {
-    .heading {
-        text-align: center;
-    }
+  .heading {
+    text-align: center;
+  }
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: $space-double;
+}
+
+@media only screen and (max-width: 500px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
 }

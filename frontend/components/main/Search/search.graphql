@@ -9,5 +9,9 @@ query SEARCH_BLOG_POSTS_QUERY($searchTerm: String!) {
   ) {
     id
     title
+    user {
+      id
+      name
+    }
   }
 }

@@ -1,3 +1,51 @@
 .container {
-    
+  padding: $space-single 0;
+
+  input {
+    max-width: $max-width;
+    margin: 0 auto;
+    border-radius: $space-quarter;
+    border: 1px solid gray;
+    padding: $space-half;
+    width: 100%;
+    display: block;
+    font-size: inherit;
+  }
+}
+
+.resultsWrapper {
+  position: relative;
+  max-width: $max-width;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.results {
+  position: absolute;
+  list-style: none;
+  padding: 0;
+  background-color: white;
+  border: {
+    bottom: 1px solid gray;
+    left: 1px solid gray;
+    right: 1px solid gray;
+    bottom-left-radius: $space-quarter;
+    bottom-right-radius: $space-quarter;
+  }
+
+  width: 100%;
+  margin: 0;
+  max-width: $max-width;
+  top: 0;
+}
+
+.item {
+  padding: $space-half;
+  border: {
+    bottom: 1px solid gray;
+  }
+}
+
+.highlighted {
+  background-color: lightgrey;
 }

@@ -16,7 +16,11 @@ interface Props {
   apollo: ApolloClient<unknown>
 }
 
-export type PageComponent<T = {}> = NextComponentType<{query: AppContext['query']} & T ,T, AppContext>
+export type PageComponent<T = {}> = NextComponentType<
+  { query: AppContext['query'] } & T,
+  T,
+  AppContext
+>
 
 class MyApp extends App<Props> {
   public static async getInitialProps({
@@ -45,6 +49,9 @@ class MyApp extends App<Props> {
     return (
       <Container>
         <Head>
+          <title>Blog Platform with GraphQL</title>
+          <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+          <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
           <link
             href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Roboto"
             rel="stylesheet"

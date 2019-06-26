@@ -8,29 +8,38 @@ import {
   Search_Blog_Posts_QueryQuery,
   Search_Blog_Posts_QueryQueryVariables,
   BlogPost,
+  User,
 } from '../../../generated/graphql'
 import Router from 'next/router'
 import { useState } from 'react'
+import { SearchResults } from './SearchResults'
 
-type SearchBlogPost = Pick<BlogPost, 'id' | 'title'>
+export type SearchBlogPost = Pick<BlogPost, 'id' | 'title'> & {
+  readonly user: Pick<User, 'name'>
+}
 
-
-function routeToItem(item: SearchBlogPost) {
+function routeToItem(item: SearchBlogPost, callback: () => void) {
   Router.push({
     pathname: '/post',
     query: { id: item.id },
+  }).then(() => {
+    callback()
   })
 }
 
+const MIN_STRING_VALUE = 3
+
 interface OnChangeParams {
-  event: React.ChangeEvent<HTMLInputElement>
+  searchTerm: string
   client: ApolloClient<{}>
   setLoading: (loading: boolean) => void
   setBlogPosts: (blogPosts: Readonly<SearchBlogPost[]>) => void
 }
 
 const getBlogPosts = debounce(
-  async ({ event, client, setLoading, setBlogPosts }: OnChangeParams) => {
+  async ({ searchTerm, client, setLoading, setBlogPosts }: OnChangeParams) => {
+    if (searchTerm.length < MIN_STRING_VALUE) return
+
     setLoading(true)
 
     const res = await client.query<
@@ -38,11 +47,12 @@ const getBlogPosts = debounce(
       Search_Blog_Posts_QueryQueryVariables
     >({
       query: Search_Blog_Posts_QueryDocument,
-      variables: { searchTerm: event.target.value },
+      variables: { searchTerm },
     })
     setBlogPosts(res.data.blogPosts)
     setLoading(false)
   },
+  300,
 )
 
 const Search: React.FC = () => {
@@ -53,53 +63,57 @@ const Search: React.FC = () => {
     <ApolloConsumer>
       {client => {
         const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-          event.persist()
-          getBlogPosts({ event, client, setLoading, setBlogPosts })
+          getBlogPosts({
+            searchTerm: event.target.value,
+            client,
+            setLoading,
+            setBlogPosts,
+          })
         }
         resetIdCounter()
         return (
-          <div className={styles.container}>
-            <Downshift
-              onChange={routeToItem}
-              itemToString={item => (item === null ? '' : item.title)}
-            >
-              {({
-                getInputProps,
-                getItemProps,
-                isOpen,
-                inputValue,
-                highlightedIndex,
-              }) => (
-                <div>
-                  <input
-                    {...getInputProps({
-                      type: 'search',
-                      placeholder: 'Search For An Item',
-                      id: 'search',
-                      className: loading ? 'loading' : '',
-                      onChange,
-                    })}
-                  />
+          <Downshift
+            onStateChange={(option, state) => {
+              if (option.selectedItem) {
+                routeToItem(option.selectedItem, () => {
+                  state.clearSelection()
+  
+                  setBlogPosts([])
+                })
+              }
+            }}
+            itemToString={item => (item === null ? '' : item.title)}
+          >
+            {({
+              getInputProps,
+              getItemProps,
+              isOpen,
+              inputValue,
+              highlightedIndex,
+            }) => (
+              <div className={styles.container}>
+                <input
+                  {...getInputProps({
+                    type: 'search',
+                    placeholder: 'Search For An Item',
+                    id: 'search',
+                    className: loading ? styles.loading : '',
+                    onChange,
+                  })}
+                />
 
-                  {isOpen && (
-                    <ul>
-                      {blogPosts.map((item, index) => (
-                        <li
-                          {...getItemProps({ item })}
-                          key={item.id}
-                        >
-                          {item.title}
-                        </li>
-                      ))}
-                      {!blogPosts.length && !loading && (
-                        <li> Nothing Found {inputValue}</li>
-                      )}
-                    </ul>
-                  )}
-                </div>
-              )}
-            </Downshift>
-          </div>
+                {isOpen && (
+                  <SearchResults
+                    loading={loading}
+                    blogPosts={blogPosts}
+                    getItemProps={getItemProps}
+                    inputValue={inputValue}
+                    highlightedIndex={highlightedIndex}
+                  />
+                )}
+              </div>
+            )}
+          </Downshift>
         )
       }}
     </ApolloConsumer>
