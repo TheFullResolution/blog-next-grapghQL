@@ -1,16 +1,16 @@
-import Markdown from 'markdown-to-jsx'
-import { NextFC } from 'next'
-import Link from 'next/link'
-import { useState } from 'react'
+import Markdown from 'markdown-to-jsx';
+import { NextFC } from 'next';
+import Link from 'next/link';
+import { useState } from 'react';
+import { FaPencilAlt } from 'react-icons/fa';
 
-import { routes, RoutPath } from '../../../app/routes'
-import { Blog_PostComponent, Blog_PostQuery } from '../../../generated/graphql'
-import { Button } from '../../blocks/Button/Button'
-import { DeleteBlogPost } from '../DeleteBlogPost/DeleteBlogPost'
-import { Like } from '../Like/Like'
-import { isLoggedIn, User } from '../User/User'
-import * as styles from './postPage.scss'
-import { FaPencilAlt } from 'react-icons/fa'
+import { routes, RoutPath } from '../../../app/routes';
+import { Blog_PostComponent, Blog_PostQuery } from '../../../generated/graphql';
+import { Button } from '../../blocks/Button/Button';
+import { DeleteBlogPost } from '../DeleteBlogPost/DeleteBlogPost';
+import { Like } from '../Like/Like';
+import { isLoggedIn, User } from '../User/User';
+import * as styles from './postPage.scss';
 
 interface Props {
   blogPost: Blog_PostQuery['blogPost']
@@ -53,7 +53,6 @@ const PostPage: NextFC<Props> = ({ blogPost: blogPostInitial }) => {
                 return null
               }}
             </User>
-
             <Markdown>{blogPost.body}</Markdown>
             <p className={styles.author}>
               <FaPencilAlt /> Written by {blogPost.user.name} on{' '}

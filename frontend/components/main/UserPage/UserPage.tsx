@@ -1,7 +1,10 @@
 import * as styles from './userPage.scss'
 import { User, isLoggedIn } from '../User/User'
-import { User_Blog_PostsComponent } from '../../../generated/graphql'
-import { UsersArticles } from '../../blocks/UsersArticles/UsersArticles'
+import {
+  User_Blog_PostsComponent,
+  User_LikesComponent,
+} from '../../../generated/graphql'
+import { UserLists } from '../../blocks/UserLists/UserLists'
 
 const UserPage: React.FC = () => {
   return (
@@ -11,14 +14,26 @@ const UserPage: React.FC = () => {
         {({ payload }) => {
           if (isLoggedIn(payload.data)) {
             return (
-              <User_Blog_PostsComponent variables={{ id: payload.data.me.id }}>
-                {({ data }) => (
-                  <>
-                    <h2>List of your articles:</h2>
-                    {data && <UsersArticles data={data} />}
-                  </>
-                )}
-              </User_Blog_PostsComponent>
+              <div className={styles.wrapper}>
+                <User_Blog_PostsComponent
+                  variables={{ id: payload.data.me.id }}
+                >
+                  {({ data }) => (
+                    <div>
+                      <h2>List of your articles:</h2>
+                      {data && <UserLists data={data} />}
+                    </div>
+                  )}
+                </User_Blog_PostsComponent>
+                <User_LikesComponent variables={{ id: payload.data.me.id }}>
+                  {({ data }) => (
+                    <div>
+                      <h2>List of your likes:</h2>
+                      {data && <UserLists data={data} />}
+                    </div>
+                  )}
+                </User_LikesComponent>
+              </div>
             )
           } else return null
         }}

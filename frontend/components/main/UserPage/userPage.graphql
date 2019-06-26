@@ -2,6 +2,15 @@ query USER_BLOG_POSTS($id: ID!) {
   blogPosts(where: { user: { id: $id } }) {
     id
     title
-    body
+  }
+}
+
+query USER_LIKES($id: ID!) {
+  likes(where: { user: { id: $id } }) {
+    id
+    blogPost {
+      id
+      title
+    }
   }
 }

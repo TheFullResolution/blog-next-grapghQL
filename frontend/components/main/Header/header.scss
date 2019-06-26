@@ -31,6 +31,7 @@
 
   nav {
     display: flex;
+
     list-style: none;
     margin: {
       bottom: 0;
@@ -38,7 +39,7 @@
       right: auto;
       top: $space-double;
     }
-    max-width: 600px;
+    max-width: $max-width;
     li + li {
       margin-left: 10px;
     }

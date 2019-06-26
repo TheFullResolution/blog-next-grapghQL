@@ -11,7 +11,7 @@ interface Props {
 
 const Post: PageComponent<Props> = ({ blogPost }) => {
   if (!blogPost) return <Error statusCode={404} />
-
+  
   return <PostPage blogPost={blogPost} />
 }
 
