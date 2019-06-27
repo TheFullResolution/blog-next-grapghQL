@@ -39,9 +39,25 @@ export const Authenticate = withRouter(function AuthenticateComponent(props) {
   }
 
   return (
-    <SignupComponent refetchQueries={[{ query: UserDataDocument }]}>
+    <SignupComponent
+      refetchQueries={[{ query: UserDataDocument }]}
+      awaitRefetchQueries={true}
+      onCompleted={data => {
+        if (data.signup.id) {
+          redirectAfterAuth()
+        }
+      }}
+    >
       {(signUp, signUpParams) => (
-        <LoginComponent refetchQueries={[{ query: UserDataDocument }]}>
+        <LoginComponent
+          refetchQueries={[{ query: UserDataDocument }]}
+          awaitRefetchQueries={true}
+          onCompleted={data => {
+            if (data.login.id) {
+              redirectAfterAuth()
+            }
+          }}
+        >
           {(logIn, signInParams) => {
             const error = getActiveParam(signInParams.error, signUpParams.error)
             const loading = getActiveParam(
@@ -51,26 +67,20 @@ export const Authenticate = withRouter(function AuthenticateComponent(props) {
 
             const onSubmit = async (values: AuthForm) => {
               if (state === AUTH_STATE.Login) {
-                const id = await logIn({
+                await logIn({
                   variables: {
                     email: values.email,
                     password: values.password,
                   },
                 })
-                if (id && id.data && id.data.login.id) {
-                  redirectAfterAuth()
-                }
               } else if (state === AUTH_STATE.Signup && values.name) {
-                const id = await signUp({
+                await signUp({
                   variables: {
                     email: values.email,
                     password: values.password,
                     name: values.name,
                   },
                 })
-                if (id && id.data && id.data.signup.id) {
-                  redirectAfterAuth()
-                }
               }
             }
 

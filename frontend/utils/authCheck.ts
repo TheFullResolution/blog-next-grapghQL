@@ -13,9 +13,10 @@ function shouldAuthCheck(path: string) {
 }
 
 export async function authCheck(ctx: AppContext, router: SingletonRouter) {
-  const { data } = await ctx.apolloClient.query({ query: UserDataDocument })
-
   const needsAuth = shouldAuthCheck(ctx.pathname)
+  if (!needsAuth) return
+
+  const { data } = await ctx.apolloClient.query({ query: UserDataDocument })
 
   if (needsAuth && !isLoggedIn(data)) {
     if (ctx.res) {
@@ -24,7 +25,7 @@ export async function authCheck(ctx: AppContext, router: SingletonRouter) {
       })
       ctx.res.end()
     } else {
-      router.replace(RoutPath.auth)
+      router.replace(`/${RoutPath.auth}`)
     }
   }
 }

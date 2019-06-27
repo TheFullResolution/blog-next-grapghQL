@@ -1,14 +1,14 @@
-import Link from 'next/link'
-import { FaBookReader, FaWalking } from 'react-icons/fa'
+import Link from 'next/link';
+import { withRouter } from 'next/router';
+import { FaBookReader, FaWalking } from 'react-icons/fa';
 
-import { routes, RoutPath } from '../../../app/routes'
-import { LogoutComponent, UserDataDocument } from '../../../generated/graphql'
-import { Button } from '../../blocks/Button/Button'
-import { isLoggedIn, User } from '../User/User'
-
-import styles from './header.scss'
-import { withRouter, SingletonRouter } from 'next/router'
-import { Search } from '../Search/Search'
+import { routes, RoutPath } from '../../../app/routes';
+import { LogoutComponent, UserDataDocument } from '../../../generated/graphql';
+import { getRedirect } from '../../../utils/getRedirect';
+import { Button } from '../../blocks/Button/Button';
+import { Search } from '../Search/Search';
+import { isLoggedIn, User } from '../User/User';
+import styles from './header.scss';
 
 const routPathsArray = [
   RoutPath.home,
@@ -16,13 +16,6 @@ const routPathsArray = [
   RoutPath.account,
   RoutPath.auth,
 ]
-
-function getRedirect(router: SingletonRouter) {
-  if (router.pathname === routes[RoutPath.home].path) {
-    return undefined
-  }
-  return router.asPath
-}
 
 const Header = withRouter(function HeaderComponent({ router }) {
   const redirect = router && getRedirect(router)

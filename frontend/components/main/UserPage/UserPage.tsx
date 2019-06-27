@@ -5,6 +5,7 @@ import {
   User_LikesComponent,
 } from '../../../generated/graphql'
 import { UserLists } from '../../blocks/UserLists/UserLists'
+import { NeedAuth } from '../../blocks/NeedAuth/NeedAuth'
 
 const UserPage: React.FC = () => {
   return (
@@ -35,7 +36,9 @@ const UserPage: React.FC = () => {
                 </User_LikesComponent>
               </div>
             )
-          } else return null
+          } else {
+            return <NeedAuth />
+          }
         }}
       </User>
     </section>
