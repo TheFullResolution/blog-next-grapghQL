@@ -46,7 +46,7 @@ const UserLists: React.FC<Props> = ({ data }) => (
       : data.likes.map(like => (
           <UserListItem
             key={like.id}
-            id={like.id}
+            id={like.blogPost.id}
             title={like.blogPost.title}
           />
         ))}

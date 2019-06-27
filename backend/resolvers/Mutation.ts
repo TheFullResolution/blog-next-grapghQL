@@ -63,6 +63,8 @@ const Mutation: Required<MutationResolvers> = {
 
     const id = args.id
 
+    await ctx.db.deleteManyLikes({ blogPost: { id } })
+
     const blog = await ctx.db.deleteBlogPost({
       id,
     })
@@ -92,7 +94,7 @@ const Mutation: Required<MutationResolvers> = {
         },
       },
     })
-    return {id: like.id}
+    return { id: like.id }
   },
 
   async deleteLike(parent, args, ctx) {
@@ -106,7 +108,7 @@ const Mutation: Required<MutationResolvers> = {
       id,
     })
 
-    return {id: like.id}
+    return { id: like.id }
   },
   async login(parent, { email, password }, ctx, info) {
     const user = await ctx.db.user({ email: email.toLowerCase() })
