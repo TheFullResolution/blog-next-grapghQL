@@ -1,5 +1,5 @@
-import { BlogPostWhereUniqueInput, ID_Input, Prisma } from '../generated'
-import { QueryResolvers, BlogPost, Like } from '../generated/graphql'
+import { Prisma } from '../generated'
+import { BlogPost, Like, QueryResolvers } from '../generated/graphql'
 
 const Query: Required<QueryResolvers> = {
   async blogPost(parent, args, ctx, info) {
