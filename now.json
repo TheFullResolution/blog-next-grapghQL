@@ -1,0 +1,22 @@
+{
+    "version": 2,
+    "name": "blog-platform",
+    "builds": [
+        {
+            "src": "./backend/**/*.ts",
+            "use": "@now/node@canary"
+        },
+        { "src": "./frontend/next.config.js", "use": "@now/next" }
+
+    ],
+        "routes": [
+            {
+                "src": "/api/(.*)",
+                "dest": "/api/$1"
+            },
+            {
+                "src": "/(.*)",
+                "dest": "/www/$1"
+            }
+        ]
+    }

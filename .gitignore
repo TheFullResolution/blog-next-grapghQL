@@ -3,3 +3,7 @@ node_modules
 frontend/\.next/
 
 backend/build/
+
+backend/variables\.env
+
+backend/variables\.prod\.env

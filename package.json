@@ -16,6 +16,9 @@
     "build:backend": "tsc && node ./build/app.js",
     "deploy": "cd backend && prisma deploy --env-file variables.env"
   },
+  "engines": {
+    "node": "10.x"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TheFullResolution/personal-website.git"
