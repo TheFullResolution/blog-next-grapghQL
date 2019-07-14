@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "tsc": "tsc",
+    "postinstall": "npm run tsc",
     "dev": "ts-node-dev --respawn --transpileOnly --project ./tsconfig.json ./index.ts",
-    "start": "npm run tsc --project ./tsconfig.json && node ./build/index.js",
+    "start": "node ./build/index.js",
     "prisma:deploy": "prisma deploy --env-file variables.env"
   },
   "engines": {
@@ -23,6 +24,13 @@
   },
   "homepage": "https://github.com/TheFullResolution/personal-website#readme",
   "dependencies": {
+    "@types/bcryptjs": "2.4.2",
+    "@types/cookie-parser": "1.4.1",
+    "@types/graphql": "14.2.2",
+    "@types/helmet": "0.0.43",
+    "@types/jsonwebtoken": "8.3.2",
+    "@types/ms": "0.7.30",
+    "@types/node": "12.0.12",
     "apollo-server-express": "2.6.7",
     "bcryptjs": "2.4.3",
     "body-parser": "1.19.0",
@@ -42,13 +50,6 @@
     "prisma-client-lib": "1.34.1"
   },
   "devDependencies": {
-    "@types/bcryptjs": "2.4.2",
-    "@types/cookie-parser": "1.4.1",
-    "@types/graphql": "14.2.2",
-    "@types/helmet": "0.0.43",
-    "@types/jsonwebtoken": "8.3.2",
-    "@types/ms": "0.7.30",
-    "@types/node": "12.0.12",
     "@typescript-eslint/eslint-plugin": "1.11.0",
     "@typescript-eslint/parser": "1.11.0",
     "eslint": "5.16.0",
