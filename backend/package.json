@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc",
     "dev": "ts-node-dev --respawn --transpileOnly --project ./tsconfig.json ./index.ts",
-    "start": "tsc --project ./tsconfig.json && node ./build/index.js",
+    "start": "npm run tsc --project ./tsconfig.json && node ./build/index.js",
     "prisma:deploy": "prisma deploy --env-file variables.env"
   },
   "engines": {
