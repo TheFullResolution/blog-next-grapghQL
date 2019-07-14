@@ -7,3 +7,5 @@ backend/build/
 backend/variables\.env
 
 backend/variables\.prod\.env
+
+backend/\.env

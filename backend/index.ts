@@ -1,4 +1,4 @@
-require('dotenv').config({ path: 'backend/variables.env' })
+require('dotenv').config({ path: './variables.env' })
 
 import { ApolloServer, makeExecutableSchema } from 'apollo-server-express'
 import cookieParser from 'cookie-parser'
@@ -13,7 +13,7 @@ import { Query } from './resolvers/Query'
 
 // let's go!
 
-const typeDefs = importSchema('./backend/models/schema.graphql')
+const typeDefs = importSchema('./models/schema.graphql')
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -71,10 +71,8 @@ app.use(async (req, res, next) => {
 
 server.applyMiddleware({ app, cors: corsOptions })
 
-app.listen({ port: process.env.PORT || 4000 }, (err: Error) => {
+app.listen({ port: process.env.PORT || 4000 }, () => {
   console.log('\n'.repeat(5))
-
-  if (err) throw err
   console.log(
     `Apollo Server ready at http://localhost:${process.env.PORT}${
       server.graphqlPath

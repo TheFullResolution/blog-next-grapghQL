@@ -1,22 +1,24 @@
 {
-    "version": 2,
     "name": "blog-platform",
+    "version": 2,
     "builds": [
         {
-            "src": "./backend/**/*.ts",
-            "use": "@now/node@canary"
+            "src": "frontend/next.config.js",
+            "use": "@now/next"
         },
-        { "src": "./frontend/next.config.js", "use": "@now/next" }
-
+        {
+            "src": "./backend/index.ts",
+            "use": "@now/node@canary"
+        }
     ],
-        "routes": [
-            {
-                "src": "/api/(.*)",
-                "dest": "/api/$1"
-            },
-            {
-                "src": "/(.*)",
-                "dest": "/www/$1"
-            }
-        ]
-    }
+    "routes": [
+        {
+            "src": "/backend/(.*)",
+            "dest": "/backend/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/frontend/$1"
+        }
+    ]
+}

@@ -9,4 +9,14 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
   },
+  "include": [
+    "../_types/**/*.d.ts",
+    "./**/*.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ],
+  "typeRoots": [
+    "./backend.d.ts",
+    "node_modules/@types"
+  ]
 }
