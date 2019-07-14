@@ -73,7 +73,7 @@ app.use(async (req, res, next) => {
 server.applyMiddleware({ app, cors: corsOptions })
 
 app.listen({ port: process.env.PORT || 4000 }, () => {
-  console.log('\n'.repeat(5))
+  console.log('\n'.repeat(2))
   console.log(
     `Apollo Server ready at http://localhost:${process.env.PORT}${
       server.graphqlPath
