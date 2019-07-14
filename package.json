@@ -8,10 +8,11 @@
     "codegen": "graphql-codegen",
     "generate": "graphql-codegen --config codegen.yml",
     "start": "npm-run-all --parallel dev:frontend dev:backend",
-    "dev:frontend": "cd frontend && npm run start",
+    "dev:frontend": "cd frontend && npm run dev",
     "dev:backend": "cd backend && npm run dev",
     "new": "hygen react new",
-    "deploy": "cd backend && npm run prisma:deploy"
+    "prisma:deploy": "cd backend && npm run prisma:deploy",
+    "backend:deploy": "git subtree push --prefix backend heroku-backend master"
   },
   "engines": {
     "node": "10.x"
