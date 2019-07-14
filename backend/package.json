@@ -8,7 +8,9 @@
     "postinstall": "npm run tsc",
     "dev": "ts-node-dev --respawn --transpileOnly --project ./tsconfig.json ./index.ts",
     "start": "node ./build/index.js",
-    "prisma:deploy": "prisma deploy --env-file variables.env"
+    "prisma:deploy:dev": "prisma deploy --env-file variables.env",
+    "prisma:deploy:prod": "prisma deploy --env-file variables.build.env",
+    "prisma:generate": "prisma generate --env-file variables.env"
   },
   "engines": {
     "node": "10.x"

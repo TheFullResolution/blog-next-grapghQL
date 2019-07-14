@@ -120,7 +120,7 @@ const Mutation: Required<MutationResolvers> = {
     if (!valid) {
       return errorThrow()
     }
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET as string)
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
 
     ctx.res.cookie(TOKEN, token, {
       httpOnly: true,
@@ -145,7 +145,7 @@ const Mutation: Required<MutationResolvers> = {
       permissions: { set: ['USER'] },
     })
 
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET as string)
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET)
 
     ctx.res.cookie(TOKEN, token, {
       httpOnly: true,

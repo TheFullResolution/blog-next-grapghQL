@@ -13,7 +13,11 @@ const Pagination: React.FC<Props> = ({ page }) => {
   return (
     <Pagination_QueryComponent>
       {({ data }) => {
-        const count = (data && data.blogPostsConnection.aggregate.count) || 0
+        const count =
+          (data &&
+            data.blogPostsConnection &&
+            data.blogPostsConnection.aggregate.count) ||
+          0
         const pages = Math.ceil(count / perPage)
 
         return (

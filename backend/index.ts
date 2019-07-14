@@ -52,7 +52,8 @@ app.use(cookieParser())
 app.use((req, res, next) => {
   
   const token = req.cookies[TOKEN]
-  if (token && process.env.APP_SECRET) {
+
+  if (token && process.env.APP_SECRET) {    
     const tokenData = jwt.verify(token, process.env.APP_SECRET)
     req.userId = (tokenData as { userId: string }).userId
   }

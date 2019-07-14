@@ -9,3 +9,5 @@ backend/variables\.env
 backend/variables\.prod\.env
 
 backend/\.env
+
+backend/variables\.build\.env
