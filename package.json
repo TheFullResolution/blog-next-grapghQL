@@ -12,8 +12,7 @@
     "dev:frontend": "next -p 3333 ./frontend",
     "dev:backend": "ts-node-dev --respawn --transpileOnly --project backend/tsconfig.json backend/index.ts",
     "new": "hygen react new",
-    "build:frontend": "next build ./frontend",
-    "build:backend": "tsc && node ./build/app.js",
+    "now-build": "next build ./frontend",
     "deploy": "cd backend && prisma deploy --env-file variables.env"
   },
   "engines": {
