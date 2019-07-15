@@ -64,23 +64,26 @@ export const Authenticate = withRouter(function AuthenticateComponent(props) {
               signInParams.loading,
               signUpParams.loading,
             )
-
             const onSubmit = async (values: AuthForm) => {
-              if (state === AUTH_STATE.Login) {
-                await logIn({
-                  variables: {
-                    email: values.email,
-                    password: values.password,
-                  },
-                })
-              } else if (state === AUTH_STATE.Signup && values.name) {
-                await signUp({
-                  variables: {
-                    email: values.email,
-                    password: values.password,
-                    name: values.name,
-                  },
-                })
+              try {
+                if (state === AUTH_STATE.Login) {
+                  await logIn({
+                    variables: {
+                      email: values.email,
+                      password: values.password,
+                    },
+                  })
+                } else if (state === AUTH_STATE.Signup && values.name) {
+                  await signUp({
+                    variables: {
+                      email: values.email,
+                      password: values.password,
+                      name: values.name,
+                    },
+                  })
+                }
+              } catch (errorc) {
+                console.log({ errorc })
               }
             }
 

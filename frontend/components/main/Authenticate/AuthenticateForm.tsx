@@ -64,7 +64,7 @@ export const AuthenticateForm: React.FC<Props> = ({
       onSubmit={onSubmit}
       validate={validate}
     >
-      {({ touched, isValid, isSubmitting }) => {
+      {({ touched, isValid }) => {
         const formTouched = Object.values(touched).some(Boolean)
 
         return (
@@ -120,7 +120,7 @@ export const AuthenticateForm: React.FC<Props> = ({
               <Button
                 type="submit"
                 version="secondary"
-                disabled={(formTouched && !isValid) || isSubmitting}
+                disabled={(formTouched && !isValid) || loading}
               >
                 {state}
               </Button>
