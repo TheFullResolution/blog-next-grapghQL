@@ -11,3 +11,5 @@ backend/variables\.prod\.env
 backend/\.env
 
 backend/variables\.build\.env
+
+**/*.DS_Store
