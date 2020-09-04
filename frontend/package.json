@@ -55,7 +55,7 @@
     "react-icons": "3.7.0",
     "react-mde": "7.6.2",
     "react": "16.8.6",
-    "showdown": "1.9.0",
+    "showdown": "1.9.1",
     "typescript": "3.5.3"
   },
   "devDependencies": {
